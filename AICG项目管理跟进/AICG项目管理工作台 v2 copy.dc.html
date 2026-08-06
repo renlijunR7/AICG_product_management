@@ -322,12 +322,20 @@
         <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;padding:20px 22px;box-shadow:0 1px 2px rgba(24,23,42,.04);margin-top:16px">
           <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px">
             <div style="font:700 14.5px 'Manrope','PingFang SC',sans-serif">提醒 <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;color:#8783a3;text-transform:uppercase;margin-left:6px">· REMINDERS ·</span></div>
-            <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;color:#8783a3">{{ remindCount }} 条</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <sc-if value="{{ showTodoToggle }}" hint-placeholder-val="{{ false }}">
+                <span onClick="{{ toggleTodoMine }}" style="font:700 10.5px 'Manrope','PingFang SC',sans-serif;border:1px solid {{ todoTogBd }};color:{{ todoTogFg }};background:{{ todoTogBg }};border-radius:99px;padding:3px 10px;cursor:pointer">{{ todoFilterLabel }}</span>
+              </sc-if>
+              <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;color:#8783a3">{{ remindCount }} 条</span>
+            </div>
           </div>
           <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px">
             <sc-for list="{{ remindersView }}" as="rm" hint-placeholder-count="1">
               <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;background:{{ rm.bg }};border:1px solid {{ rm.bd }}">
                 <span style="font:700 11px 'IBM Plex Mono',Menlo,monospace;color:{{ rm.dateColor }};white-space:nowrap">{{ rm.dateLabel }}</span>
+                <sc-if value="{{ rm.roleTag }}" hint-placeholder-val="{{ false }}">
+                  <span style="font:700 9.5px 'Manrope','PingFang SC',sans-serif;background:#eeecf7;color:#5f5a7d;border-radius:5px;padding:2px 7px;flex:none">{{ rm.roleTag }}</span>
+                </sc-if>
                 <span onClick="{{ rm.toggle }}" style="font:600 13px 'Manrope','PingFang SC',sans-serif;flex:1;min-width:0;cursor:pointer;color:{{ rm.fg }};text-decoration:{{ rm.deco }}">{{ rm.text }}</span>
                 <sc-if value="{{ rm.urgent }}" hint-placeholder-val="{{ false }}">
                   <span style="font:700 9.5px 'IBM Plex Mono',Menlo,monospace;background:#fde4e4;color:#d94a4a;border-radius:5px;padding:2px 7px;flex:none">急</span>
@@ -1931,7 +1939,12 @@
             </div>
           </div>
           <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;padding:20px 22px;box-shadow:0 1px 2px rgba(24,23,42,.04)">
-            <div style="font:700 14.5px 'Manrope','PingFang SC',sans-serif;margin-bottom:12px">未来 7 天</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <div style="font:700 14.5px 'Manrope','PingFang SC',sans-serif">未来 7 天</div>
+              <sc-if value="{{ showTodoToggle }}" hint-placeholder-val="{{ false }}">
+                <span onClick="{{ toggleTodoMine }}" style="font:700 10.5px 'Manrope','PingFang SC',sans-serif;border:1px solid {{ todoTogBd }};color:{{ todoTogFg }};background:{{ todoTogBg }};border-radius:99px;padding:3px 10px;cursor:pointer">{{ todoFilterLabel }}</span>
+              </sc-if>
+            </div>
             <sc-if value="{{ hasUpcoming }}" hint-placeholder-val="{{ true }}">
               <div style="display:flex;flex-direction:column;gap:8px">
                 <sc-for list="{{ upcoming }}" as="u" hint-placeholder-count="3">
@@ -3228,7 +3241,7 @@
     <div onClick="{{ stopRoleProp }}" style="background:#fff;border-radius:22px;box-shadow:0 24px 60px -12px rgba(24,23,42,.18),0 8px 24px -8px rgba(24,23,42,.08);width:920px;max-width:100%;max-height:86vh;overflow:auto;padding:26px;animation:fadeIn .14s ease">
       <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:4px">
         <div style="font:800 18px 'Manrope','PingFang SC',sans-serif;letter-spacing:-.01em">切换角色</div>
-        <div style="font:700 9.5px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;color:#c2bfd6">ROLE SWITCH · 12 ROLES</div>
+        <div style="font:700 9.5px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;color:#c2bfd6">ROLE SWITCH · 13 ROLES</div>
         <div style="flex:1"></div>
         <div onClick="{{ closeRoleModal }}" style="width:28px;height:28px;border-radius:99px;background:#f3f1fa;color:#8783a3;display:flex;align-items:center;justify-content:center;cursor:pointer;font:700 14px 'Manrope',sans-serif" style-hover="background:#e8e5f5;color:#18172a">×</div>
       </div>
@@ -3624,8 +3637,28 @@ class Component extends DCLogic {
     { id: 'ts', name: '内容审核 · T&S', en: 'TRUST & SAFETY', avatar: '审', grad: 'linear-gradient(140deg,#7c4dcc,#54348c)', home: 'risk', duties: ['模板与 UGC 双审执行', '举报队列 24h SOP 响应', '违禁内容清单与分级标签更新', '未成年人保护措施执行'] },
     { id: 'community', name: '社区 / 玩家运营', en: 'COMMUNITY', avatar: '社', grad: 'linear-gradient(140deg,#e0558c,#a83263)', home: 'daily', duties: ['官方 TG / Discord 社群运营', '活动期玩家答疑与申诉处理', '女巫误判申诉复核与转办', '玩家侧激励活动执行'] },
     { id: 'design', name: '设计 / 美术', en: 'DESIGN', avatar: '设', grad: 'linear-gradient(140deg,#e8a13a,#b3781f)', home: 'tpl', duties: ['模板素材生产与风格统一', '品牌方定制皮肤（换皮）制作', '素材版权溯源登记', 'AI 生成素材审核与微调'] },
-    { id: 'support', name: '客服支持', en: 'SUPPORT', avatar: '客', grad: 'linear-gradient(140deg,#5a6b8c,#3c4a66)', home: 'daily', duties: ['品牌方 / KOL 工单响应', '玩家申诉受理与跨角色转办', 'FAQ 与帮助知识库维护', 'SLA 时效与满意度跟踪'] }
+    { id: 'support', name: '客服支持', en: 'SUPPORT', avatar: '客', grad: 'linear-gradient(140deg,#5a6b8c,#3c4a66)', home: 'daily', duties: ['品牌方 / KOL 工单响应', '玩家申诉受理与跨角色转办', 'FAQ 与帮助知识库维护', 'SLA 时效与满意度跟踪'] },
+    { id: 'hr', name: '人力资源 · 招聘', en: 'HR / TALENT', avatar: '人', grad: 'linear-gradient(140deg,#889144,#5c632b)', home: 'daily', duties: ['团队招聘：JD 制定、面试与 Offer 推进', '关键岗位人才地图与梯队建设', '新人入职培训与角色权限开通', '绩效考核与激励机制协同'] }
   ];
+
+  // ── 操作权限分级（负责人全权限，其余按矩阵；未列出的操作全员可用）──
+  PERM_DEFS = {
+    partner: { label: '品牌合作管理', roles: ['biz', 'finance'] },
+    creds:   { label: '营销账号凭据', roles: ['biz'] },
+    board:   { label: '任务与版本管理', roles: ['product', 'tech', 'qa'] },
+    comp:    { label: '竞品档案管理', roles: ['biz', 'product'] },
+    docs:    { label: '文档资料管理', roles: ['product', 'design'] },
+    content: { label: '案例与机制文档修订', roles: ['product', 'tech'] },
+    tpl:     { label: '模板库管理', roles: ['design', 'product'] },
+    kol:     { label: 'KOL 档案管理', roles: ['kolops'] },
+    legal:   { label: '协议签署状态变更', roles: ['legal'] },
+    admin:   { label: '数据导入 / 覆盖', roles: [] }
+  };
+  MODAL_PERM = { partner: 'partner', task: 'board', version: 'board', roadver: 'board', comp: 'comp', doc: 'docs', newcase: 'content', creds: 'creds', vault: 'creds' };
+  curRole() { return (this.state && this.state.data && this.state.data.role) || 'owner'; }
+  can(k) { const r = this.curRole(); if (r === 'owner') return true; const p = this.PERM_DEFS[k]; return !!p && p.roles.includes(r); }
+  denyToast(k) { const p = this.PERM_DEFS[k] || { label: k, roles: [] }; const names = p.roles.map(id => (this.ROLES.find(r => r.id === id) || {}).name).filter(Boolean).concat('项目负责人').join(' / '); this.showToast('当前角色无权：' + p.label + ' · 需 ' + names); }
+  guard(k, fn) { return (...a) => { if (!this.can(k)) { this.denyToast(k); return; } return fn(...a); }; }
 
   loadDocFile(x) {
     this._mdDocC = this._mdDocC || {};
@@ -3710,7 +3743,7 @@ class Component extends DCLogic {
       .catch(() => { if (this.state.caseSel === i) this.setState({ caseHtml: '<p>文档加载失败，请刷新重试。</p>', caseLoading: false }); });
   }
 
-  startCaseEdit = () => this.setState({ caseEditing: true, caseDraft: (this._mdRawC || {})[this.state.caseSel] || '' });
+  startCaseEdit = () => { if (!this.can('content')) { this.denyToast('content'); return; } this.setState({ caseEditing: true, caseDraft: (this._mdRawC || {})[this.state.caseSel] || '' }); }
   cancelCaseEdit = () => this.setState({ caseEditing: false });
   saveCaseEdit = () => {
     const i = this.state.caseSel, f = this.allCases()[i], raw = this.state.caseDraft || '';
@@ -3762,7 +3795,7 @@ class Component extends DCLogic {
     if (d.editLog.length > 100) d.editLog.length = 100;
   }
 
-  startFlowEdit = () => this.setState({ flowEditing: true, flowDraft: (this._mdRawF || {})[this.state.flowSel] || '' });
+  startFlowEdit = () => { if (!this.can('content')) { this.denyToast('content'); return; } this.setState({ flowEditing: true, flowDraft: (this._mdRawF || {})[this.state.flowSel] || '' }); }
   cancelFlowEdit = () => this.setState({ flowEditing: false });
   saveFlowEdit = () => {
     const i = this.state.flowSel, f = this.FLOW[i], raw = this.state.flowDraft || '';
@@ -3780,7 +3813,7 @@ class Component extends DCLogic {
     this.loadFlow(i);
   };
 
-  startAgentEdit = () => this.setState({ agentEditing: true, agentDraft: (this._mdRawA || {})[this.state.agentSel] || '' });
+  startAgentEdit = () => { if (!this.can('content')) { this.denyToast('content'); return; } this.setState({ agentEditing: true, agentDraft: (this._mdRawA || {})[this.state.agentSel] || '' }); }
   cancelAgentEdit = () => this.setState({ agentEditing: false });
   saveAgentEdit = () => {
     const i = this.state.agentSel, f = this.AGENT[i], raw = this.state.agentDraft || '';
@@ -3881,6 +3914,7 @@ class Component extends DCLogic {
     this.showToast('备份已导出为 JSON 文件');
   };
   importData = () => {
+    if (!this.can('admin')) { this.denyToast('admin'); return; }
     const inp = document.createElement('input');
     inp.type = 'file'; inp.accept = '.json,application/json';
     inp.onchange = () => {
@@ -4536,7 +4570,7 @@ class Component extends DCLogic {
   }
 
   // ── modal helpers ────────────────────────────
-  openModal(type, draft) { this.setState({ modal: type, draft }); }
+  openModal(type, draft) { const k = this.MODAL_PERM[type]; if (k && !this.can(k)) { this.denyToast(k); return; } this.setState({ modal: type, draft }); }
   saveModal = () => {
     const S = this.state, dr = S.draft, t = this.today();
     if (S.modal === 'partner') {
@@ -4660,6 +4694,7 @@ class Component extends DCLogic {
   renderVals() {
     const S = this.state, D = S.data;
     const roleCur = this.ROLES.find(r => r.id === (D.role || 'owner')) || this.ROLES[0];
+    const todoMine = S.todoMine !== false && roleCur.id !== 'owner';
     const today = this.today(), week = this.plusDays(7);
     const hideMoney = !!this.props.hideMoney;
     const money = v => hideMoney ? '$ •••' : (v > 0 ? '$' + Number(v).toLocaleString('en-US') : '待定');
@@ -4817,7 +4852,7 @@ class Component extends DCLogic {
           cyclePri: () => kbCycle(sb.id, itm.id, 'pri', KB_PRI),
           cycleVer: () => kbCycle(sb.id, itm.id, 'ver', KB_VER),
           cycleSt: () => kbCycle(sb.id, itm.id, 'status', KB_ST),
-          del: () => this.askConfirm('删除功能点「' + itm.name + '」？', () => this.setData(d => { const s2 = (d.kb.subs || []).find(s => s.id === sb.id); if (s2) s2.items = s2.items.filter(y => y.id !== itm.id); }))
+          del: this.guard('docs', () => this.askConfirm('删除功能点「' + itm.name + '」？', () => this.setData(d => { const s2 = (d.kb.subs || []).find(s => s.id === sb.id); if (s2) s2.items = s2.items.filter(y => y.id !== itm.id); })))
         };
       }),
       add: e => {
@@ -4963,7 +4998,7 @@ class Component extends DCLogic {
           menuOpen: S.taskMenu === 'p:' + p.id,
           toggleMenu: e => { e.stopPropagation(); this.setState(s => ({ taskMenu: s.taskMenu === 'p:' + p.id ? null : 'p:' + p.id })); },
           edit: () => { this.setState({ taskMenu: null }); this.openModal('partner', { ...p }); },
-          del: () => { this.setState({ taskMenu: null }); this.askConfirm('删除合作方「' + p.name + '」？相关沟通记录将一并删除。', () => this.setData(d => { d.partners = d.partners.filter(y => y.id !== p.id); })); }
+          del: this.guard('partner', () => { this.setState({ taskMenu: null }); this.askConfirm('删除合作方「' + p.name + '」？相关沟通记录将一并删除。', () => this.setData(d => { d.partners = d.partners.filter(y => y.id !== p.id); })); })
         };
       });
 
@@ -5032,7 +5067,7 @@ class Component extends DCLogic {
           prev: () => { this.setState({ taskMenu: null }); this.moveTask(tk.id, -1); },
           next: () => { this.setState({ taskMenu: null }); this.moveTask(tk.id, 1); },
           edit: () => { this.setState({ taskMenu: null }); this.openModal('task', { ...tk }); },
-          del: () => { this.setState({ taskMenu: null }); this.askConfirm('删除任务「' + tk.title + '」？', () => this.setData(d => { d.tasks = d.tasks.filter(y => y.id !== tk.id); })); }
+          del: this.guard('board', () => { this.setState({ taskMenu: null }); this.askConfirm('删除任务「' + tk.title + '」？', () => this.setData(d => { d.tasks = d.tasks.filter(y => y.id !== tk.id); })); })
         };
       });
       return {
@@ -5166,7 +5201,7 @@ class Component extends DCLogic {
           menuOpen: S.taskMenu === 'c:' + c.id,
           toggleMenu: e => { e.stopPropagation(); this.setState(s => ({ taskMenu: s.taskMenu === 'c:' + c.id ? null : 'c:' + c.id })); },
           edit: () => { this.setState({ taskMenu: null }); this.openModal('comp', { ...c }); },
-          del: () => { this.setState({ taskMenu: null }); this.askConfirm('删除竞品「' + c.name + '」？相关动态记录将一并删除。', () => this.setData(d => { d.competitors = d.competitors.filter(y => y.id !== c.id); })); }
+          del: this.guard('comp', () => { this.setState({ taskMenu: null }); this.askConfirm('删除竞品「' + c.name + '」？相关动态记录将一并删除。', () => this.setData(d => { d.competitors = d.competitors.filter(y => y.id !== c.id); })); })
         };
       });
     const compPills = [['全部', '全部'], ['高', '高威胁'], ['中', '中威胁'], ['低', '低威胁']].map(x => {
@@ -5230,7 +5265,7 @@ class Component extends DCLogic {
         menuOpen: S.taskMenu === 'rv:' + rv.id,
         toggleMenu: e => { e.stopPropagation(); this.setState(s => ({ taskMenu: s.taskMenu === 'rv:' + rv.id ? null : 'rv:' + rv.id })); },
         edit: () => { this.setState({ taskMenu: null }); this.openModal('roadver', { ...rv, scopeText: (rv.scope || []).join('\n') }); },
-        del: () => this.askConfirm('删除版本「' + rv.ver + '」？', () => this.setData(d => { d.roadmap = (d.roadmap || []).filter(y => y.id !== rv.id); this.pushLog(d, '资料库', '版本 ' + rv.ver, '删除'); }))
+        del: this.guard('board', () => this.askConfirm('删除版本「' + rv.ver + '」？', () => this.setData(d => { d.roadmap = (d.roadmap || []).filter(y => y.id !== rv.id); this.pushLog(d, '资料库', '版本 ' + rv.ver, '删除'); })))
       };
     });
     const showRoadmap = S.docFilter === '需求文档';
@@ -5254,7 +5289,7 @@ class Component extends DCLogic {
           menuOpen: S.taskMenu === 'd:' + x.id,
           toggleMenu: e => { e.stopPropagation(); this.setState(s => ({ taskMenu: s.taskMenu === 'd:' + x.id ? null : 'd:' + x.id })); },
           edit: () => { this.setState({ taskMenu: null }); this.openModal('doc', { ...x }); },
-          del: () => this.askConfirm('删除文档「' + x.title + '」？', () => this.setData(d => { d.docs = d.docs.filter(y => y.id !== x.id); this.pushLog(d, '资料库', x.title, '删除'); }))
+          del: this.guard('docs', () => this.askConfirm('删除文档「' + x.title + '」？', () => this.setData(d => { d.docs = d.docs.filter(y => y.id !== x.id); this.pushLog(d, '资料库', x.title, '删除'); })))
         };
       });
     const recentDocs = docsView.length ? docsView.slice(0, 3) : D.docs.slice(0, 3).map(x => {
@@ -5290,6 +5325,8 @@ class Component extends DCLogic {
     D.tasks.forEach(tk => { if (tk.due && tk.due > today && tk.due <= week && tk.col !== '已完成') upcoming.push({ date: tk.due, text: tk.title, dot: '#ff7a3d', kind: 't', refId: tk.id }); });
     upcoming.sort((a, b) => a.date < b.date ? -1 : 1);
     upcoming.forEach(u => { u.dateLabel = md(u.date); u.go = () => this.jumpTo(u.kind, u.refId); });
+    const ROLE_KINDS = { biz: ['p'], finance: ['p'], product: ['t'], tech: ['t'], qa: ['t'] };
+    const upcomingView = (todoMine && ROLE_KINDS[roleCur.id]) ? upcoming.filter(u => ROLE_KINDS[roleCur.id].includes(u.kind)) : upcoming;
 
     // 跟进任务分布（按类型）
     const brandToday = D.partners.filter(p => p.nextDate && p.nextDate <= today).length;
@@ -5299,12 +5336,13 @@ class Component extends DCLogic {
     const taskOver = D.tasks.filter(tk => tk.due && tk.due < today && tk.col !== '已完成').length;
     const taskWeek = upcoming.filter(u => u.kind === 't').length;
     const manualDone = D.todos.filter(m => m.done).length;
-    const remindersView = (D.reminders || []).slice().sort((a, b) => (a.done - b.done) || (a.date > b.date ? 1 : -1)).map(rm => {
+    const remindersView = (D.reminders || []).filter(rm => !todoMine || !rm.role || rm.role === roleCur.id).slice().sort((a, b) => (a.done - b.done) || (a.date > b.date ? 1 : -1)).map(rm => {
       const overdue = !rm.done && rm.date && rm.date < today;
       const urgent = !rm.done && rm.date && rm.date >= today && rm.date <= this.plusDays(3);
       return {
         ...rm,
         dateLabel: rm.date ? md(rm.date) : '—',
+        roleTag: rm.role ? ((this.ROLES.find(r => r.id === rm.role) || {}).name || '') : '',
         dateColor: rm.done ? '#b9b5d0' : (overdue ? '#d94a4a' : (urgent ? '#d15a1f' : '#8783a3')),
         bg: rm.done ? '#fafaff' : (overdue ? '#fef7f7' : '#fafaff'),
         bd: rm.done ? '#ebe9f4' : (overdue ? '#f5d3d3' : (urgent ? '#ffd8c2' : '#ebe9f4')),
@@ -5319,7 +5357,7 @@ class Component extends DCLogic {
       e.preventDefault();
       const f = e.target, text = (f.rtext.value || '').trim(), date = f.rdate.value || '';
       if (!text) return;
-      this.setData(d => { (d.reminders = d.reminders || []).push({ id: this.uid('rm'), date, text, done: false }); });
+      this.setData(d => { (d.reminders = d.reminders || []).push({ id: this.uid('rm'), date, text, done: false, role: this.curRole() }); });
       f.rtext.value = ''; f.rdate.value = '';
     };
     const typeCards = [
@@ -5480,15 +5518,15 @@ class Component extends DCLogic {
         const cm = { '原始模板': { bg: '#fdf3df', fg: '#a97b22' }, '解析后模板': { bg: '#efeeff', fg: '#5b4dff' }, '可发布模板': { bg: '#e2f4e9', fg: '#2eaa70' } }[cat];
         return { ...t, stBg: m.bg, stFg: m.fg, initial: (t.name || '?').slice(0, 1),
           cat, catBg: cm.bg, catFg: cm.fg,
-          cycleCat: () => this.setData(d => { const x = (d.tplLib || []).find(y => y.id === t.id); if (x) { const o = ['原始模板', '解析后模板', '可发布模板']; x.cat = o[(o.indexOf(x.cat || '可发布模板') + 1) % o.length]; } }),
+          cycleCat: this.guard('tpl', () => this.setData(d => { const x = (d.tplLib || []).find(y => y.id === t.id); if (x) { const o = ['原始模板', '解析后模板', '可发布模板']; x.cat = o[(o.indexOf(x.cat || '可发布模板') + 1) % o.length]; } })),
           agBg: agOk ? '#e2f4e9' : '#efeeff', agFg: agOk ? '#2eaa70' : '#5b4dff',
           hasDetail: !!(t.owner || t.agreement || t.intro),
-          cycle: () => this.setData(d => { const x = (d.tplLib || []).find(y => y.id === t.id); if (x) { const o = ['可用', '开发中', '下架']; x.status = o[(o.indexOf(x.status) + 1) % o.length]; } }),
-          del: () => this.setData(d => { d.tplLib = (d.tplLib || []).filter(x => x.id !== t.id); })
+          cycle: this.guard('tpl', () => this.setData(d => { const x = (d.tplLib || []).find(y => y.id === t.id); if (x) { const o = ['可用', '开发中', '下架']; x.status = o[(o.indexOf(x.status) + 1) % o.length]; } })),
+          del: this.guard('tpl', () => this.setData(d => { d.tplLib = (d.tplLib || []).filter(x => x.id !== t.id); }))
         };
       }),
       addTpl: e => {
-        e.preventDefault(); const f = e.target;
+        e.preventDefault(); if (!this.can('tpl')) { this.denyToast('tpl'); return; } const f = e.target;
         const name = (f.tname.value || '').trim(); if (!name) return;
         const base = (f.tbase.value || '').trim(), scene = (f.tscene.value || '').trim();
         f.tname.value = ''; f.tbase.value = ''; f.tscene.value = '';
@@ -5503,14 +5541,14 @@ class Component extends DCLogic {
           ratingLabel: k.rating ? k.rating.toFixed(1) : '—',
           ratingStars: k.rating ? '★'.repeat(Math.round(k.rating)) + '☆'.repeat(5 - Math.round(k.rating)) : '未评分',
           followUpLabel: k.followUp || '—', coopDataLabel: k.coopData || '暂无合作记录',
-          cycleAg: () => this.setData(d => { const x = (d.kolLib || []).find(y => y.id === k.id); if (x) x.agreement = x.agreement === '已签署' ? '未签署' : '已签署'; }),
-          cycleSt: () => this.setData(d => { const x = (d.kolLib || []).find(y => y.id === k.id); if (x) { const o = ['洽谈中', '已签约', '合作中', '暂停']; x.status = o[(o.indexOf(x.status) + 1) % o.length]; } }),
-          cycleTier: () => this.setData(d => { const x = (d.kolLib || []).find(y => y.id === k.id); if (x) { const o = ['S', 'A', 'B']; x.tier = o[(o.indexOf(x.tier) + 1) % o.length]; } }),
-          del: () => this.setData(d => { d.kolLib = (d.kolLib || []).filter(x => x.id !== k.id); })
+          cycleAg: this.guard('legal', () => this.setData(d => { const x = (d.kolLib || []).find(y => y.id === k.id); if (x) x.agreement = x.agreement === '已签署' ? '未签署' : '已签署'; })),
+          cycleSt: this.guard('kol', () => this.setData(d => { const x = (d.kolLib || []).find(y => y.id === k.id); if (x) { const o = ['洽谈中', '已签约', '合作中', '暂停']; x.status = o[(o.indexOf(x.status) + 1) % o.length]; } })),
+          cycleTier: this.guard('kol', () => this.setData(d => { const x = (d.kolLib || []).find(y => y.id === k.id); if (x) { const o = ['S', 'A', 'B']; x.tier = o[(o.indexOf(x.tier) + 1) % o.length]; } })),
+          del: this.guard('kol', () => this.setData(d => { d.kolLib = (d.kolLib || []).filter(x => x.id !== k.id); }))
         };
       }),
       addKolco: e => {
-        e.preventDefault(); const f = e.target;
+        e.preventDefault(); if (!this.can('kol')) { this.denyToast('kol'); return; } const f = e.target;
         const name = (f.kname.value || '').trim(); if (!name) return;
         const plat = (f.kplat.value || '').trim(), fans = (f.kfans.value || '').trim(), mode = (f.kmode.value || '').trim(), country = (f.kcountry.value || '').trim();
         f.kname.value = ''; f.kplat.value = ''; f.kfans.value = ''; f.kmode.value = ''; f.kcountry.value = '';
@@ -5637,6 +5675,7 @@ class Component extends DCLogic {
       caseTabDoc: S.caseView !== 'diagram' ? { bg: '#18172a', fg: '#fff', bd: '#18172a' } : { bg: '#fff', fg: '#4b486a', bd: '#ddd9ec' },
       caseTabDia: S.caseView === 'diagram' ? { bg: '#18172a', fg: '#fff', bd: '#18172a' } : { bg: '#fff', fg: '#4b486a', bd: '#ddd9ec' },
       delCase: () => {
+        if (!this.can('content')) { this.denyToast('content'); return; }
         const f = this.allCases()[S.caseSel];
         if (!f || !f.user) return;
         this.askConfirm('删除案例「' + f.title + '」？', () => {
@@ -6057,7 +6096,11 @@ class Component extends DCLogic {
       },
       doneCount, totalCount,
       donePct: (totalCount ? Math.round(doneCount / totalCount * 100) : 0) + '%',
-      upcoming, hasUpcoming: upcoming.length > 0, noUpcoming: upcoming.length === 0,
+      upcoming: upcomingView, hasUpcoming: upcomingView.length > 0, noUpcoming: upcomingView.length === 0,
+      showTodoToggle: roleCur.id !== 'owner',
+      todoFilterLabel: todoMine ? '只看 ' + roleCur.name : '全部角色',
+      todoTogBd: todoMine ? '#5b4dff' : '#ddd9ec', todoTogFg: todoMine ? '#5b4dff' : '#8783a3', todoTogBg: todoMine ? '#efeeff' : '#fff',
+      toggleTodoMine: () => this.setState({ todoMine: !(S.todoMine !== false) }),
 
       // search
       q: S.q || '', qTrim,

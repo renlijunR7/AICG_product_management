@@ -202,11 +202,11 @@
       </div>
       <div style="display:flex;align-items:center;gap:10px">
         <div style="position:relative">
-          <input value="{{ q }}" onChange="{{ onQ }}" placeholder="搜索品牌 / 任务 / 文档 / 待办…" style="width:250px;box-sizing:border-box;padding:8px 14px;border:1.5px solid #ddd9ec;border-radius:99px;font:500 12.5px 'Manrope','PingFang SC',sans-serif;color:#18172a;outline:none;background:#fff" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
+          <input id="aicg-global-q" value="{{ q }}" onChange="{{ onQ }}" onKeyDown="{{ onQKey }}" placeholder="搜索全站 · ⌘K" style="width:250px;box-sizing:border-box;padding:8px 14px;border:1.5px solid #ddd9ec;border-radius:99px;font:500 12.5px 'Manrope','PingFang SC',sans-serif;color:#18172a;outline:none;background:#fff" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
           <sc-if value="{{ searching }}" hint-placeholder-val="{{ false }}">
             <div style="position:absolute;top:42px;right:0;width:360px;background:#fff;border:1px solid #ebe9f4;border-radius:14px;box-shadow:0 24px 60px -12px rgba(24,23,42,.18);padding:8px;z-index:40;animation:fadeIn .14s ease;max-height:380px;overflow:auto">
               <sc-for list="{{ results }}" as="r" hint-placeholder-count="3">
-                <div onClick="{{ r.go }}" style="display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:9px;cursor:pointer" style-hover="background:#fafaff">
+                <div onClick="{{ r.go }}" style="display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:9px;cursor:pointer;background:{{ r.actBg }}" style-hover="background:#fafaff">
                   <span style="font:700 9.5px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.05em;background:{{ r.tagBg }};color:{{ r.tagFg }};border-radius:6px;padding:2px 7px;flex:none">{{ r.tag }}</span>
                   <span style="font:600 12.5px 'Manrope','PingFang SC',sans-serif;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.text }}</span>
                   <span style="font:500 10.5px 'IBM Plex Mono',Menlo,monospace;color:#b9b5d0;flex:none">{{ r.sub }}</span>
@@ -3806,8 +3806,30 @@ class Component extends DCLogic {
     { num: '29', title: '数据反馈 Memory 与模板更新', file: 'uploads/29. 数据反馈Memory与模板更新机制结构化梳理.md' }
   ];
 
+  PAGE_KEYS = ['overview', 'daily', 'partners', 'comp', 'exlist', 'board', 'docs', 'flow', 'agentos', 'kb', 'risk', 'cases', 'tpl', 'kolco', 'settle', 'aigc', 'mkagent', 'mkag2'];
+  setState(st, cb) {
+    super.setState(st, cb);
+    if (st && typeof st === 'object' && st.page && this.PAGE_KEYS.indexOf(st.page) >= 0) {
+      try { history.replaceState(null, '', location.pathname + location.search + '#p=' + st.page); } catch (e) {}
+    }
+  }
   componentDidMount() {
     this.autoBackup();
+    const hp = (location.hash.match(/#p=([a-z0-9]+)/) || [])[1];
+    if (hp && this.PAGE_KEYS.indexOf(hp) >= 0 && hp !== this.state.page) {
+      this.setState({ page: hp });
+      if (hp === 'flow') this.loadFlow(this.state.flowSel || 0);
+      if (hp === 'cases') this.loadCase(this.state.caseSel || 0);
+      if (hp === 'agentos') this.loadAgent(this.state.agentSel || 0);
+    }
+    this._hotkey = e => {
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault();
+        const inp = document.getElementById('aicg-global-q');
+        if (inp) inp.focus();
+      }
+    };
+    document.addEventListener('keydown', this._hotkey);
     this._closeMenu = () => { if (this.state.taskMenu) this.setState({ taskMenu: null }); };
     document.addEventListener('click', this._closeMenu);
     if (this.state.page === 'flow') this.loadFlow(this.state.flowSel || 0);
@@ -5434,11 +5456,17 @@ class Component extends DCLogic {
       D.partners.forEach(p => { if (hit(p.name) || hit(p.contact) || hit(p.owner)) results.push({ tag: '品牌', tagBg: '#efeeff', tagFg: '#5b4dff', text: p.name, sub: p.stage, go: goP }); });
       D.tasks.forEach(tk => { if (hit(tk.title) || hit(tk.desc) || hit(tk.assignee)) results.push({ tag: '任务', tagBg: '#ffece1', tagFg: '#d15a1f', text: tk.title, sub: tk.col, go: goT }); });
       D.docs.forEach(x => { if (hit(x.title) || hit(x.category)) results.push({ tag: '文档', tagBg: '#e2f4e9', tagFg: '#2eaa70', text: x.title, sub: x.status, go: () => this.setState({ q: '', page: 'docs', docGroup: catGroup(x.category), docFilter: '全部' }) }); });
-      D.todos.forEach(m => { if (hit(m.text)) results.push({ tag: '待办', tagBg: '#fdf3df', tagFg: '#a97b22', text: m.text, sub: m.done ? '已完成' : '待办', go: goM }); });
+      (D.reminders || []).forEach(m => { if (hit(m.text)) results.push({ tag: '待办', tagBg: '#fdf3df', tagFg: '#a97b22', text: m.text, sub: m.done ? '已完成' : '待办', go: goM }); });
+      (D.kolLib || []).forEach(k => { if (hit(k.name) || hit(k.plat) || hit(k.country) || hit(k.attrs)) results.push({ tag: 'KOL', tagBg: '#fcd1e1', tagFg: '#b03a72', text: k.name, sub: k.tier + ' 级 · ' + (k.status || ''), go: () => this.setState({ q: '', page: 'kolco', kolQ: k.name, kolTier: '全部' }) }); });
+      (D.tplLib || []).forEach(t2 => { if (hit(t2.name) || hit(t2.base) || hit(t2.scene)) results.push({ tag: '模板', tagBg: '#e2f4e9', tagFg: '#1d9f6e', text: t2.name, sub: t2.status || '', go: () => this.setState({ q: '', page: 'tpl', tplQ: t2.name, tplCat: '全部' }) }); });
+      (D.settlements || []).forEach(x => { if (hit(x.party) || hit(x.note)) results.push({ tag: '结算', tagBg: '#defaf3', tagFg: '#0f9d8f', text: x.party, sub: x.stype + ' · ' + x.status, go: () => this.setState({ q: '', page: 'settle', settleType: '全部', settleSt: '全部' }) }); });
+      (this.CASES || []).forEach((c2, ci) => { if (hit(c2.title)) results.push({ tag: '案例', tagBg: '#efeeff', tagFg: '#5b4dff', text: c2.title, sub: 'AP 案例库', go: () => { this.setState({ q: '', page: 'cases' }); this.loadCase(ci); } }); });
+      (window.EXCHANGE_ROWS || []).forEach(r2 => { if (hit(r2[0]) || hit(r2[1])) results.push({ tag: '交易所', tagBg: '#fdf3df', tagFg: '#a97b22', text: r2[0], sub: r2[2] || '', go: () => this.setState({ q: '', page: 'exlist', exQ: r2[0] }) }); });
       const goC = () => this.setState({ q: '', page: 'comp', compFilter: '全部' });
       (D.competitors || []).forEach(c => { if (hit(c.name) || hit(c.track) || hit(c.position)) results.push({ tag: '竞品', tagBg: '#fcd1e1', tagFg: '#b03a72', text: c.name, sub: c.threat + '威胁', go: goC }); });
     }
     const resultsView = results.slice(0, 10);
+    const searchIdx = Math.min(S.searchIdx || 0, Math.max(0, resultsView.length - 1));
 
     // competitors
     const threatMeta = { '高': { bg: '#fde4e4', fg: '#d94a4a' }, '中': { bg: '#fdf3df', fg: '#a97b22' }, '低': { bg: '#eeecf7', fg: '#8783a3' } };
@@ -6418,9 +6446,16 @@ class Component extends DCLogic {
 
       // search
       q: S.q || '', qTrim,
-      onQ: e => this.setState({ q: e.target.value }),
+      onQ: e => this.setState({ q: e.target.value, searchIdx: 0 }),
+      onQKey: e => {
+        if (!resultsView.length) { if (e.key === 'Escape') this.setState({ q: '' }); return; }
+        if (e.key === 'ArrowDown') { e.preventDefault(); this.setState({ searchIdx: (searchIdx + 1) % resultsView.length }); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); this.setState({ searchIdx: (searchIdx - 1 + resultsView.length) % resultsView.length }); }
+        else if (e.key === 'Enter') { e.preventDefault(); const r = resultsView[searchIdx]; if (r) r.go(); }
+        else if (e.key === 'Escape') { this.setState({ q: '' }); e.target.blur(); }
+      },
       searching: !!qTrim,
-      results: resultsView,
+      results: resultsView.map((r, i) => ({ ...r, actBg: i === searchIdx ? '#f5f4ff' : 'transparent' })),
       noResults: resultsView.length === 0,
 
       // backup / confirm / toast

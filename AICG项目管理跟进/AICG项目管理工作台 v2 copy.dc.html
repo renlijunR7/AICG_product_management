@@ -170,6 +170,11 @@
     </div>
 
     <div style="flex:1"></div>
+    <div onClick="{{ openBackupModal }}" style="display:flex;align-items:center;gap:8px;padding:7px 10px;margin-bottom:8px;border-radius:10px;cursor:pointer;font:600 11.5px 'Manrope','PingFang SC',sans-serif;color:#8783a3" style-hover="background:#fafaff;color:#5b4dff">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"></path><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"></path></svg>
+      <span style="flex:1">数据备份</span>
+      <span style="font:600 9.5px 'IBM Plex Mono',Menlo,monospace;color:#c2bfd6">{{ backupCount }}</span>
+    </div>
     <div onClick="{{ openRoleModal }}" title="切换角色" style="display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #ebe9f4;border-radius:14px;background:#fafaff;cursor:pointer;transition:border-color .15s ease" style-hover="border-color:#c9c3f2;background:#f5f4ff">
       <div style="width:32px;height:32px;flex:none;border-radius:99px;background:{{ roleGrad }};color:#fff;display:flex;align-items:center;justify-content:center;font:800 13px 'Manrope',sans-serif">{{ roleAvatar }}</div>
       <div style="min-width:0;flex:1">
@@ -3263,6 +3268,39 @@
   </div>
 </sc-if>
 
+<!-- ============ BACKUP ============ -->
+<sc-if value="{{ backupModalOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeBackupModal }}" style="position:fixed;inset:0;background:rgba(24,23,42,.45);display:flex;align-items:center;justify-content:center;z-index:60;padding:20px">
+    <div onClick="{{ stopRoleProp }}" style="background:#fff;border-radius:22px;box-shadow:0 24px 60px -12px rgba(24,23,42,.18);width:480px;max-width:100%;max-height:80vh;overflow:auto;padding:26px;animation:fadeIn .14s ease">
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:4px">
+        <div style="font:800 18px 'Manrope','PingFang SC',sans-serif;letter-spacing:-.01em">数据备份</div>
+        <div style="font:700 9.5px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;color:#c2bfd6">BACKUP &amp; RESTORE</div>
+        <div style="flex:1"></div>
+        <div onClick="{{ closeBackupModal }}" style="width:28px;height:28px;border-radius:99px;background:#f3f1fa;color:#8783a3;display:flex;align-items:center;justify-content:center;cursor:pointer;font:700 14px 'Manrope',sans-serif" style-hover="background:#e8e5f5;color:#18172a">×</div>
+      </div>
+      <div style="font:500 12.5px 'Manrope','PingFang SC',sans-serif;color:#8783a3;margin-bottom:16px">每天首次打开自动备份一次，保留最近 7 天 · 数据仅存本机浏览器</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <button onClick="{{ exportData }}" style="flex:1;background:#5b4dff;border:none;color:#fff;border-radius:10px;padding:9px 0;font:700 12.5px 'Manrope','PingFang SC',sans-serif;cursor:pointer" style-hover="background:#4a3ce8">导出 JSON</button>
+        <button onClick="{{ importData }}" style="flex:1;background:#fff;border:1.5px solid #ddd9ec;color:#4b486a;border-radius:10px;padding:9px 0;font:700 12.5px 'Manrope','PingFang SC',sans-serif;cursor:pointer" style-hover="border-color:#5b4dff;color:#5b4dff">导入 JSON</button>
+        <button onClick="{{ backupNow }}" style="flex:1;background:#fff;border:1.5px solid #ddd9ec;color:#4b486a;border-radius:10px;padding:9px 0;font:700 12.5px 'Manrope','PingFang SC',sans-serif;cursor:pointer" style-hover="border-color:#5b4dff;color:#5b4dff">立即备份</button>
+      </div>
+      <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:8px">自动备份 · {{ backupCount }} 份</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <sc-for list="{{ backupList }}" as="bk" hint-placeholder-count="2">
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid #ebe9f4;border-radius:12px;background:#fafaff">
+            <span style="font:700 12px 'IBM Plex Mono',Menlo,monospace;color:#18172a">{{ bk.day }}</span>
+            <span style="font:600 10.5px 'IBM Plex Mono',Menlo,monospace;color:#b9b5d0;flex:1">{{ bk.size }}</span>
+            <span onClick="{{ bk.restore }}" style="font:700 11.5px 'Manrope','PingFang SC',sans-serif;color:#5b4dff;cursor:pointer;border:1px solid #c9c3f2;border-radius:8px;padding:4px 12px" style-hover="background:#efeeff">恢复</span>
+          </div>
+        </sc-for>
+        <sc-if value="{{ noBackups }}" hint-placeholder-val="{{ false }}">
+          <div style="font:500 12px 'Manrope','PingFang SC',sans-serif;color:#b9b5d0;padding:6px 2px">暂无自动备份 —— 明天首次打开时会自动生成</div>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
 <!-- ============ ROLE SWITCH ============ -->
 <sc-if value="{{ roleModalOpen }}" hint-placeholder-val="{{ false }}">
   <div onClick="{{ closeRoleModal }}" style="position:fixed;inset:0;background:rgba(24,23,42,.45);display:flex;align-items:center;justify-content:center;z-index:60;padding:20px">
@@ -3302,7 +3340,12 @@
 
 <!-- ============ TOAST ============ -->
 <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
-  <div style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#18172a;color:#fff;border-radius:99px;padding:10px 20px;font:600 12.5px 'Manrope','PingFang SC',sans-serif;box-shadow:0 12px 30px -8px rgba(24,23,42,.4);z-index:70;animation:fadeIn .14s ease;white-space:nowrap">{{ toast }}</div>
+  <div style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#18172a;color:#fff;border-radius:99px;padding:10px 20px;font:600 12.5px 'Manrope','PingFang SC',sans-serif;box-shadow:0 12px 30px -8px rgba(24,23,42,.4);z-index:70;animation:fadeIn .14s ease;white-space:nowrap;display:flex;align-items:center;gap:12px">
+    <span>{{ toast }}</span>
+    <sc-if value="{{ toastUndo }}" hint-placeholder-val="{{ false }}">
+      <span onClick="{{ toastUndo }}" style="color:#a99fff;font:700 12.5px 'Manrope','PingFang SC',sans-serif;cursor:pointer;border-bottom:1px solid rgba(169,159,255,.5)" style-hover="color:#fff">撤销</span>
+    </sc-if>
+  </div>
 </sc-if>
     <sc-if value="{{ docFileOpen }}" hint-placeholder-val="{{ false }}">
       <div onClick="{{ closeDocFile }}" style="position:fixed;inset:0;background:rgba(24,23,42,.5);z-index:80;display:flex;align-items:center;justify-content:center;padding:32px">
@@ -3634,6 +3677,7 @@ class Component extends DCLogic {
   ];
 
   componentDidMount() {
+    this.autoBackup();
     this._closeMenu = () => { if (this.state.taskMenu) this.setState({ taskMenu: null }); };
     document.addEventListener('click', this._closeMenu);
     if (this.state.page === 'flow') this.loadFlow(this.state.flowSel || 0);
@@ -3931,6 +3975,45 @@ class Component extends DCLogic {
     this.setState({ toast: msg });
     clearTimeout(this._tt);
     this._tt = setTimeout(() => this.setState({ toast: null }), 2600);
+  }
+  // 快照式可撤销操作：先存整棵数据快照，toast 提供 6 秒撤销
+  undoable(msg, fn) {
+    const snap = JSON.stringify(this.state.data);
+    fn();
+    this.setState({ toast: { text: msg, undo: () => {
+      try { const d = JSON.parse(snap); this.setState({ data: d, toast: null }); this.persist(d); this.showToast('已恢复'); } catch (e) {}
+    } } });
+    clearTimeout(this._tt);
+    this._tt = setTimeout(() => this.setState({ toast: null }), 6000);
+  }
+  // 每日自动备份（保留最近 7 份）
+  autoBackup() {
+    try {
+      const day = this.today(), idxKey = 'aicg-pm-backups';
+      const idx = JSON.parse(localStorage.getItem(idxKey) || '[]');
+      if (idx.includes(day)) return;
+      idx.push(day);
+      while (idx.length > 7) localStorage.removeItem('aicg-pm-bak-' + idx.shift());
+      localStorage.setItem('aicg-pm-bak-' + day, JSON.stringify(this.state.data));
+      localStorage.setItem(idxKey, JSON.stringify(idx));
+    } catch (e) {}
+  }
+  listBackups() {
+    try {
+      return (JSON.parse(localStorage.getItem('aicg-pm-backups') || '[]')).slice().reverse().map(day => {
+        const raw = localStorage.getItem('aicg-pm-bak-' + day) || '';
+        return { day, size: raw ? (raw.length / 1024).toFixed(0) + ' KB' : '—' };
+      }).filter(b => b.size !== '—');
+    } catch (e) { return []; }
+  }
+  restoreBackup(day) {
+    this.askConfirm('用 ' + day + ' 的自动备份覆盖当前数据？操作后 6 秒内可撤销。', () => {
+      try {
+        const d = JSON.parse(localStorage.getItem('aicg-pm-bak-' + day));
+        if (d && d.partners) { this.setState({ data: d, backupModal: false }); this.persist(d); }
+        else this.showToast('备份数据无效');
+      } catch (e) { this.showToast('恢复失败：备份已损坏'); }
+    });
   }
   exportData = () => {
     const blob = new Blob([JSON.stringify(this.state.data, null, 2)], { type: 'application/json' });
@@ -4914,7 +4997,7 @@ class Component extends DCLogic {
       ckBd: m.done ? '#5b4dff' : '#ddd9ec',
       ckBg: m.done ? '#5b4dff' : '#fff',
       toggle: () => this.setData(d => { const x = d.todos.find(y => y.id === m.id); if (x) x.done = !x.done; }),
-      del: () => this.setData(d => { d.todos = d.todos.filter(y => y.id !== m.id); })
+      del: () => this.undoable('已删除待办', () => this.setData(d => { d.todos = d.todos.filter(y => y.id !== m.id); }))
     }));
 
     const openAuto = autoItems.filter(a => !a.done).length;
@@ -4979,7 +5062,7 @@ class Component extends DCLogic {
           agDel: () => this.setData(d => { const x = d.partners.find(y => y.id === p.id); if (x) x.agreementUrl = ''; }),
           channelsView: (p.channels || []).map((ch, ci) => ({
             ...ch,
-            del: () => this.setData(d => { const x = d.partners.find(y => y.id === p.id); if (x && x.channels) x.channels.splice(ci, 1); })
+            del: () => this.undoable('已删除渠道链接', () => this.setData(d => { const x = d.partners.find(y => y.id === p.id); if (x && x.channels) x.channels.splice(ci, 1); }))
           })),
           noChannels: (p.channels || []).length === 0,
           addChannel: e => {
@@ -5381,7 +5464,7 @@ class Component extends DCLogic {
         deco: rm.done ? 'line-through' : 'none',
         urgent,
         toggle: () => this.setData(d => { const x = (d.reminders || []).find(y => y.id === rm.id); if (x) x.done = !x.done; }),
-        del: () => this.setData(d => { d.reminders = (d.reminders || []).filter(y => y.id !== rm.id); })
+        del: () => this.undoable('已删除提醒', () => this.setData(d => { d.reminders = (d.reminders || []).filter(y => y.id !== rm.id); }))
       };
     });
     const addReminder = e => {
@@ -5553,7 +5636,7 @@ class Component extends DCLogic {
           agBg: agOk ? '#e2f4e9' : '#efeeff', agFg: agOk ? '#2eaa70' : '#5b4dff',
           hasDetail: !!(t.owner || t.agreement || t.intro),
           cycle: this.guard('tpl', () => this.setData(d => { const x = (d.tplLib || []).find(y => y.id === t.id); if (x) { const o = ['可用', '开发中', '下架']; x.status = o[(o.indexOf(x.status) + 1) % o.length]; } })),
-          del: this.guard('tpl', () => this.setData(d => { d.tplLib = (d.tplLib || []).filter(x => x.id !== t.id); }))
+          del: this.guard('tpl', () => this.undoable('已删除模板「' + t.name + '」', () => this.setData(d => { d.tplLib = (d.tplLib || []).filter(x => x.id !== t.id); })))
         };
       }),
       addTpl: e => {
@@ -5575,7 +5658,7 @@ class Component extends DCLogic {
           cycleAg: this.guard('legal', () => this.setData(d => { const x = (d.kolLib || []).find(y => y.id === k.id); if (x) x.agreement = x.agreement === '已签署' ? '未签署' : '已签署'; })),
           cycleSt: this.guard('kol', () => this.setData(d => { const x = (d.kolLib || []).find(y => y.id === k.id); if (x) { const o = ['洽谈中', '已签约', '合作中', '暂停']; x.status = o[(o.indexOf(x.status) + 1) % o.length]; } })),
           cycleTier: this.guard('kol', () => this.setData(d => { const x = (d.kolLib || []).find(y => y.id === k.id); if (x) { const o = ['S', 'A', 'B']; x.tier = o[(o.indexOf(x.tier) + 1) % o.length]; } })),
-          del: this.guard('kol', () => this.setData(d => { d.kolLib = (d.kolLib || []).filter(x => x.id !== k.id); }))
+          del: this.guard('kol', () => this.undoable('已移除达人「' + k.name + '」', () => this.setData(d => { d.kolLib = (d.kolLib || []).filter(x => x.id !== k.id); })))
         };
       }),
       addKolco: e => {
@@ -6148,9 +6231,19 @@ class Component extends DCLogic {
       importData: this.importData,
       showConfirm: !!S.confirm,
       confirmText: S.confirm ? S.confirm.text : '',
-      doConfirm: () => { const f = S.confirm && S.confirm.fn; this.setState({ confirm: null }); if (f) f(); },
+      doConfirm: () => { const f = S.confirm && S.confirm.fn; this.setState({ confirm: null }); if (f) this.undoable('已删除 · 6 秒内可撤销', f); },
       cancelConfirm: () => this.setState({ confirm: null }),
-      toast: S.toast || '',
+      toast: (S.toast && (S.toast.text || S.toast)) || '',
+      toastUndo: (S.toast && S.toast.undo) || null,
+
+      // backup
+      backupModalOpen: !!S.backupModal,
+      openBackupModal: () => this.setState({ backupModal: true }),
+      closeBackupModal: () => this.setState({ backupModal: false }),
+      backupNow: () => { try { const day = this.today(); const idxKey = 'aicg-pm-backups'; const idx = JSON.parse(localStorage.getItem(idxKey) || '[]'); if (!idx.includes(day)) idx.push(day); while (idx.length > 7) localStorage.removeItem('aicg-pm-bak-' + idx.shift()); localStorage.setItem('aicg-pm-bak-' + day, JSON.stringify(D)); localStorage.setItem(idxKey, JSON.stringify(idx)); this.showToast('已备份到本机（' + day + '）'); this.setState({ backupModal: true }); } catch (e) { this.showToast('备份失败：存储空间不足'); } },
+      backupList: this.listBackups().map(b => ({ ...b, restore: () => this.restoreBackup(b.day) })),
+      backupCount: this.listBackups().length,
+      noBackups: this.listBackups().length === 0,
 
       // role switch
       roleName: roleCur.name, roleEn: roleCur.en, roleAvatar: roleCur.avatar, roleGrad: roleCur.grad,

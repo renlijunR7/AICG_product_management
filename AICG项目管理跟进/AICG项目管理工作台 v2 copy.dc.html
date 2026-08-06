@@ -83,62 +83,90 @@
           <span style="font:700 10.5px 'IBM Plex Mono',Menlo,monospace;background:#ff7a3d;color:#fff;border-radius:99px;padding:2px 7px">{{ dailyBadge }}</span>
         </sc-if>
       </div>
+      <sc-if value="{{ nav_board }}" hint-placeholder-val="{{ true }}">
       <div onClick="{{ goBoard }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;transition:background .15s ease;background:{{ navS.board.bg }};color:{{ navS.board.fg }};box-shadow:{{ navS.board.sh }}" style-hover="background:{{ navS.board.hbg }}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5z"></path><path d="M3 13l9 5 9-5"></path><path d="M3 18l9 5 9-5"></path></svg>
         <span>项目推进</span>
       </div>
+      </sc-if>
     </div>
 
+    <sc-if value="{{ navGroupProj }}" hint-placeholder-val="{{ true }}">
     <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#8783a3;padding:16px 10px 6px">· 项目 ·</div>
+    </sc-if>
     <div style="display:flex;flex-direction:column;gap:4px">
+      <sc-if value="{{ nav_docs }}" hint-placeholder-val="{{ true }}">
       <div onClick="{{ goDocs }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;transition:background .15s ease;background:{{ navS.docs.bg }};color:{{ navS.docs.fg }};box-shadow:{{ navS.docs.sh }}" style-hover="background:{{ navS.docs.hbg }}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4-9 4z"></path><path d="M3 7v10l9 4 9-4V7"></path><path d="M12 11v10"></path></svg>
         <span>知识库</span>
       </div>
+      </sc-if>
+      <sc-if value="{{ nav_partners }}" hint-placeholder-val="{{ true }}">
       <div onClick="{{ goPartners }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;transition:background .15s ease;background:{{ navS.partners.bg }};color:{{ navS.partners.fg }};box-shadow:{{ navS.partners.sh }}" style-hover="background:{{ navS.partners.hbg }}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="9" cy="8" rx="6" ry="3"></ellipse><path d="M3 8v4c0 1.7 2.7 3 6 3"></path><path d="M3 12v4c0 1.7 2.7 3 6 3"></path><ellipse cx="15" cy="16" rx="6" ry="3"></ellipse></svg>
         <span>品牌合作</span>
       </div>
+      </sc-if>
+      <sc-if value="{{ nav_tpl }}" hint-placeholder-val="{{ true }}">
       <div onClick="{{ goTpl }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;transition:background .15s ease;background:{{ navS.tpl.bg }};color:{{ navS.tpl.fg }};box-shadow:{{ navS.tpl.sh }}" style-hover="background:{{ navS.tpl.hbg }}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="2"></rect><rect x="13" y="3" width="8" height="8" rx="2"></rect><rect x="3" y="13" width="8" height="8" rx="2"></rect><path d="M17 13v8"></path><path d="M13 17h8"></path></svg>
         <span>模板库</span>
       </div>
+      </sc-if>
+      <sc-if value="{{ nav_kolco }}" hint-placeholder-val="{{ true }}">
       <div onClick="{{ goKolco }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;transition:background .15s ease;background:{{ navS.kolco.bg }};color:{{ navS.kolco.fg }};box-shadow:{{ navS.kolco.sh }}" style-hover="background:{{ navS.kolco.hbg }}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"></circle><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"></path><path d="M16 5.5a3.5 3.5 0 010 5"></path><path d="M17.5 14.5c2.1.8 3.5 2.9 3.5 5.5"></path></svg>
         <span>KOL 合作库</span>
       </div>
+      </sc-if>
+      <sc-if value="{{ nav_cases }}" hint-placeholder-val="{{ true }}">
       <div onClick="{{ goCases }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;transition:background .15s ease;background:{{ navS.cases.bg }};color:{{ navS.cases.fg }};box-shadow:{{ navS.cases.sh }}" style-hover="background:{{ navS.cases.hbg }}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.4 5 5.6.7-4.1 3.8 1.1 5.5-5-2.8-5 2.8 1.1-5.5L4 8.7 9.6 8z"></path></svg>
         <span>AP 案例库</span>
       </div>
+      </sc-if>
+      <sc-if value="{{ nav_mkagent }}" hint-placeholder-val="{{ true }}">
       <div onClick="{{ goMkagent }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;transition:background .15s ease;background:{{ navS.mkagent.bg }};color:{{ navS.mkagent.fg }};box-shadow:{{ navS.mkagent.sh }}" style-hover="background:{{ navS.mkagent.hbg }}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-7-7 18-2.5-7.5z"></path></svg>
         <span>营销 Agent 案例</span>
       </div>
+      </sc-if>
     </div>
 
+    <sc-if value="{{ navGroupPlat }}" hint-placeholder-val="{{ true }}">
     <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#8783a3;padding:16px 10px 6px">· 平台 ·</div>
+    </sc-if>
     <div style="display:flex;flex-direction:column;gap:4px">
+      <sc-if value="{{ nav_flow }}" hint-placeholder-val="{{ true }}">
       <div onClick="{{ goFlow }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;transition:background .15s ease;background:{{ navS.flow.bg }};color:{{ navS.flow.fg }};box-shadow:{{ navS.flow.sh }}" style-hover="background:{{ navS.flow.hbg }}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="6" r="2.5"></circle><circle cx="19" cy="6" r="2.5"></circle><circle cx="12" cy="18" r="2.5"></circle><path d="M7 7.5l3.5 8"></path><path d="M17 7.5l-3.5 8"></path><path d="M7.5 6h9"></path></svg>
         <span>AICG 工作流</span>
       </div>
+      </sc-if>
+      <sc-if value="{{ nav_aigc }}" hint-placeholder-val="{{ true }}">
       <div onClick="{{ goAigc }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;transition:background .15s ease;background:{{ navS.aigc.bg }};color:{{ navS.aigc.fg }};box-shadow:{{ navS.aigc.sh }}" style-hover="background:{{ navS.aigc.hbg }}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"></rect><path d="M9 9h6v6H9z"></path><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"></path></svg>
         <span>AIGC 架构</span>
       </div>
+      </sc-if>
+      <sc-if value="{{ nav_agentos }}" hint-placeholder-val="{{ true }}">
       <div onClick="{{ goAgentOs }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;transition:background .15s ease;background:{{ navS.agentos.bg }};color:{{ navS.agentos.fg }};box-shadow:{{ navS.agentos.sh }}" style-hover="background:{{ navS.agentos.hbg }}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="2.5"></rect><path d="M12 3v4"></path><path d="M12 17v4"></path><path d="M3 12h4"></path><path d="M17 12h4"></path><circle cx="12" cy="12" r="1.5"></circle></svg>
         <span>Agent OS</span>
       </div>
+      </sc-if>
+      <sc-if value="{{ nav_mkag2 }}" hint-placeholder-val="{{ true }}">
       <div onClick="{{ goMkag2 }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;transition:background .15s ease;background:{{ navS.mkag2.bg }};color:{{ navS.mkag2.fg }};box-shadow:{{ navS.mkag2.sh }}" style-hover="background:{{ navS.mkag2.hbg }}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8z"></path><circle cx="19" cy="17" r="2.5"></circle><path d="M5 17h8"></path></svg>
         <span>营销 Agent</span>
       </div>
+      </sc-if>
+      <sc-if value="{{ nav_map }}" hint-placeholder-val="{{ true }}">
       <div onClick="{{ openMapMode }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;transition:background .15s ease;color:#4b486a" style-hover="background:rgba(91,77,255,.06)">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9s1.3-6.4 3.8-9z"></path></svg>
         <span>Airvana 网络</span>
       </div>
+      </sc-if>
     </div>
 
     <div style="flex:1"></div>
@@ -3627,18 +3655,18 @@ class Component extends DCLogic {
   // ── 角色体系（左下角用户卡切换）──
   ROLES = [
     { id: 'owner', name: '项目负责人', en: 'OWNER', avatar: '我', grad: 'linear-gradient(140deg,#5b4dff,#3c2fd0)', home: 'overview', duties: ['全局视角与跨角色资源协调', '版本计划与优先级最终审批', '结算与协议变更的最终审批', '对外关键合作关系维护'] },
-    { id: 'biz', name: '项目商务', en: 'BD', avatar: '商', grad: 'linear-gradient(140deg,#ff7a3d,#d15a1f)', home: 'partners', duties: ['品牌方需求对接与营销方案制定', '游戏团队模板批量合作洽谈', '合同 / SOW 推进与回款跟进', '合作方档案与沟通记录维护'] },
-    { id: 'legal', name: '项目法务', en: 'LEGAL', avatar: '法', grad: 'linear-gradient(140deg,#d43d33,#8f231c)', home: 'risk', duties: ['平台 8 份协议维护与版本管理', '品牌方准入尽调与红线把关', 'Web3 合规：KYC 分级 / 地区屏蔽', '对外合作权益保障与争议处理'] },
-    { id: 'kolops', name: 'KOL 运营', en: 'KOL OPS', avatar: 'K', grad: 'linear-gradient(140deg,#b03a72,#7d2450)', home: 'kolco', duties: ['KOL 招募准入与数据核验', '分层管理（S/A/B）与培训赋能', 'KOL 营销方案共创与排期', '达人舆情监控与紧急下架协同'] },
-    { id: 'product', name: '项目产品', en: 'PRODUCT', avatar: '产', grad: 'linear-gradient(140deg,#1d9f6e,#136b49)', home: 'cases', duties: ['营销案例方案设计与全流程推演', '模板标准与上架规范制定', '产品设计与 PRD / 版本规划', '漏斗定义与结算口径制定'] },
-    { id: 'tech', name: '项目技术', en: 'ENGINEERING', avatar: '技', grad: 'linear-gradient(140deg,#2b6fd4,#1b478c)', home: 'agentos', duties: ['Agent OS / AICG 工作流开发', '模板引擎与 H5 Builder 建设', '发布投放连接器与系统稳定性', '架构可拓展性与技术文档沉淀'] },
-    { id: 'qa', name: '项目测试', en: 'QA', avatar: '测', grad: 'linear-gradient(140deg,#b97a1c,#8a5a12)', home: 'board', duties: ['模板 / Playable 功能兼容测试', '模拟测试机制运营与预览验收', '线上问题跟踪、反馈与回归', '发版门禁与质量报告'] },
-    { id: 'finance', name: '结算财务', en: 'FINANCE', avatar: '财', grad: 'linear-gradient(140deg,#0f9d8f,#0a6b62)', home: 'partners', duties: ['KOL 分成核算与发放执行', '品牌方账单、回款与对账', '积分发放与额度熔断监控', '提现审核（配合 KYC）与税务发票'] },
-    { id: 'ts', name: '内容审核 · T&S', en: 'TRUST & SAFETY', avatar: '审', grad: 'linear-gradient(140deg,#7c4dcc,#54348c)', home: 'risk', duties: ['模板与 UGC 双审执行', '举报队列 24h SOP 响应', '违禁内容清单与分级标签更新', '未成年人保护措施执行'] },
-    { id: 'community', name: '社区 / 玩家运营', en: 'COMMUNITY', avatar: '社', grad: 'linear-gradient(140deg,#e0558c,#a83263)', home: 'daily', duties: ['官方 TG / Discord 社群运营', '活动期玩家答疑与申诉处理', '女巫误判申诉复核与转办', '玩家侧激励活动执行'] },
-    { id: 'design', name: '设计 / 美术', en: 'DESIGN', avatar: '设', grad: 'linear-gradient(140deg,#e8a13a,#b3781f)', home: 'tpl', duties: ['模板素材生产与风格统一', '品牌方定制皮肤（换皮）制作', '素材版权溯源登记', 'AI 生成素材审核与微调'] },
-    { id: 'support', name: '客服支持', en: 'SUPPORT', avatar: '客', grad: 'linear-gradient(140deg,#5a6b8c,#3c4a66)', home: 'daily', duties: ['品牌方 / KOL 工单响应', '玩家申诉受理与跨角色转办', 'FAQ 与帮助知识库维护', 'SLA 时效与满意度跟踪'] },
-    { id: 'hr', name: '人力资源 · 招聘', en: 'HR / TALENT', avatar: '人', grad: 'linear-gradient(140deg,#889144,#5c632b)', home: 'daily', duties: ['团队招聘：JD 制定、面试与 Offer 推进', '关键岗位人才地图与梯队建设', '新人入职培训与角色权限开通', '绩效考核与激励机制协同'] }
+    { id: 'biz', name: '项目商务', en: 'BD', avatar: '商', grad: 'linear-gradient(140deg,#ff7a3d,#d15a1f)', home: 'partners', duties: ['品牌方需求对接与营销方案制定', '游戏团队模板批量合作洽谈', '合同 / SOW 推进与回款跟进', '合作方档案与沟通记录维护'], nav: ['overview', 'daily', 'partners', 'docs', 'tpl', 'kolco', 'cases', 'mkagent', 'map'] },
+    { id: 'legal', name: '项目法务', en: 'LEGAL', avatar: '法', grad: 'linear-gradient(140deg,#d43d33,#8f231c)', home: 'risk', duties: ['平台 8 份协议维护与版本管理', '品牌方准入尽调与红线把关', 'Web3 合规：KYC 分级 / 地区屏蔽', '对外合作权益保障与争议处理'], nav: ['overview', 'daily', 'docs', 'partners', 'kolco'] },
+    { id: 'kolops', name: 'KOL 运营', en: 'KOL OPS', avatar: 'K', grad: 'linear-gradient(140deg,#b03a72,#7d2450)', home: 'kolco', duties: ['KOL 招募准入与数据核验', '分层管理（S/A/B）与培训赋能', 'KOL 营销方案共创与排期', '达人舆情监控与紧急下架协同'], nav: ['overview', 'daily', 'kolco', 'partners', 'cases', 'mkagent', 'map'] },
+    { id: 'product', name: '项目产品', en: 'PRODUCT', avatar: '产', grad: 'linear-gradient(140deg,#1d9f6e,#136b49)', home: 'cases', duties: ['营销案例方案设计与全流程推演', '模板标准与上架规范制定', '产品设计与 PRD / 版本规划', '漏斗定义与结算口径制定'], nav: ['overview', 'daily', 'board', 'docs', 'tpl', 'cases', 'mkagent', 'flow', 'aigc', 'mkag2'] },
+    { id: 'tech', name: '项目技术', en: 'ENGINEERING', avatar: '技', grad: 'linear-gradient(140deg,#2b6fd4,#1b478c)', home: 'agentos', duties: ['Agent OS / AICG 工作流开发', '模板引擎与 H5 Builder 建设', '发布投放连接器与系统稳定性', '架构可拓展性与技术文档沉淀'], nav: ['overview', 'daily', 'board', 'flow', 'aigc', 'agentos', 'mkag2', 'tpl', 'map'] },
+    { id: 'qa', name: '项目测试', en: 'QA', avatar: '测', grad: 'linear-gradient(140deg,#b97a1c,#8a5a12)', home: 'board', duties: ['模板 / Playable 功能兼容测试', '模拟测试机制运营与预览验收', '线上问题跟踪、反馈与回归', '发版门禁与质量报告'], nav: ['overview', 'daily', 'board', 'flow', 'tpl', 'cases'] },
+    { id: 'finance', name: '结算财务', en: 'FINANCE', avatar: '财', grad: 'linear-gradient(140deg,#0f9d8f,#0a6b62)', home: 'partners', duties: ['KOL 分成核算与发放执行', '品牌方账单、回款与对账', '积分发放与额度熔断监控', '提现审核（配合 KYC）与税务发票'], nav: ['overview', 'daily', 'partners', 'kolco', 'docs'] },
+    { id: 'ts', name: '内容审核 · T&S', en: 'TRUST & SAFETY', avatar: '审', grad: 'linear-gradient(140deg,#7c4dcc,#54348c)', home: 'risk', duties: ['模板与 UGC 双审执行', '举报队列 24h SOP 响应', '违禁内容清单与分级标签更新', '未成年人保护措施执行'], nav: ['overview', 'daily', 'docs', 'tpl', 'cases', 'kolco'] },
+    { id: 'community', name: '社区 / 玩家运营', en: 'COMMUNITY', avatar: '社', grad: 'linear-gradient(140deg,#e0558c,#a83263)', home: 'daily', duties: ['官方 TG / Discord 社群运营', '活动期玩家答疑与申诉处理', '女巫误判申诉复核与转办', '玩家侧激励活动执行'], nav: ['overview', 'daily', 'kolco', 'partners', 'mkagent', 'map'] },
+    { id: 'design', name: '设计 / 美术', en: 'DESIGN', avatar: '设', grad: 'linear-gradient(140deg,#e8a13a,#b3781f)', home: 'tpl', duties: ['模板素材生产与风格统一', '品牌方定制皮肤（换皮）制作', '素材版权溯源登记', 'AI 生成素材审核与微调'], nav: ['overview', 'daily', 'tpl', 'cases', 'docs', 'flow'] },
+    { id: 'support', name: '客服支持', en: 'SUPPORT', avatar: '客', grad: 'linear-gradient(140deg,#5a6b8c,#3c4a66)', home: 'daily', duties: ['品牌方 / KOL 工单响应', '玩家申诉受理与跨角色转办', 'FAQ 与帮助知识库维护', 'SLA 时效与满意度跟踪'], nav: ['overview', 'daily', 'partners', 'kolco', 'docs'] },
+    { id: 'hr', name: '人力资源 · 招聘', en: 'HR / TALENT', avatar: '人', grad: 'linear-gradient(140deg,#889144,#5c632b)', home: 'daily', duties: ['团队招聘：JD 制定、面试与 Offer 推进', '关键岗位人才地图与梯队建设', '新人入职培训与角色权限开通', '绩效考核与激励机制协同'], nav: ['overview', 'daily', 'docs'] }
   ];
 
   // ── 操作权限分级（负责人全权限，其余按矩阵；未列出的操作全员可用）──
@@ -4695,6 +4723,9 @@ class Component extends DCLogic {
     const S = this.state, D = S.data;
     const roleCur = this.ROLES.find(r => r.id === (D.role || 'owner')) || this.ROLES[0];
     const todoMine = S.todoMine !== false && roleCur.id !== 'owner';
+    const NAV_KEYS = ['overview', 'daily', 'board', 'docs', 'partners', 'tpl', 'kolco', 'cases', 'mkagent', 'flow', 'aigc', 'agentos', 'mkag2', 'map'];
+    const navAllowed = roleCur.nav || NAV_KEYS;
+    const navShow = {}; NAV_KEYS.forEach(k => { navShow['nav_' + k] = navAllowed.includes(k); });
     const today = this.today(), week = this.plusDays(7);
     const hideMoney = !!this.props.hideMoney;
     const money = v => hideMoney ? '$ •••' : (v > 0 ? '$' + Number(v).toLocaleString('en-US') : '待定');
@@ -6098,6 +6129,9 @@ class Component extends DCLogic {
       donePct: (totalCount ? Math.round(doneCount / totalCount * 100) : 0) + '%',
       upcoming: upcomingView, hasUpcoming: upcomingView.length > 0, noUpcoming: upcomingView.length === 0,
       showTodoToggle: roleCur.id !== 'owner',
+      ...navShow,
+      navGroupProj: ['docs', 'partners', 'tpl', 'kolco', 'cases', 'mkagent'].some(k => navAllowed.includes(k)),
+      navGroupPlat: ['flow', 'aigc', 'agentos', 'mkag2', 'map'].some(k => navAllowed.includes(k)),
       todoFilterLabel: todoMine ? '只看 ' + roleCur.name : '全部角色',
       todoTogBd: todoMine ? '#5b4dff' : '#ddd9ec', todoTogFg: todoMine ? '#5b4dff' : '#8783a3', todoTogBg: todoMine ? '#efeeff' : '#fff',
       toggleTodoMine: () => this.setState({ todoMine: !(S.todoMine !== false) }),
@@ -6133,6 +6167,9 @@ class Component extends DCLogic {
         pick: () => {
           this.setData(d => { d.role = r.id; });
           this.setState({ roleModal: false, page: r.home });
+          if (r.home === 'flow' && !this.state.flowHtml) this.loadFlow(this.state.flowSel || 0);
+          if (r.home === 'cases' && !this.state.caseHtml) this.loadCase(this.state.caseSel || 0);
+          if (r.home === 'agentos' && !this.state.agentHtml) this.loadAgent(this.state.agentSel || 0);
           this.showToast('已切换为「' + r.name + '」');
         }
       })),

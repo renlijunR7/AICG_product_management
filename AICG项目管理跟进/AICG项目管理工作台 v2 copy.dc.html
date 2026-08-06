@@ -3345,45 +3345,18 @@ class Component extends DCLogic {
           (d.docs || []).forEach(x => { if (x.category === '游戏平台项目') x.category = '游戏品牌方'; });
           if (!d.ljhSeeded) {
             d.ljhSeeded = true;
-            const LP = (id, name, contact, note) => ({ id, name, industry: '游戏', stage: '接触', owner: '我', contact, budget: 0, nextDate: this.plusDays(3), deadline: '', exposure: 0, conversion: 0, notes: [{ d: this.plusDays(0).slice(5), t: note }] });
-            const adds = [
-              LP('ljh1', '王国纪元（IGG）', 'bd@igg.com', '量江湖 ASA 合作客户 · 全球多地区持续投放，SLG 品类 iOS 流量标杆'),
-              LP('ljh2', '万国觉醒（莉莉丝）', 'bd@lilith.com', '量江湖 ASA 合作客户 · 东南亚多语言投放，广告量级翻倍'),
-              LP('ljh3', '剑与远征（莉莉丝）', 'bd@lilith.com', '量江湖 ASA 合作客户 · 高成本放置赛道，量级与 ROI 同步提升'),
-              LP('ljh4', '少年三国志 2（游族）', 'bd@yoozoo.com', '量江湖 ASA 合作客户 · 泛三国非品牌词挖掘高质量付费用户'),
-              LP('ljh5', '闪烁之光', 'bd@qcplay.com', '量江湖 ASA 合作客户 · 品牌词守护 + 竞品流量拦截'),
-              LP('ljh6', '荒野行动（网易）', 'partnership@netease.com', '量江湖 ASA 合作客户 · 日本市场投放，抢占竞技类搜索流量'),
-              LP('ljh7', '明日之后（网易）', 'partnership@netease.com', '量江湖 ASA 合作客户 · 末日细分赛道精细化投放'),
-              LP('ljh8', '一拳超人：最强之男（游族）', 'bd@yoozoo.com', '量江湖 ASA 合作客户 · 动漫泛词/竞品词稳定获付费用户'),
-              LP('ljh9', 'Chapters（Crazy Maple）', 'bd@crazymaplestudio.com', '量江湖 ASA 合作客户 · 竞品词冷启动，日曝光 +300%')
-            ];
-            adds.forEach(p => { if (!(d.partners || []).some(x => x.name === p.name)) d.partners.push(p); });
+            this.seedLjhPartners().forEach(p => { if (!(d.partners || []).some(x => x.name === p.name)) d.partners.push(p); });
           }
           if (!d.remindersW720) { d.remindersW720 = 1; d.reminders = this.seedRemindersW720(); }
           if (!d.remindersW803) { d.remindersW803 = 1; d.reminders = this.seedRemindersW720(); }
-          if (!d.tplLib) d.tplLib = [
-            { id: 'tp1', name: '塔防', base: '塔防守卫', scene: '策略互动 · 品牌任务植入', status: '可用' },
-            { id: 'tp2', name: '空投', base: '空投领取', scene: 'TG 社群裂变 · 空投预热', status: '可用' },
-            { id: 'tp3', name: '模拟交易', base: '模拟盘交易', scene: '交易所拉新 · 新手教育', status: '可用' },
-            { id: 'tp4', name: '竞猜', base: '二元预测', scene: 'K 线竞猜 · 币圈 KOL 营销', status: '可用' }
-          ];
+          if (!d.tplLib) d.tplLib = this.seedTplLib();
           if (!(d.docs || []).some(x => x.id === 'd_td_cex')) { d.docs = d.docs || []; d.docs.unshift({ id: 'd_td_cex', title: '塔防 × Web3 交易所营销切入点方案', category: '产品资料', status: '评审', link: encodeURI('uploads/塔防xWeb3交易所营销切入点方案.md'), updated: '2026-07-17' }); }
           d.docs = (d.docs || []).filter(x => x.id !== 'd_risk24'); // v2.4 定稿已并入「风控体系」页
           if (!d.aiIndex) d.aiIndex = this.seedAiIndex();
-          if (!d.tplLibV3) { d.tplLibV3 = 1; d.tplLib = [
-            { id: 'tp1', name: '塔防', base: '塔防守卫', scene: '策略互动 · 品牌任务植入', status: '可用', owner: 'Airvana 平台自研', agreement: '平台自有 · 无需授权', intro: '经典塔防玩法轻量化：玩家布置防御塔抵御波次进攻，塔位/敌人皮肤可替换为品牌元素，通关奖励对接核销。单局 60-90 秒，支持难度递增与排行榜。' },
-            { id: 'tp2', name: '空投', base: '空投领取', scene: 'TG 社群裂变 · 空投预热', status: '可用', owner: 'Airvana 平台自研', agreement: '平台自有 · 无需授权', intro: '定时空投掉落 + 点击领取玩法：完成任务（关注/邀请/进群）解锁领取资格，奖励接积分或代币白名单。内置邀请裂变与防作弊校验，是 TG 冷启动标配模板。' },
-            { id: 'tp3', name: '模拟交易', base: '模拟盘交易', scene: '交易所拉新 · 新手教育', status: '可用', owner: 'Airvana × 量化工作室联研', agreement: '联合开发协议 · 收益分成 85/15', intro: '真实行情回放的模拟盘：玩家用虚拟资金买卖，结算收益率排行。K 线数据接真实交易对，支持品牌交易所 Logo/开户链接植入，转化路径直达注册。' },
-            { id: 'tp4', name: '竞猜', base: '二元预测', scene: 'K 线竞猜 · 币圈 KOL 营销', status: '可用', owner: 'Airvana 平台自研', agreement: '平台自有 · 无需授权', intro: 'Pump or Dump 二元预测：60 秒内猜下一根 K 线涨跌，连胜倍增积分。玩法极轻、分享率高，KOL 可自定义交易对与口播文案，适合行情热点即时蹭量。' }
-          ]; }
+          if (!d.tplLibV3) { d.tplLibV3 = 1; d.tplLib = this.seedTplLib(); }
           if (!d.kolLib) d.kolLib = [];
           if (!d.kolLibV2) { d.kolLibV2 = 1; d.kolLib = []; }
-          if (!d.kolLibV3) { d.kolLibV3 = 1; d.kolLib = [
-            { id: 'kc1', name: 'Aria', plat: 'TikTok · X', fans: '240万', mode: '纯分成 60/40', tier: 'S', status: '合作中', country: '美国', gender: '女', audience: '18-30 · 币圈 / 科技爱好者 · 男性 62%', attrs: '加密 KOL · 视频创作 · 英语', contact: 'aria@kolmail.com · TG @aria_kol', agreement: '已签署', followUp: '孙睿', coopData: '合作 12 次 · 曝光 480万 · 转化 3.2万 · 分成 $8,400', rating: 4.8 },
-            { id: 'kc2', name: 'CryptoLeo', plat: 'X · TG', fans: '86万', mode: 'CPS 分成', tier: 'A', status: '合作中', country: '新加坡', gender: '男', audience: '22-38 · 交易员 / DeFi 玩家 · 男性 78%', attrs: '行情分析 · 图文推文 · 英语/中文', contact: 'TG @cryptoleo_sg', agreement: '已签署', followUp: '珊珊', coopData: '合作 7 次 · 曝光 190万 · 转化 1.4万 · 分成 $3,100', rating: 4.5 },
-            { id: 'kc3', name: '游戏主播小葵', plat: '抖音', fans: '120万', mode: '坑位费 + 佣金', tier: 'A', status: '已签约', country: '中国', gender: '女', audience: '16-28 · 手游玩家 · 女性 55%', attrs: '游戏直播 · 试玩带货 · 中文', contact: '微信 xiaokui_mcn（经纪人）', agreement: '已签署', followUp: '任丽军', coopData: '合作 2 次 · 曝光 65万 · 转化 4,800 · 分成 ¥12,000', rating: 4.2 },
-            { id: 'kc4', name: 'MemeQueen', plat: 'TG · Discord', fans: '32万', mode: 'CPS 分成', tier: 'B', status: '洽谈中', country: '韩国', gender: '女', audience: '18-26 · Meme / NFT 社群 · 混合', attrs: 'Meme 内容 · 社群运营 · 韩语/英语', contact: 'Discord memequeen#0412', agreement: '未签署', followUp: '孙睿', coopData: '暂无合作记录', rating: 0 }
-          ]; }
+          if (!d.kolLibV3) { d.kolLibV3 = 1; d.kolLib = this.seedKolLib(); }
           if (!d.asaSeeded) {
             d.asaSeeded = true;
             const asaMap = {
@@ -3896,6 +3869,46 @@ class Component extends DCLogic {
     ];
   }
 
+  seedTplLib() {
+    return [
+    { id: 'tp1', name: '塔防', base: '塔防守卫', scene: '策略互动 · 品牌任务植入', status: '可用', owner: 'Airvana 平台自研', agreement: '平台自有 · 无需授权', intro: '经典塔防玩法轻量化：玩家布置防御塔抵御波次进攻，塔位/敌人皮肤可替换为品牌元素，通关奖励对接核销。单局 60-90 秒，支持难度递增与排行榜。' },
+    { id: 'tp2', name: '空投', base: '空投领取', scene: 'TG 社群裂变 · 空投预热', status: '可用', owner: 'Airvana 平台自研', agreement: '平台自有 · 无需授权', intro: '定时空投掉落 + 点击领取玩法：完成任务（关注/邀请/进群）解锁领取资格，奖励接积分或代币白名单。内置邀请裂变与防作弊校验，是 TG 冷启动标配模板。' },
+    { id: 'tp3', name: '模拟交易', base: '模拟盘交易', scene: '交易所拉新 · 新手教育', status: '可用', owner: 'Airvana × 量化工作室联研', agreement: '联合开发协议 · 收益分成 85/15', intro: '真实行情回放的模拟盘：玩家用虚拟资金买卖，结算收益率排行。K 线数据接真实交易对，支持品牌交易所 Logo/开户链接植入，转化路径直达注册。' },
+    { id: 'tp4', name: '竞猜', base: '二元预测', scene: 'K 线竞猜 · 币圈 KOL 营销', status: '可用', owner: 'Airvana 平台自研', agreement: '平台自有 · 无需授权', intro: 'Pump or Dump 二元预测：60 秒内猜下一根 K 线涨跌，连胜倍增积分。玩法极轻、分享率高，KOL 可自定义交易对与口播文案，适合行情热点即时蹭量。' }
+          
+    ];
+  }
+
+  seedKolLib() {
+    return [
+    { id: 'kc1', name: 'Aria', plat: 'TikTok · X', fans: '240万', mode: '纯分成 60/40', tier: 'S', status: '合作中', country: '美国', gender: '女', audience: '18-30 · 币圈 / 科技爱好者 · 男性 62%', attrs: '加密 KOL · 视频创作 · 英语', contact: 'aria@kolmail.com · TG @aria_kol', agreement: '已签署', followUp: '孙睿', coopData: '合作 12 次 · 曝光 480万 · 转化 3.2万 · 分成 $8,400', rating: 4.8 },
+    { id: 'kc2', name: 'CryptoLeo', plat: 'X · TG', fans: '86万', mode: 'CPS 分成', tier: 'A', status: '合作中', country: '新加坡', gender: '男', audience: '22-38 · 交易员 / DeFi 玩家 · 男性 78%', attrs: '行情分析 · 图文推文 · 英语/中文', contact: 'TG @cryptoleo_sg', agreement: '已签署', followUp: '珊珊', coopData: '合作 7 次 · 曝光 190万 · 转化 1.4万 · 分成 $3,100', rating: 4.5 },
+    { id: 'kc3', name: '游戏主播小葵', plat: '抖音', fans: '120万', mode: '坑位费 + 佣金', tier: 'A', status: '已签约', country: '中国', gender: '女', audience: '16-28 · 手游玩家 · 女性 55%', attrs: '游戏直播 · 试玩带货 · 中文', contact: '微信 xiaokui_mcn（经纪人）', agreement: '已签署', followUp: '任丽军', coopData: '合作 2 次 · 曝光 65万 · 转化 4,800 · 分成 ¥12,000', rating: 4.2 },
+    { id: 'kc4', name: 'MemeQueen', plat: 'TG · Discord', fans: '32万', mode: 'CPS 分成', tier: 'B', status: '洽谈中', country: '韩国', gender: '女', audience: '18-26 · Meme / NFT 社群 · 混合', attrs: 'Meme 内容 · 社群运营 · 韩语/英语', contact: 'Discord memequeen#0412', agreement: '未签署', followUp: '孙睿', coopData: '暂无合作记录', rating: 0 }
+          
+    ];
+  }
+
+  seedLjhPartners() {
+    const asaMap = {
+      ljh1: '全球多地区 · 品牌词 + 类目词持续投放', ljh2: '东南亚多语言 · 量级 100% 翻倍', ljh3: '放置赛道 · 量级与回收 ROI 同步优化',
+      ljh4: '国内 iOS · 泛三国非品牌词拓量', ljh5: '品牌词守护 + 竞品词拦截', ljh6: '日本市场 · 竞技类搜索流量抢占',
+      ljh7: '末日细分赛道 · 精细化控成本', ljh8: '动漫泛词 + 竞品词稳定获客', ljh9: '竞品词冷启动 · 非品牌词曝光 +50%'
+    };
+    const LP = (id, name, contact, note) => ({ id, name, industry: '游戏', stage: '接触', owner: '我', contact, budget: 0, nextDate: this.plusDays(3), deadline: '', exposure: 0, conversion: 0, asa: { strategy: asaMap[id], taps: 0, installs: 0, cpa: 0, roas: 0 }, notes: [{ d: this.plusDays(0).slice(5), t: note }] });
+    return [
+      LP('ljh1', '王国纪元（IGG）', 'bd@igg.com', '量江湖 ASA 合作客户 · 全球多地区持续投放，SLG 品类 iOS 流量标杆'),
+      LP('ljh2', '万国觉醒（莉莉丝）', 'bd@lilith.com', '量江湖 ASA 合作客户 · 东南亚多语言投放，广告量级翻倍'),
+      LP('ljh3', '剑与远征（莉莉丝）', 'bd@lilith.com', '量江湖 ASA 合作客户 · 高成本放置赛道，量级与 ROI 同步提升'),
+      LP('ljh4', '少年三国志 2（游族）', 'bd@yoozoo.com', '量江湖 ASA 合作客户 · 泛三国非品牌词挖掘高质量付费用户'),
+      LP('ljh5', '闪烁之光', 'bd@qcplay.com', '量江湖 ASA 合作客户 · 品牌词守护 + 竞品流量拦截'),
+      LP('ljh6', '荒野行动（网易）', 'partnership@netease.com', '量江湖 ASA 合作客户 · 日本市场投放，抢占竞技类搜索流量'),
+      LP('ljh7', '明日之后（网易）', 'partnership@netease.com', '量江湖 ASA 合作客户 · 末日细分赛道精细化投放'),
+      LP('ljh8', '一拳超人：最强之男（游族）', 'bd@yoozoo.com', '量江湖 ASA 合作客户 · 动漫泛词/竞品词稳定获付费用户'),
+      LP('ljh9', 'Chapters（Crazy Maple）', 'bd@crazymaplestudio.com', '量江湖 ASA 合作客户 · 竞品词冷启动，日曝光 +300%')
+    ];
+  }
+
   seedGamePartners() {
     const P = (id, name, stage, owner, contact, nextDate, note) => ({ id, name, industry: '游戏', stage, owner, contact, budget: 0, nextDate: nextDate || '', deadline: '', exposure: 0, conversion: 0, notes: note ? [{ d: this.plusDays(-2).slice(5), t: note }] : [] });
     return [
@@ -4031,8 +4044,15 @@ class Component extends DCLogic {
       indPartnersSeeded: true,
       moduleTasksSeeded: true,
       gamePartnersSeeded: true,
+      ljhSeeded: true,
+      asaSeeded: true,
+      tplLibV3: 1,
+      kolLibV2: 1,
+      kolLibV3: 1,
+      tplLib: this.seedTplLib(),
+      kolLib: this.seedKolLib(),
       userCases: [],
-      partners: this.seedGamePartners().concat(this.seedIndPartners()).concat([
+      partners: this.seedGamePartners().concat(this.seedIndPartners()).concat(this.seedLjhPartners()).concat([
         { id: 'p1', name: '币安 Binance', stage: '执行', owner: '李骏', contact: 'TG @bn_partnership', budget: 60000, nextDate: t, deadline: this.plusDays(24), exposure: 1240000, conversion: 8600, regs: 4200, deposit: 380000, trades: 2600000, channels: [
           { label: 'TG Bot 落地页', url: 'https://t.me/aicg_playable_bot' },
           { label: '活动主页', url: 'https://binance.com/activity/aicg' }
@@ -4071,6 +4091,7 @@ class Component extends DCLogic {
         { id: 't10', title: '6 月数据周报发送', desc: '', col: '已完成', assignee: 'Momo', priority: '低', due: '', ver: 'v1', partnerId: '', docId: '' }
       ].concat(this.seedModuleTasks()),
       docs: [
+        { id: 'd_td_cex', title: '塔防 × Web3 交易所营销切入点方案', category: '产品资料', status: '评审', link: encodeURI('uploads/塔防xWeb3交易所营销切入点方案.md'), updated: '2026-07-17' },
         { id: 'd1', title: '项目白皮书 v0.9', category: '白皮书', status: '评审', link: '', updated: y2 },
         { id: 'd2', title: '项目一页纸 One-pager', category: '营销物料', status: '定稿', link: '', updated: this.plusDays(-6) },
         { id: 'd3', title: '产品介绍 Deck（品牌方版）', category: '营销物料', status: '定稿', link: '', updated: this.plusDays(-11) },

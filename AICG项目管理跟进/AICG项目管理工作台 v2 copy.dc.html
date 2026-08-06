@@ -142,12 +142,13 @@
     </div>
 
     <div style="flex:1"></div>
-    <div style="display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #ebe9f4;border-radius:14px;background:#fafaff">
-      <div style="width:32px;height:32px;flex:none;border-radius:99px;background:linear-gradient(140deg,#5b4dff,#3c2fd0);color:#fff;display:flex;align-items:center;justify-content:center;font:800 13px 'Manrope',sans-serif">我</div>
-      <div style="min-width:0">
-        <div style="font:700 12.5px 'Manrope','PingFang SC',sans-serif">项目负责人</div>
-        <div style="font:500 10px 'IBM Plex Mono',Menlo,monospace;color:#8783a3;letter-spacing:.06em">AICG · OWNER</div>
+    <div onClick="{{ openRoleModal }}" title="切换角色" style="display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #ebe9f4;border-radius:14px;background:#fafaff;cursor:pointer;transition:border-color .15s ease" style-hover="border-color:#c9c3f2;background:#f5f4ff">
+      <div style="width:32px;height:32px;flex:none;border-radius:99px;background:{{ roleGrad }};color:#fff;display:flex;align-items:center;justify-content:center;font:800 13px 'Manrope',sans-serif">{{ roleAvatar }}</div>
+      <div style="min-width:0;flex:1">
+        <div style="font:700 12.5px 'Manrope','PingFang SC',sans-serif">{{ roleName }}</div>
+        <div style="font:500 10px 'IBM Plex Mono',Menlo,monospace;color:#8783a3;letter-spacing:.06em">AICG · {{ roleEn }}</div>
       </div>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b9b5d0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l4-4 4 4"></path><path d="M8 15l4 4 4-4"></path></svg>
     </div>
   </div>
   </sc-if>
@@ -3221,6 +3222,43 @@
   </div>
 </sc-if>
 
+<!-- ============ ROLE SWITCH ============ -->
+<sc-if value="{{ roleModalOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeRoleModal }}" style="position:fixed;inset:0;background:rgba(24,23,42,.45);display:flex;align-items:center;justify-content:center;z-index:60;padding:20px">
+    <div onClick="{{ stopRoleProp }}" style="background:#fff;border-radius:22px;box-shadow:0 24px 60px -12px rgba(24,23,42,.18),0 8px 24px -8px rgba(24,23,42,.08);width:920px;max-width:100%;max-height:86vh;overflow:auto;padding:26px;animation:fadeIn .14s ease">
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:4px">
+        <div style="font:800 18px 'Manrope','PingFang SC',sans-serif;letter-spacing:-.01em">切换角色</div>
+        <div style="font:700 9.5px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;color:#c2bfd6">ROLE SWITCH · 12 ROLES</div>
+        <div style="flex:1"></div>
+        <div onClick="{{ closeRoleModal }}" style="width:28px;height:28px;border-radius:99px;background:#f3f1fa;color:#8783a3;display:flex;align-items:center;justify-content:center;cursor:pointer;font:700 14px 'Manrope',sans-serif" style-hover="background:#e8e5f5;color:#18172a">×</div>
+      </div>
+      <div style="font:500 12.5px 'Manrope','PingFang SC',sans-serif;color:#8783a3;margin-bottom:16px">选择你的身份，工作台将跳转到该角色的默认工作页</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:12px">
+        <sc-for list="{{ roleList }}" as="ro" hint-placeholder-count="12">
+          <div onClick="{{ ro.pick }}" style="border:1.5px solid {{ ro.bd }};border-radius:16px;padding:14px 16px;cursor:pointer;background:{{ ro.bg }};transition:border-color .15s ease" style-hover="border-color:#5b4dff;box-shadow:0 4px 16px -6px rgba(91,77,255,.18)">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+              <div style="width:34px;height:34px;flex:none;border-radius:99px;background:{{ ro.grad }};color:#fff;display:flex;align-items:center;justify-content:center;font:800 13px 'Manrope',sans-serif">{{ ro.avatar }}</div>
+              <div style="min-width:0;flex:1">
+                <div style="font:800 13.5px 'Manrope','PingFang SC',sans-serif;color:#18172a">{{ ro.name }}</div>
+                <div style="font:600 9px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;color:#8783a3">{{ ro.en }}</div>
+              </div>
+              <sc-if value="{{ ro.on }}" hint-placeholder-val="{{ false }}">
+                <div style="flex:none;padding:2px 9px;border-radius:99px;background:#5b4dff;color:#fff;font:700 10px 'Manrope','PingFang SC',sans-serif">当前</div>
+              </sc-if>
+            </div>
+            <sc-for list="{{ ro.dutyList }}" as="du" hint-placeholder-count="4">
+              <div style="display:flex;gap:6px;align-items:baseline;margin:3px 0">
+                <span style="flex:none;width:4px;height:4px;border-radius:99px;background:#c9c3f2;position:relative;top:-2px"></span>
+                <span style="font:500 11.5px/1.5 'Manrope','PingFang SC',sans-serif;color:#4b486a">{{ du.t }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
 <!-- ============ TOAST ============ -->
 <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
   <div style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#18172a;color:#fff;border-radius:99px;padding:10px 20px;font:600 12.5px 'Manrope','PingFang SC',sans-serif;box-shadow:0 12px 30px -8px rgba(24,23,42,.4);z-index:70;animation:fadeIn .14s ease;white-space:nowrap">{{ toast }}</div>
@@ -3373,6 +3411,7 @@ class Component extends DCLogic {
           }
           // 备注日期统一为 MM-DD（历史数据里混入过 YYYY-MM-DD，导致时间线排序错乱）
           (d.competitors || []).forEach(c => (c.notes || []).forEach(n => { if (/^\d{4}-\d{2}-\d{2}/.test(n.d)) n.d = n.d.slice(5); }));
+          if (!d.role || !this.ROLES.some(r => r.id === d.role)) d.role = 'owner';
           return d;
         }
       }
@@ -3570,6 +3609,22 @@ class Component extends DCLogic {
     'uploads/协议6. Airvana_作品托管授权协议.md',
     'uploads/协议7. Airvana_Web3附加条款.md',
     'uploads/协议8. Airvana_内容规范与社区准则.md'
+  ];
+
+  // ── 角色体系（左下角用户卡切换）──
+  ROLES = [
+    { id: 'owner', name: '项目负责人', en: 'OWNER', avatar: '我', grad: 'linear-gradient(140deg,#5b4dff,#3c2fd0)', home: 'overview', duties: ['全局视角与跨角色资源协调', '版本计划与优先级最终审批', '结算与协议变更的最终审批', '对外关键合作关系维护'] },
+    { id: 'biz', name: '项目商务', en: 'BD', avatar: '商', grad: 'linear-gradient(140deg,#ff7a3d,#d15a1f)', home: 'partners', duties: ['品牌方需求对接与营销方案制定', '游戏团队模板批量合作洽谈', '合同 / SOW 推进与回款跟进', '合作方档案与沟通记录维护'] },
+    { id: 'legal', name: '项目法务', en: 'LEGAL', avatar: '法', grad: 'linear-gradient(140deg,#d43d33,#8f231c)', home: 'risk', duties: ['平台 8 份协议维护与版本管理', '品牌方准入尽调与红线把关', 'Web3 合规：KYC 分级 / 地区屏蔽', '对外合作权益保障与争议处理'] },
+    { id: 'kolops', name: 'KOL 运营', en: 'KOL OPS', avatar: 'K', grad: 'linear-gradient(140deg,#b03a72,#7d2450)', home: 'kolco', duties: ['KOL 招募准入与数据核验', '分层管理（S/A/B）与培训赋能', 'KOL 营销方案共创与排期', '达人舆情监控与紧急下架协同'] },
+    { id: 'product', name: '项目产品', en: 'PRODUCT', avatar: '产', grad: 'linear-gradient(140deg,#1d9f6e,#136b49)', home: 'cases', duties: ['营销案例方案设计与全流程推演', '模板标准与上架规范制定', '产品设计与 PRD / 版本规划', '漏斗定义与结算口径制定'] },
+    { id: 'tech', name: '项目技术', en: 'ENGINEERING', avatar: '技', grad: 'linear-gradient(140deg,#2b6fd4,#1b478c)', home: 'agentos', duties: ['Agent OS / AICG 工作流开发', '模板引擎与 H5 Builder 建设', '发布投放连接器与系统稳定性', '架构可拓展性与技术文档沉淀'] },
+    { id: 'qa', name: '项目测试', en: 'QA', avatar: '测', grad: 'linear-gradient(140deg,#b97a1c,#8a5a12)', home: 'board', duties: ['模板 / Playable 功能兼容测试', '模拟测试机制运营与预览验收', '线上问题跟踪、反馈与回归', '发版门禁与质量报告'] },
+    { id: 'finance', name: '结算财务', en: 'FINANCE', avatar: '财', grad: 'linear-gradient(140deg,#0f9d8f,#0a6b62)', home: 'partners', duties: ['KOL 分成核算与发放执行', '品牌方账单、回款与对账', '积分发放与额度熔断监控', '提现审核（配合 KYC）与税务发票'] },
+    { id: 'ts', name: '内容审核 · T&S', en: 'TRUST & SAFETY', avatar: '审', grad: 'linear-gradient(140deg,#7c4dcc,#54348c)', home: 'risk', duties: ['模板与 UGC 双审执行', '举报队列 24h SOP 响应', '违禁内容清单与分级标签更新', '未成年人保护措施执行'] },
+    { id: 'community', name: '社区 / 玩家运营', en: 'COMMUNITY', avatar: '社', grad: 'linear-gradient(140deg,#e0558c,#a83263)', home: 'daily', duties: ['官方 TG / Discord 社群运营', '活动期玩家答疑与申诉处理', '女巫误判申诉复核与转办', '玩家侧激励活动执行'] },
+    { id: 'design', name: '设计 / 美术', en: 'DESIGN', avatar: '设', grad: 'linear-gradient(140deg,#e8a13a,#b3781f)', home: 'tpl', duties: ['模板素材生产与风格统一', '品牌方定制皮肤（换皮）制作', '素材版权溯源登记', 'AI 生成素材审核与微调'] },
+    { id: 'support', name: '客服支持', en: 'SUPPORT', avatar: '客', grad: 'linear-gradient(140deg,#5a6b8c,#3c4a66)', home: 'daily', duties: ['品牌方 / KOL 工单响应', '玩家申诉受理与跨角色转办', 'FAQ 与帮助知识库维护', 'SLA 时效与满意度跟踪'] }
   ];
 
   loadDocFile(x) {
@@ -4051,6 +4106,7 @@ class Component extends DCLogic {
       kolLibV3: 1,
       tplLib: this.seedTplLib(),
       kolLib: this.seedKolLib(),
+      role: 'owner',
       userCases: [],
       partners: this.seedGamePartners().concat(this.seedIndPartners()).concat(this.seedLjhPartners()).concat([
         { id: 'p1', name: '币安 Binance', stage: '执行', owner: '李骏', contact: 'TG @bn_partnership', budget: 60000, nextDate: t, deadline: this.plusDays(24), exposure: 1240000, conversion: 8600, regs: 4200, deposit: 380000, trades: 2600000, channels: [
@@ -4603,6 +4659,7 @@ class Component extends DCLogic {
   // ── render values ────────────────────────────
   renderVals() {
     const S = this.state, D = S.data;
+    const roleCur = this.ROLES.find(r => r.id === (D.role || 'owner')) || this.ROLES[0];
     const today = this.today(), week = this.plusDays(7);
     const hideMoney = !!this.props.hideMoney;
     const money = v => hideMoney ? '$ •••' : (v > 0 ? '$' + Number(v).toLocaleString('en-US') : '待定');
@@ -6017,6 +6074,25 @@ class Component extends DCLogic {
       doConfirm: () => { const f = S.confirm && S.confirm.fn; this.setState({ confirm: null }); if (f) f(); },
       cancelConfirm: () => this.setState({ confirm: null }),
       toast: S.toast || '',
+
+      // role switch
+      roleName: roleCur.name, roleEn: roleCur.en, roleAvatar: roleCur.avatar, roleGrad: roleCur.grad,
+      roleModalOpen: !!S.roleModal,
+      openRoleModal: () => this.setState({ roleModal: true }),
+      closeRoleModal: () => this.setState({ roleModal: false }),
+      stopRoleProp: e => e.stopPropagation(),
+      roleList: this.ROLES.map(r => ({
+        id: r.id, name: r.name, en: r.en, avatar: r.avatar, grad: r.grad,
+        on: r.id === roleCur.id,
+        bd: r.id === roleCur.id ? '#5b4dff' : '#ebe9f4',
+        bg: r.id === roleCur.id ? '#f5f4ff' : '#fff',
+        dutyList: r.duties.map(t => ({ t })),
+        pick: () => {
+          this.setData(d => { d.role = r.id; });
+          this.setState({ roleModal: false, page: r.home });
+          this.showToast('已切换为「' + r.name + '」');
+        }
+      })),
 
       // modal
       showModal: !!S.modal,

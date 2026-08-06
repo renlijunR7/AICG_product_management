@@ -3393,33 +3393,6 @@ class Component extends DCLogic {
             };
             (d.partners || []).forEach(p => { if (asaMap[p.id]) p.asa = { strategy: asaMap[p.id], taps: 0, installs: 0, cpa: 0, roas: 0 }; });
           }
-          if (!d.aiGameCompSeeded) {
-            d.aiGameCompSeeded = true;
-            const y0 = this.plusDays(0).slice(5);
-            const C = (id, name, track, threat, position, pros, cons, link, pricing, audience, revenue, funding, backing, caps, note) => ({ id, name, track, threat, position, pros, cons, link, pricing, audience, revenue, funding, backing, caps, notes: [{ d: y0, t: note }] });
-            d.competitors = (d.competitors || []).concat([
-              C('c7', '极逸 SOON AI', '一站式 AI 游戏开发平台', '高', '一年内连续完成两轮融资的 AI 游戏开发平台，覆盖策划到成品全链路生成', '资本节奏快（横店资本 / 恺英网络 / 比高集团 / 见识资本），影视+游戏产业资源加持', '商业化初期，无营销分发与结算闭环，不面向 KOL', '', 'B 端授权 + 分成', '游戏研发团队 / IP 方', '商业化初期，未公开营收', '两轮累计近 ¥1亿 · 首轮估值 ¥1亿（恺英子公司持股 85%）', '产业资本加持 · 早期', { 'Agent 共创': 1, 'Playable 生成': 2, '分发渠道': 0, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 0 }, '关注其 AI 生成游戏全链路能力是否延伸到营销场景'),
-              C('c8', 'TapTap Maker', '一站式 AI 游戏开发平台', '高', '心动公司（02400.HK）旗下 AI 游戏创作平台，背靠 TapTap 分发生态', '自带 TapTap 分发渠道与玩家社区，母公司 2025 年营收 ¥57.64亿（+15%），TapTap 分部收入 ¥19.68亿', '面向游戏开发者而非营销场景，无 KOL / 结算体系', 'https://www.taptap.cn', '开发者工具订阅 + 分发基础设施', '独立开发者 / 中小游戏团队', '母公司归母净利 ¥15.35亿（+89.2%）', '心动公司体内业务，无独立融资', '上市公司体内 · 生态成熟', { 'Agent 共创': 1, 'Playable 生成': 2, '分发渠道': 2, '结算 / 钱包': 1, 'Web3 场景': 0, 'KOL 生态': 1 }, '生成 + 自有分发是其最大威胁点，紧盯 Maker 内容是否商业化开放'),
-              C('c9', '腾讯造化工坊', '一站式 AI 游戏开发平台', '中', '腾讯光子工作室群内部 AI 游戏生成项目，依托腾讯整体资源', '腾讯技术与 IP 资源（2026 年 6 月完成 410 亿双币种融资背书），免费策略快速建生态', '短期无大额营收诉求，主要用于生态建设与创作者激励，商业化路径未定', '', '免费开放 · 生态激励', '创作者生态 / 内部工作室', '短期无大额营收', '腾讯内部项目，依托集团融资', '巨头内部孵化', { 'Agent 共创': 1, 'Playable 生成': 2, '分发渠道': 1, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 1 }, '免费策略可能拉低创作者付费预期，关注其开放节奏'),
-              C('c10', '阿里 HappyOyster 快乐生蚝', '一站式 AI 游戏开发平台', '中', '阿里云百炼平台产品，2026 年 7 月刚上线灰度测试', '阿里云算力与百炼平台底座，集团计划五年内 AI 相关收入提升至 $1000亿', '刚灰度上线，产品成熟度低，无营销与结算场景', '', '企业级订阅（百炼计费）', '企业客户 / 行业开发者', '刚上线灰度，暂无营收', '阿里云体内产品', '云巨头体内 · 灰度期', { 'Agent 共创': 1, 'Playable 生成': 1, '分发渠道': 1, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 0 }, '灰度期重点观察生成质量与定价策略'),
-              C('c11', 'Holopix AI', '专业游戏素材生成 · 2D/3D 美术', '低', '广州光绘科技旗下游戏美术素材生成平台，算力点计费', '按算力点付费门槛低（新用户送 50 算力，日免费 30 次），面向游戏团队的批量生成方案', '仅覆盖美术素材单点，无游戏成品生成与营销链路', '', '算力点付费 + 企业版订阅 + API', '游戏美术团队', '未公开', '融资信息未公开', '早期 · 未公开', { 'Agent 共创': 0, 'Playable 生成': 0, '分发渠道': 0, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 0 }, '可作为素材 Agent 的潜在供给侧对接对象'),
-              C('c12', 'Krene', '专业游戏素材生成 · 2D/3D 美术', '低', '前《原神》主创团队创办的游戏美术垂直生成平台', '团队美术基因强（角色概念图 / 场景设计），支持游戏团队定制化模型训练', '垂直美术单点，未公开营收，无营销场景', '', '按次付费 + 订阅制 + 定制模型训练', '游戏研发美术管线', '未公开 · 专注美术垂直', '2025 年底完成 Pre-A 轮（投资方未公开）', 'Pre-A · 明星团队', { 'Agent 共创': 0, 'Playable 生成': 0, '分发渠道': 0, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 0 }, '角色/场景风格化能力值得对标素材 Agent'),
-              C('c13', 'Ludo.ai', '专业游戏素材生成 · 创意验证', '低', '游戏创意生成 + 市场验证一体化 SaaS，面向独立开发者', '创意到市场验证一体化，订阅定价清晰（基础版 $25/月，工作室版 $250/月 15 席）', '不生成可玩成品，无分发与结算', 'https://ludo.ai', 'SaaS 订阅（$25-250/月）', '独立开发者 / 游戏公司', 'SaaS 订阅收入（规模未公开）', 'Danxia Capital / Tyhke Ventures / Harlem Capital（金额未公开）', '种子期 · SaaS', { 'Agent 共创': 0, 'Playable 生成': 1, '分发渠道': 0, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 0 }, '其「创意 → 市场验证」流程可借鉴到玩法基底选型'),
-              C('c14', 'Layer AI', '专业游戏素材生成 · 2D/3D 美术', '低', '面向游戏工作室的 AI 内容创作套件，支持批量生成与风格统一', '服务超 300 家游戏工作室，King 联创等游戏行业资本背书', '素材工具单点，预计年收入约 $220万，体量小', 'https://layer.ai', 'SaaS 订阅（工作室套件）', '游戏工作室', '预计年收入约 $220万', '2025 年 5 月 $650万 种子轮（Arcadia Gaming Partners 领投，King 联创 Riccardo Zacconi 等）', '种子轮 · 游戏资本', { 'Agent 共创': 0, 'Playable 生成': 0, '分发渠道': 0, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 0 }, '批量生成 + 风格统一能力是素材管线对标项')
-            ]);
-          }
-          if (!d.aiPlayComps) {
-            d.aiPlayComps = 1;
-            const y0 = this.today().slice(5);
-            const C2 = (id, name, threat, position, pros, cons, link, pricing, audience, revenue, funding, backing, caps, note) => ({ id, name, track: 'AI 互动游戏平台（UGC Playable）', threat, position, pros, cons, link, pricing, audience, revenue, funding, backing, caps, notes: [{ d: y0, t: note }] });
-            d.competitors = (d.competitors || []).concat([
-              C2('c18', 'Loopit', '高', 'SeedLeap（北京，陈伟鹏，前搜狗搜索研发总经理）的 AI Playable Maker：一句话生成可交互 H5，单列 Feed「可玩版 TikTok」', '产品形态与 Airvana Playable 最接近；安卓累计 490万 下载、近 30 天 140万，娱乐榜第 4，iOS 4.8 分', '纯 C 端 UGC 社区，无品牌营销 / KOL 结算 / Web3 场景，商业化未启动', 'https://www.loopit.me', 'UGC 免费创作 + 免费玩，商业化早期', 'C 端创作者 / 玩家', '未公开（早期）', '未公开融资', '早期 · 增长迅猛', { 'Agent 共创': 1, 'Playable 生成': 2, '分发渠道': 1, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 0 }, '形态最接近的竞品：紧盯其生成质量、Feed 分发与商业化动作'),
-              C2('c19', 'Aippy', '中', 'NADA AI（新加坡）的 AI 生成社区：自然语言生成小游戏 / 工具 / 互动艺术，全栈无代码 + Remix 二创', '安卓累计 170万 下载、近 30 天 42万，4.8 分；支持体感 / 手势追踪 / 3D 实验', '无营销链路与结算体系，纯社区产品', 'https://aippy.ai', '免费无广告 · UGC 社区', 'C 端创作者', '未公开', '未公开融资', '早期', { 'Agent 共创': 1, 'Playable 生成': 2, '分发渠道': 1, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 0 }, '全栈生成（前端+后端+数据库）能力值得对标'),
-              C2('c20', 'Sekai', '中', 'Versa AI 的 AI 互动内容平台：秒级生成测验 / 互动故事 / 迷你游戏，主打群聊链接分享', '「链接即玩」社交分发路径轻，群聊裂变场景清晰', '内容偏轻（测验 / 贺卡），生成稳定性一般，无商业化闭环', 'https://sekaiapp.com', '免费创作 + 免费玩 · 无广告', 'C 端 / 群聊社交场景', '未公开', '未公开融资', '早期', { 'Agent 共创': 1, 'Playable 生成': 1, '分发渠道': 1, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 0 }, '群聊链接分发路径可借鉴到 KOL 私域场景'),
-              C2('c21', 'Rezona', '高', 'Stratava 的 AI meme 游戏平台：梗图 / 脑洞一句话变 Memeplay，TikTok 式 Feed + 一键 Remix', '增长最快：安卓累计 1,300万 下载、近 30 天 230万，娱乐榜第 5；内置积分提现（CASH OUT）玩家激励', '以 meme 娱乐为主，无品牌方 / KOL 商业化基础设施', 'https://www.rezona.ai', 'UGC 免费 + 积分 / 现金激励', 'C 端玩家 / meme 社区', '未公开', '未公开融资', '早期 · 增长标杆', { 'Agent 共创': 1, 'Playable 生成': 2, '分发渠道': 1, '结算 / 钱包': 1, 'Web3 场景': 0, 'KOL 生态': 0 }, '增长速度标杆：研究其 meme 裂变与积分激励模型'),
-              C2('c22', 'Remix', '高', 'Farworld Labs 的浏览器 AI 游戏平台：文字生成游戏一键发布 App Store / Google Play + TG / Base / Farcaster / World App 小程序框架', '57万+ 用户、800+ 游戏；分发渠道与 Airvana 高度重合（TG / Web3 小程序生态），社区带积分与空投预期', '游戏质量参差，安卓端下载量小，商业化以 Web3 预期为主', 'https://remix.gg', 'UGC 平台 + 创作者分发生态（Web3 积分 / 空投）', 'Web3 创作者 / TG 小游戏玩家', '未公开', '未公开融资', '早期 · Web3 属性', { 'Agent 共创': 1, 'Playable 生成': 2, '分发渠道': 2, '结算 / 钱包': 1, 'Web3 场景': 1, 'KOL 生态': 0 }, '分发渠道重合度最高：紧盯其 TG / Farcaster 小程序生态进展')
-            ]);
-          }
           if (!(d.partners || []).some(p => p.id === 'p11' || p.name === 'Bitget')) {
             d.partners.unshift({ id: 'p11', name: 'Bitget', industry: 'Web3', stage: '接触', owner: '我', contact: 'TG @bitget_bd', budget: 0, nextDate: this.plusDays(2), deadline: '', exposure: 0, conversion: 0, notes: [
               { d: this.plusDays(0).slice(5), t: '新建联，准备发送项目一页纸与合作方案' }
@@ -3490,8 +3463,37 @@ class Component extends DCLogic {
       { id: 'c6', name: '钛动科技 Tec-Do', track: '出海营销 · AI 增长平台', threat: '中', position: '面向中国企业出海的一站式营销增长平台，AI 创意生成 + 全球媒体投放 + 数据服务全链路', pros: '全球媒体渠道资源深（Meta/Google/TikTok 一代），AI 创意工具矩阵成熟，出海客户体量大', cons: '服务广告主投放团队而非 KOL，无 playable 共创与玩家生态，无 Web3 结算场景', link: 'https://www.tec-do.com', pricing: '媒体代理返点 + SaaS 服务费', audience: '中国出海企业 / 游戏发行商 / 电商品牌', revenue: '流水体量大（代理返点为主）', funding: '多轮融资 · 累计数亿元人民币', backing: '成熟营收 · 多轮融资', caps: { 'Agent 共创': 1, 'Playable 生成': 1, '分发渠道': 2, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 1 }, notes: [
         { d: y3, t: '其 AI 创意生成（图文/视频）已规模化商用，关注是否延伸到互动素材' }
       ]}
+    ].concat(this.seedAiGameComps()).concat(this.seedAiPlayComps());
+  }
+
+  seedAiGameComps() {
+    const y0 = this.plusDays(0).slice(5);
+    const C = (id, name, track, threat, position, pros, cons, link, pricing, audience, revenue, funding, backing, caps, note) => ({ id, name, track, threat, position, pros, cons, link, pricing, audience, revenue, funding, backing, caps, notes: [{ d: y0, t: note }] });
+    return [
+      C('c7', '极逸 SOON AI', '一站式 AI 游戏开发平台', '高', '一年内连续完成两轮融资的 AI 游戏开发平台，覆盖策划到成品全链路生成', '资本节奏快（横店资本 / 恺英网络 / 比高集团 / 见识资本），影视+游戏产业资源加持', '商业化初期，无营销分发与结算闭环，不面向 KOL', '', 'B 端授权 + 分成', '游戏研发团队 / IP 方', '商业化初期，未公开营收', '两轮累计近 ¥1亿 · 首轮估值 ¥1亿（恺英子公司持股 85%）', '产业资本加持 · 早期', { 'Agent 共创': 1, 'Playable 生成': 2, '分发渠道': 0, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 0 }, '关注其 AI 生成游戏全链路能力是否延伸到营销场景'),
+      C('c8', 'TapTap Maker', '一站式 AI 游戏开发平台', '高', '心动公司（02400.HK）旗下 AI 游戏创作平台，背靠 TapTap 分发生态', '自带 TapTap 分发渠道与玩家社区，母公司 2025 年营收 ¥57.64亿（+15%），TapTap 分部收入 ¥19.68亿', '面向游戏开发者而非营销场景，无 KOL / 结算体系', 'https://www.taptap.cn', '开发者工具订阅 + 分发基础设施', '独立开发者 / 中小游戏团队', '母公司归母净利 ¥15.35亿（+89.2%）', '心动公司体内业务，无独立融资', '上市公司体内 · 生态成熟', { 'Agent 共创': 1, 'Playable 生成': 2, '分发渠道': 2, '结算 / 钱包': 1, 'Web3 场景': 0, 'KOL 生态': 1 }, '生成 + 自有分发是其最大威胁点，紧盯 Maker 内容是否商业化开放'),
+      C('c9', '腾讯造化工坊', '一站式 AI 游戏开发平台', '中', '腾讯光子工作室群内部 AI 游戏生成项目，依托腾讯整体资源', '腾讯技术与 IP 资源（2026 年 6 月完成 410 亿双币种融资背书），免费策略快速建生态', '短期无大额营收诉求，主要用于生态建设与创作者激励，商业化路径未定', '', '免费开放 · 生态激励', '创作者生态 / 内部工作室', '短期无大额营收', '腾讯内部项目，依托集团融资', '巨头内部孵化', { 'Agent 共创': 1, 'Playable 生成': 2, '分发渠道': 1, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 1 }, '免费策略可能拉低创作者付费预期，关注其开放节奏'),
+      C('c10', '阿里 HappyOyster 快乐生蚝', '一站式 AI 游戏开发平台', '中', '阿里云百炼平台产品，2026 年 7 月刚上线灰度测试', '阿里云算力与百炼平台底座，集团计划五年内 AI 相关收入提升至 $1000亿', '刚灰度上线，产品成熟度低，无营销与结算场景', '', '企业级订阅（百炼计费）', '企业客户 / 行业开发者', '刚上线灰度，暂无营收', '阿里云体内产品', '云巨头体内 · 灰度期', { 'Agent 共创': 1, 'Playable 生成': 1, '分发渠道': 1, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 0 }, '灰度期重点观察生成质量与定价策略'),
+      C('c11', 'Holopix AI', '专业游戏素材生成 · 2D/3D 美术', '低', '广州光绘科技旗下游戏美术素材生成平台，算力点计费', '按算力点付费门槛低（新用户送 50 算力，日免费 30 次），面向游戏团队的批量生成方案', '仅覆盖美术素材单点，无游戏成品生成与营销链路', '', '算力点付费 + 企业版订阅 + API', '游戏美术团队', '未公开', '融资信息未公开', '早期 · 未公开', { 'Agent 共创': 0, 'Playable 生成': 0, '分发渠道': 0, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 0 }, '可作为素材 Agent 的潜在供给侧对接对象'),
+      C('c12', 'Krene', '专业游戏素材生成 · 2D/3D 美术', '低', '前《原神》主创团队创办的游戏美术垂直生成平台', '团队美术基因强（角色概念图 / 场景设计），支持游戏团队定制化模型训练', '垂直美术单点，未公开营收，无营销场景', '', '按次付费 + 订阅制 + 定制模型训练', '游戏研发美术管线', '未公开 · 专注美术垂直', '2025 年底完成 Pre-A 轮（投资方未公开）', 'Pre-A · 明星团队', { 'Agent 共创': 0, 'Playable 生成': 0, '分发渠道': 0, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 0 }, '角色/场景风格化能力值得对标素材 Agent'),
+      C('c13', 'Ludo.ai', '专业游戏素材生成 · 创意验证', '低', '游戏创意生成 + 市场验证一体化 SaaS，面向独立开发者', '创意到市场验证一体化，订阅定价清晰（基础版 $25/月，工作室版 $250/月 15 席）', '不生成可玩成品，无分发与结算', 'https://ludo.ai', 'SaaS 订阅（$25-250/月）', '独立开发者 / 游戏公司', 'SaaS 订阅收入（规模未公开）', 'Danxia Capital / Tyhke Ventures / Harlem Capital（金额未公开）', '种子期 · SaaS', { 'Agent 共创': 0, 'Playable 生成': 1, '分发渠道': 0, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 0 }, '其「创意 → 市场验证」流程可借鉴到玩法基底选型'),
+      C('c14', 'Layer AI', '专业游戏素材生成 · 2D/3D 美术', '低', '面向游戏工作室的 AI 内容创作套件，支持批量生成与风格统一', '服务超 300 家游戏工作室，King 联创等游戏行业资本背书', '素材工具单点，预计年收入约 $220万，体量小', 'https://layer.ai', 'SaaS 订阅（工作室套件）', '游戏工作室', '预计年收入约 $220万', '2025 年 5 月 $650万 种子轮（Arcadia Gaming Partners 领投，King 联创 Riccardo Zacconi 等）', '种子轮 · 游戏资本', { 'Agent 共创': 0, 'Playable 生成': 0, '分发渠道': 0, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 0 }, '批量生成 + 风格统一能力是素材管线对标项')
     ];
   }
+
+  seedAiPlayComps() {
+    const y0 = this.today().slice(5);
+    const C2 = (id, name, threat, position, pros, cons, link, pricing, audience, revenue, funding, backing, caps, note) => ({ id, name, track: 'AI 互动游戏平台（UGC Playable）', threat, position, pros, cons, link, pricing, audience, revenue, funding, backing, caps, notes: [{ d: y0, t: note }] });
+    return [
+      C2('c18', 'Loopit', '高', 'SeedLeap（北京，陈伟鹏，前搜狗搜索研发总经理）的 AI Playable Maker：一句话生成可交互 H5，单列 Feed「可玩版 TikTok」', '产品形态与 Airvana Playable 最接近；安卓累计 490万 下载、近 30 天 140万，娱乐榜第 4，iOS 4.8 分', '纯 C 端 UGC 社区，无品牌营销 / KOL 结算 / Web3 场景，商业化未启动', 'https://www.loopit.me', 'UGC 免费创作 + 免费玩，商业化早期', 'C 端创作者 / 玩家', '未公开（早期）', '未公开融资', '早期 · 增长迅猛', { 'Agent 共创': 1, 'Playable 生成': 2, '分发渠道': 1, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 0 }, '形态最接近的竞品：紧盯其生成质量、Feed 分发与商业化动作'),
+      C2('c19', 'Aippy', '中', 'NADA AI（新加坡）的 AI 生成社区：自然语言生成小游戏 / 工具 / 互动艺术，全栈无代码 + Remix 二创', '安卓累计 170万 下载、近 30 天 42万，4.8 分；支持体感 / 手势追踪 / 3D 实验', '无营销链路与结算体系，纯社区产品', 'https://aippy.ai', '免费无广告 · UGC 社区', 'C 端创作者', '未公开', '未公开融资', '早期', { 'Agent 共创': 1, 'Playable 生成': 2, '分发渠道': 1, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 0 }, '全栈生成（前端+后端+数据库）能力值得对标'),
+      C2('c20', 'Sekai', '中', 'Versa AI 的 AI 互动内容平台：秒级生成测验 / 互动故事 / 迷你游戏，主打群聊链接分享', '「链接即玩」社交分发路径轻，群聊裂变场景清晰', '内容偏轻（测验 / 贺卡），生成稳定性一般，无商业化闭环', 'https://sekaiapp.com', '免费创作 + 免费玩 · 无广告', 'C 端 / 群聊社交场景', '未公开', '未公开融资', '早期', { 'Agent 共创': 1, 'Playable 生成': 1, '分发渠道': 1, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 0 }, '群聊链接分发路径可借鉴到 KOL 私域场景'),
+      C2('c21', 'Rezona', '高', 'Stratava 的 AI meme 游戏平台：梗图 / 脑洞一句话变 Memeplay，TikTok 式 Feed + 一键 Remix', '增长最快：安卓累计 1,300万 下载、近 30 天 230万，娱乐榜第 5；内置积分提现（CASH OUT）玩家激励', '以 meme 娱乐为主，无品牌方 / KOL 商业化基础设施', 'https://www.rezona.ai', 'UGC 免费 + 积分 / 现金激励', 'C 端玩家 / meme 社区', '未公开', '未公开融资', '早期 · 增长标杆', { 'Agent 共创': 1, 'Playable 生成': 2, '分发渠道': 1, '结算 / 钱包': 1, 'Web3 场景': 0, 'KOL 生态': 0 }, '增长速度标杆：研究其 meme 裂变与积分激励模型'),
+      C2('c22', 'Remix', '高', 'Farworld Labs 的浏览器 AI 游戏平台：文字生成游戏一键发布 App Store / Google Play + TG / Base / Farcaster / World App 小程序框架', '57万+ 用户、800+ 游戏；分发渠道与 Airvana 高度重合（TG / Web3 小程序生态），社区带积分与空投预期', '游戏质量参差，安卓端下载量小，商业化以 Web3 预期为主', 'https://remix.gg', 'UGC 平台 + 创作者分发生态（Web3 积分 / 空投）', 'Web3 创作者 / TG 小游戏玩家', '未公开', '未公开融资', '早期 · Web3 属性', { 'Agent 共创': 1, 'Playable 生成': 2, '分发渠道': 2, '结算 / 钱包': 1, 'Web3 场景': 1, 'KOL 生态': 0 }, '分发渠道重合度最高：紧盯其 TG / Farcaster 小程序生态进展'),
+      C2('c23', 'Astrocade', '高', 'AI 生成 UGC 游戏社区：对话式创建游戏（Create / Studio），社区即玩即评，热门作品播放量达百万级，与 Airvana「一句话生成游戏」路径最接近的对标', '创作生态完整，社区分发形成 UGC 飞轮，验证了 AI 生成游戏 + 社区分发的可行性', '无营销 / KOL / 结算基础设施，商业化以创作工具订阅与增值服务为主', 'https://astrocade.com', '免费游玩 + 创作工具订阅 / 增值服务', 'C 端创作者 / 玩家社区', '未公开', '未公开融资', '早期 · 社区驱动', { 'Agent 共创': 2, 'Playable 生成': 2, '分发渠道': 1, '结算 / 钱包': 0, 'Web3 场景': 0, 'KOL 生态': 0 }, '与 Airvana 生成路径最接近的直接竞对，持续跟踪其创作工具与社区运营节奏')
+    ];
+  }
+
   // ── 简易加密（口令 XOR + base64；口令仅存哈希）──
   hashCode(s) { let h = 5381; for (let i = 0; i < s.length; i++) { h = ((h << 5) + h + s.charCodeAt(i)) >>> 0; } return h.toString(16); }
   vHash(code, salt) { return this.hashCode(code + '|' + salt + '|aicg'); }

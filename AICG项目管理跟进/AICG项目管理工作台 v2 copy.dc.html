@@ -113,6 +113,18 @@
         <span>结算中心</span>
       </div>
       </sc-if>
+      <sc-if value="{{ nav_tickets }}" hint-placeholder-val="{{ true }}">
+      <div onClick="{{ goTickets }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;color:{{ navS.tickets.fg }};background:{{ navS.tickets.bg }}" style-hover="background:#f5f4ff">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"></path></svg>
+        <span>工单中心</span>
+      </div>
+      </sc-if>
+      <sc-if value="{{ nav_hire }}" hint-placeholder-val="{{ true }}">
+      <div onClick="{{ goHire }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;color:{{ navS.hire.fg }};background:{{ navS.hire.bg }}" style-hover="background:#f5f4ff">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"></circle><path d="M5 21v-2a7 7 0 0114 0v2"></path><path d="M19 8l2 2 4-4" transform="translate(-2,0) scale(.8)"></path></svg>
+        <span>招聘管理</span>
+      </div>
+      </sc-if>
       <sc-if value="{{ nav_tpl }}" hint-placeholder-val="{{ true }}">
       <div onClick="{{ goTpl }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;transition:background .15s ease;background:{{ navS.tpl.bg }};color:{{ navS.tpl.fg }};box-shadow:{{ navS.tpl.sh }}" style-hover="background:{{ navS.tpl.hbg }}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="2"></rect><rect x="13" y="3" width="8" height="8" rx="2"></rect><rect x="3" y="13" width="8" height="8" rx="2"></rect><path d="M17 13v8"></path><path d="M13 17h8"></path></svg>
@@ -1829,7 +1841,13 @@
             </sc-if>
           </div>
           <sc-if value="{{ flowEditing }}" hint-placeholder-val="{{ false }}">
-            <textarea value="{{ flowDraft }}" onChange="{{ onFlowDraft }}" style="width:100%;box-sizing:border-box;height:64vh;padding:14px 16px;border:1.5px solid #ddd9ec;border-radius:12px;font:500 12.5px/1.7 'IBM Plex Mono',Menlo,monospace;color:#18172a;outline:none;resize:vertical;background:#fafaff" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff"></textarea>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start">
+              <textarea value="{{ flowDraft }}" onChange="{{ onFlowDraft }}" style="width:100%;box-sizing:border-box;height:64vh;padding:14px 16px;border:1.5px solid #ddd9ec;border-radius:12px;font:500 12.5px/1.7 'IBM Plex Mono',Menlo,monospace;color:#18172a;outline:none;resize:vertical;background:#fafaff" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff"></textarea>
+              <div style="height:64vh;overflow:auto;border:1.5px solid #ebe9f4;border-radius:12px;padding:14px 18px;background:#fff">
+                <div style="font:700 9px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#c2bfd6;margin-bottom:8px">实时预览 · LIVE PREVIEW</div>
+                {{ flowDraftHtml }}
+              </div>
+            </div>
           </sc-if>
           <sc-if value="{{ flowNotEditing }}" hint-placeholder-val="{{ true }}">
             <sc-if value="{{ flowLoading }}" hint-placeholder-val="{{ false }}">
@@ -1889,7 +1907,13 @@
             </sc-if>
           </div>
           <sc-if value="{{ agentEditing }}" hint-placeholder-val="{{ false }}">
-            <textarea value="{{ agentDraft }}" onChange="{{ onAgentDraft }}" style="width:100%;box-sizing:border-box;height:64vh;padding:14px 16px;border:1.5px solid #ddd9ec;border-radius:12px;font:500 12.5px/1.7 'IBM Plex Mono',Menlo,monospace;color:#18172a;outline:none;resize:vertical;background:#fafaff" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff"></textarea>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start">
+              <textarea value="{{ agentDraft }}" onChange="{{ onAgentDraft }}" style="width:100%;box-sizing:border-box;height:64vh;padding:14px 16px;border:1.5px solid #ddd9ec;border-radius:12px;font:500 12.5px/1.7 'IBM Plex Mono',Menlo,monospace;color:#18172a;outline:none;resize:vertical;background:#fafaff" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff"></textarea>
+              <div style="height:64vh;overflow:auto;border:1.5px solid #ebe9f4;border-radius:12px;padding:14px 18px;background:#fff">
+                <div style="font:700 9px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#c2bfd6;margin-bottom:8px">实时预览 · LIVE PREVIEW</div>
+                {{ agentDraftHtml }}
+              </div>
+            </div>
           </sc-if>
           <sc-if value="{{ agentNotEditing }}" hint-placeholder-val="{{ true }}">
             <sc-if value="{{ agentLoading }}" hint-placeholder-val="{{ false }}">
@@ -2068,6 +2092,105 @@
       </div>
     </sc-if>
 
+    <!-- ======== PAGE: 工单中心 ======== -->
+    <sc-if value="{{ isTickets }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="工单中心">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px">
+          <sc-for list="{{ ticketSummary }}" as="ts" hint-placeholder-count="3">
+            <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;padding:18px 20px;box-shadow:0 1px 2px rgba(24,23,42,.04)">
+              <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#8783a3">{{ ts.label }}</div>
+              <div style="font:800 26px/1.1 'Manrope',sans-serif;letter-spacing:-.02em;margin-top:8px;color:{{ ts.color }}">{{ ts.v }}</div>
+              <div style="font:500 11.5px 'Manrope','PingFang SC',sans-serif;color:#8783a3;margin-top:4px">{{ ts.sub }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+          <sc-for list="{{ ticketSrcPills }}" as="sc1" hint-placeholder-count="4">
+            <div onClick="{{ sc1.click }}" style="padding:6px 14px;border-radius:99px;cursor:pointer;font:600 12px 'Manrope','PingFang SC',sans-serif;background:{{ sc1.bg }};color:{{ sc1.fg }};border:1.5px solid {{ sc1.bd }}" style-hover="border-color:#5b4dff">{{ sc1.label }}</div>
+          </sc-for>
+          <span style="width:1px;height:18px;background:#ebe9f4"></span>
+          <sc-for list="{{ ticketStPills }}" as="sc2" hint-placeholder-count="4">
+            <div onClick="{{ sc2.click }}" style="padding:6px 14px;border-radius:10px;cursor:pointer;font:700 12px 'Manrope','PingFang SC',sans-serif;background:{{ sc2.bg }};color:{{ sc2.fg }};border:1.5px solid {{ sc2.bd }}" style-hover="border-color:#5b4dff">{{ sc2.label }}</div>
+          </sc-for>
+          <div style="flex:1"></div>
+          <div onClick="{{ openAddTicket }}" style="background:#5b4dff;color:#fff;border-radius:10px;padding:9px 16px;font:700 13px 'Manrope','PingFang SC',sans-serif;cursor:pointer;box-shadow:0 8px 18px -6px rgba(91,77,255,.5)" style-hover="background:#4a3ce8">+ 新增工单</div>
+        </div>
+        <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;box-shadow:0 1px 2px rgba(24,23,42,.04);overflow-x:auto">
+          <div style="display:grid;min-width:900px;grid-template-columns:70px 2fr 150px 100px 110px 1.2fr 120px;gap:10px;padding:12px 20px;background:#fafaff;border-bottom:1px solid #ebe9f4;font:700 9.5px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#b9b5d0">
+            <span>来源</span><span>工单</span><span>处理角色（转办）</span><span>状态</span><span>SLA 到期</span><span>备注</span><span style="text-align:right">操作</span>
+          </div>
+          <sc-for list="{{ ticketView }}" as="tk" hint-placeholder-count="4">
+            <div style="display:grid;min-width:900px;grid-template-columns:70px 2fr 150px 100px 110px 1.2fr 120px;gap:10px;align-items:center;padding:13px 20px;border-bottom:1px solid #f3f1fa">
+              <span><span style="padding:2px 9px;border-radius:6px;font:700 10.5px 'Manrope','PingFang SC',sans-serif;background:{{ tk.cBg }};color:{{ tk.cFg }}">{{ tk.src }}</span></span>
+              <span style="font:700 13px 'Manrope','PingFang SC',sans-serif;color:#18172a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ tk.title }}</span>
+              <span>
+                <select value="{{ tk.assigneeSel }}" onChange="{{ tk.reassign }}" title="转办给其他角色" style="width:100%;font:700 11px 'Manrope','PingFang SC',sans-serif;background:#eeecf7;color:#5f5a7d;border:none;border-radius:6px;padding:4px 6px;outline:none;cursor:pointer">
+                  <sc-for list="{{ ticketRoleOpts }}" as="op" hint-placeholder-count="3">
+                    <option value="{{ op.v }}">{{ op.label }}</option>
+                  </sc-for>
+                </select>
+              </span>
+              <span><span onClick="{{ tk.cycleSt }}" title="点击流转状态" style="padding:2px 10px;border-radius:99px;cursor:pointer;font:700 10.5px 'Manrope','PingFang SC',sans-serif;background:{{ tk.sBg }};color:{{ tk.sFg }}" style-hover="filter:brightness(.96)">{{ tk.status }}</span></span>
+              <span style="font:600 11px 'IBM Plex Mono',Menlo,monospace;color:{{ tk.dueColor }}">{{ tk.dueFmt }}</span>
+              <span style="font:500 11.5px 'Manrope','PingFang SC',sans-serif;color:#8783a3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ tk.note }}</span>
+              <span style="display:flex;gap:8px;justify-content:flex-end">
+                <span onClick="{{ tk.edit }}" style="font:700 11.5px 'Manrope','PingFang SC',sans-serif;color:#5b4dff;cursor:pointer;border:1px solid #c9c3f2;border-radius:8px;padding:3px 10px" style-hover="background:#efeeff">编辑</span>
+                <span onClick="{{ tk.del }}" style="font:700 11.5px 'Manrope','PingFang SC',sans-serif;color:#8783a3;cursor:pointer;border:1px solid #ddd9ec;border-radius:8px;padding:3px 10px" style-hover="border-color:#d94a4a;color:#d94a4a">删除</span>
+              </span>
+            </div>
+          </sc-for>
+          <sc-if value="{{ noTickets }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:30px;text-align:center;font:500 13px 'Manrope','PingFang SC',sans-serif;color:#b9b5d0">暂无工单</div>
+          </sc-if>
+        </div>
+        <div style="font:500 11.5px 'Manrope','PingFang SC',sans-serif;color:#b9b5d0;margin-top:10px">SLA 口径：举报类 24h 响应 · 转办与状态流转仅限 客服支持 / 社区玩家运营 / 负责人</div>
+      </div>
+    </sc-if>
+
+    <!-- ======== PAGE: 招聘管理 ======== -->
+    <sc-if value="{{ isHire }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="招聘管理">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px">
+          <sc-for list="{{ hireSummary }}" as="hs" hint-placeholder-count="3">
+            <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;padding:18px 20px;box-shadow:0 1px 2px rgba(24,23,42,.04)">
+              <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#8783a3">{{ hs.label }}</div>
+              <div style="font:800 26px/1.1 'Manrope',sans-serif;letter-spacing:-.02em;margin-top:8px;color:{{ hs.color }}">{{ hs.v }}</div>
+              <div style="font:500 11.5px 'Manrope','PingFang SC',sans-serif;color:#8783a3;margin-top:4px">{{ hs.sub }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+          <sc-for list="{{ hireStagePills }}" as="hp" hint-placeholder-count="5">
+            <div onClick="{{ hp.click }}" style="padding:6px 14px;border-radius:99px;cursor:pointer;font:600 12px 'Manrope','PingFang SC',sans-serif;background:{{ hp.bg }};color:{{ hp.fg }};border:1.5px solid {{ hp.bd }}" style-hover="border-color:#5b4dff">{{ hp.label }}</div>
+          </sc-for>
+          <div style="flex:1"></div>
+          <div onClick="{{ openAddCand }}" style="background:#5b4dff;color:#fff;border-radius:10px;padding:9px 16px;font:700 13px 'Manrope','PingFang SC',sans-serif;cursor:pointer;box-shadow:0 8px 18px -6px rgba(91,77,255,.5)" style-hover="background:#4a3ce8">+ 新增候选人</div>
+        </div>
+        <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;box-shadow:0 1px 2px rgba(24,23,42,.04);overflow-x:auto">
+          <div style="display:grid;min-width:820px;grid-template-columns:1fr 1.4fr 110px 110px 1.6fr 120px;gap:10px;padding:12px 20px;background:#fafaff;border-bottom:1px solid #ebe9f4;font:700 9.5px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#b9b5d0">
+            <span>候选人</span><span>应聘岗位</span><span>阶段</span><span>下一步日期</span><span>备注</span><span style="text-align:right">操作</span>
+          </div>
+          <sc-for list="{{ candView }}" as="cd" hint-placeholder-count="4">
+            <div style="display:grid;min-width:820px;grid-template-columns:1fr 1.4fr 110px 110px 1.6fr 120px;gap:10px;align-items:center;padding:13px 20px;border-bottom:1px solid #f3f1fa">
+              <span style="font:700 13px 'Manrope','PingFang SC',sans-serif;color:#18172a">{{ cd.name }}</span>
+              <span style="font:600 12.5px 'Manrope','PingFang SC',sans-serif;color:#4b486a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ cd.job }}</span>
+              <span><span onClick="{{ cd.cycleStage }}" title="点击推进阶段" style="padding:2px 10px;border-radius:99px;cursor:pointer;font:700 10.5px 'Manrope','PingFang SC',sans-serif;background:{{ cd.sBg }};color:{{ cd.sFg }}" style-hover="filter:brightness(.96)">{{ cd.stage }}</span></span>
+              <span style="font:600 11px 'IBM Plex Mono',Menlo,monospace;color:#8783a3">{{ cd.dateFmt }}</span>
+              <span style="font:500 11.5px 'Manrope','PingFang SC',sans-serif;color:#8783a3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ cd.note }}</span>
+              <span style="display:flex;gap:8px;justify-content:flex-end">
+                <span onClick="{{ cd.edit }}" style="font:700 11.5px 'Manrope','PingFang SC',sans-serif;color:#5b4dff;cursor:pointer;border:1px solid #c9c3f2;border-radius:8px;padding:3px 10px" style-hover="background:#efeeff">编辑</span>
+                <span onClick="{{ cd.del }}" style="font:700 11.5px 'Manrope','PingFang SC',sans-serif;color:#8783a3;cursor:pointer;border:1px solid #ddd9ec;border-radius:8px;padding:3px 10px" style-hover="border-color:#d94a4a;color:#d94a4a">删除</span>
+              </span>
+            </div>
+          </sc-for>
+          <sc-if value="{{ noCands }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:30px;text-align:center;font:500 13px 'Manrope','PingFang SC',sans-serif;color:#b9b5d0">暂无候选人 —— 点击右上角新增</div>
+          </sc-if>
+        </div>
+        <div style="font:500 11.5px 'Manrope','PingFang SC',sans-serif;color:#b9b5d0;margin-top:10px">阶段流转：初筛 → 面试 → Offer → 已入职 · 入职后记得在角色面板为新人开通对应角色 · 管理权限仅限 人力资源 / 负责人</div>
+      </div>
+    </sc-if>
+
     <!-- ======== PAGE: 案例库 ======== -->
     <sc-if value="{{ isCases }}" hint-placeholder-val="{{ false }}">
       <div data-screen-label="案例库">
@@ -2116,7 +2239,13 @@
             </sc-if>
           </div>
           <sc-if value="{{ caseEditing }}" hint-placeholder-val="{{ false }}">
-            <textarea value="{{ caseDraft }}" onChange="{{ onCaseDraft }}" style="width:100%;box-sizing:border-box;height:64vh;padding:14px 16px;border:1.5px solid #ddd9ec;border-radius:12px;font:500 12.5px/1.7 'IBM Plex Mono',Menlo,monospace;color:#18172a;outline:none;resize:vertical;background:#fafaff" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff"></textarea>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start">
+              <textarea value="{{ caseDraft }}" onChange="{{ onCaseDraft }}" style="width:100%;box-sizing:border-box;height:64vh;padding:14px 16px;border:1.5px solid #ddd9ec;border-radius:12px;font:500 12.5px/1.7 'IBM Plex Mono',Menlo,monospace;color:#18172a;outline:none;resize:vertical;background:#fafaff" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff"></textarea>
+              <div style="height:64vh;overflow:auto;border:1.5px solid #ebe9f4;border-radius:12px;padding:14px 18px;background:#fff">
+                <div style="font:700 9px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#c2bfd6;margin-bottom:8px">实时预览 · LIVE PREVIEW</div>
+                {{ caseDraftHtml }}
+              </div>
+            </div>
           </sc-if>
           <sc-if value="{{ caseNotEditing }}" hint-placeholder-val="{{ true }}">
             <sc-if value="{{ caseLoading }}" hint-placeholder-val="{{ false }}">
@@ -3224,6 +3353,64 @@
         </div>
       </sc-if>
 
+      <sc-if value="{{ isTicketModal }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
+          <div style="grid-column:1/-1">
+            <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">工单标题 *</div>
+            <input value="{{ draft.title }}" onChange="{{ dOn.title }}" placeholder="例：KOL 分成对账明细申请" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'Manrope','PingFang SC',sans-serif;outline:none" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
+          </div>
+          <div>
+            <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">来源</div>
+            <select value="{{ draft.src }}" onChange="{{ dOn.src }}" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'Manrope','PingFang SC',sans-serif;outline:none;background:#fff"><option>品牌方</option><option>KOL</option><option>玩家</option></select>
+          </div>
+          <div>
+            <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">状态</div>
+            <select value="{{ draft.status }}" onChange="{{ dOn.status }}" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'Manrope','PingFang SC',sans-serif;outline:none;background:#fff"><option>待处理</option><option>处理中</option><option>已解决</option></select>
+          </div>
+          <div>
+            <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">处理角色</div>
+            <select value="{{ draft.assignee }}" onChange="{{ dOn.assignee }}" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'Manrope','PingFang SC',sans-serif;outline:none;background:#fff">
+              <sc-for list="{{ ticketRoleOpts }}" as="op" hint-placeholder-count="3">
+                <option value="{{ op.v }}">{{ op.label }}</option>
+              </sc-for>
+            </select>
+          </div>
+          <div>
+            <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">SLA 到期日</div>
+            <input value="{{ draft.due }}" onChange="{{ dOn.due }}" type="date" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'Manrope','PingFang SC',sans-serif;outline:none" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
+          </div>
+          <div style="grid-column:1/-1">
+            <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">备注</div>
+            <input value="{{ draft.note }}" onChange="{{ dOn.note }}" placeholder="处理说明 / 关联信息" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'Manrope','PingFang SC',sans-serif;outline:none" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isCandModal }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
+          <div>
+            <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">候选人姓名 *</div>
+            <input value="{{ draft.name }}" onChange="{{ dOn.name }}" placeholder="例：陈默" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'Manrope','PingFang SC',sans-serif;outline:none" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
+          </div>
+          <div>
+            <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">应聘岗位</div>
+            <input value="{{ draft.job }}" onChange="{{ dOn.job }}" placeholder="例：数据分析师" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'Manrope','PingFang SC',sans-serif;outline:none" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
+          </div>
+          <div>
+            <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">阶段</div>
+            <select value="{{ draft.stage }}" onChange="{{ dOn.stage }}" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'Manrope','PingFang SC',sans-serif;outline:none;background:#fff"><option>初筛</option><option>面试</option><option>Offer</option><option>已入职</option></select>
+          </div>
+          <div>
+            <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">下一步日期</div>
+            <input value="{{ draft.cdate }}" onChange="{{ dOn.cdate }}" type="date" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'Manrope','PingFang SC',sans-serif;outline:none" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
+          </div>
+          <div style="grid-column:1/-1">
+            <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">备注</div>
+            <input value="{{ draft.note }}" onChange="{{ dOn.note }}" placeholder="来源 / 面试反馈 / 期望薪资等" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'Manrope','PingFang SC',sans-serif;outline:none" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
+          </div>
+        </div>
+      </sc-if>
+
       <sc-if value="{{ isVersionModal }}" hint-placeholder-val="{{ false }}">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
           <div style="grid-column:1/-1">
@@ -3625,6 +3812,8 @@ class Component extends DCLogic {
           (d.competitors || []).forEach(c => (c.notes || []).forEach(n => { if (/^\d{4}-\d{2}-\d{2}/.test(n.d)) n.d = n.d.slice(5); }));
           if (!d.role || !this.ROLES.some(r => r.id === d.role)) d.role = 'owner';
           if (!d.settlements) d.settlements = this.seedSettlements();
+          if (!d.tickets) d.tickets = this.seedTickets();
+          if (!d.candidates) d.candidates = this.seedCandidates();
           if (d.todos && d.todos.length) { d.reminders = (d.reminders || []).concat(d.todos.map(m => ({ id: m.id, text: m.text, done: !!m.done, date: '', role: m.role || '' }))); d.todos = []; }
           return d;
         }
@@ -3806,7 +3995,7 @@ class Component extends DCLogic {
     { num: '29', title: '数据反馈 Memory 与模板更新', file: 'uploads/29. 数据反馈Memory与模板更新机制结构化梳理.md' }
   ];
 
-  PAGE_KEYS = ['overview', 'daily', 'partners', 'comp', 'exlist', 'board', 'docs', 'flow', 'agentos', 'kb', 'risk', 'cases', 'tpl', 'kolco', 'settle', 'aigc', 'mkagent', 'mkag2'];
+  PAGE_KEYS = ['overview', 'daily', 'partners', 'comp', 'exlist', 'board', 'docs', 'flow', 'agentos', 'kb', 'risk', 'cases', 'tpl', 'kolco', 'settle', 'tickets', 'hire', 'aigc', 'mkagent', 'mkag2'];
   setState(st, cb) {
     super.setState(st, cb);
     if (st && typeof st === 'object' && st.page && this.PAGE_KEYS.indexOf(st.page) >= 0) {
@@ -3859,10 +4048,10 @@ class Component extends DCLogic {
     { id: 'qa', name: '项目测试', en: 'QA', avatar: '测', grad: 'linear-gradient(140deg,#b97a1c,#8a5a12)', home: 'board', duties: ['模板 / Playable 功能兼容测试', '模拟测试机制运营与预览验收', '线上问题跟踪、反馈与回归', '发版门禁与质量报告'], nav: ['overview', 'daily', 'board', 'flow', 'tpl', 'cases'] },
     { id: 'finance', name: '结算财务', en: 'FINANCE', avatar: '财', grad: 'linear-gradient(140deg,#0f9d8f,#0a6b62)', home: 'settle', duties: ['KOL 分成核算与发放执行', '品牌方账单、回款与对账', '积分发放与额度熔断监控', '提现审核（配合 KYC）与税务发票'], nav: ['overview', 'daily', 'settle', 'partners', 'kolco', 'docs'] },
     { id: 'ts', name: '内容审核 · T&S', en: 'TRUST & SAFETY', avatar: '审', grad: 'linear-gradient(140deg,#7c4dcc,#54348c)', home: 'risk', duties: ['模板与 UGC 双审执行', '举报队列 24h SOP 响应', '违禁内容清单与分级标签更新', '未成年人保护措施执行'], nav: ['overview', 'daily', 'docs', 'tpl', 'cases', 'kolco'] },
-    { id: 'community', name: '社区 / 玩家运营', en: 'COMMUNITY', avatar: '社', grad: 'linear-gradient(140deg,#e0558c,#a83263)', home: 'daily', duties: ['官方 TG / Discord 社群运营', '活动期玩家答疑与申诉处理', '女巫误判申诉复核与转办', '玩家侧激励活动执行'], nav: ['overview', 'daily', 'kolco', 'partners', 'mkagent', 'map'] },
+    { id: 'community', name: '社区 / 玩家运营', en: 'COMMUNITY', avatar: '社', grad: 'linear-gradient(140deg,#e0558c,#a83263)', home: 'daily', duties: ['官方 TG / Discord 社群运营', '活动期玩家答疑与申诉处理', '女巫误判申诉复核与转办', '玩家侧激励活动执行'], nav: ['overview', 'daily', 'tickets', 'kolco', 'partners', 'mkagent', 'map'] },
     { id: 'design', name: '设计 / 美术', en: 'DESIGN', avatar: '设', grad: 'linear-gradient(140deg,#e8a13a,#b3781f)', home: 'tpl', duties: ['模板素材生产与风格统一', '品牌方定制皮肤（换皮）制作', '素材版权溯源登记', 'AI 生成素材审核与微调'], nav: ['overview', 'daily', 'tpl', 'cases', 'docs', 'flow'] },
-    { id: 'support', name: '客服支持', en: 'SUPPORT', avatar: '客', grad: 'linear-gradient(140deg,#5a6b8c,#3c4a66)', home: 'daily', duties: ['品牌方 / KOL 工单响应', '玩家申诉受理与跨角色转办', 'FAQ 与帮助知识库维护', 'SLA 时效与满意度跟踪'], nav: ['overview', 'daily', 'partners', 'kolco', 'docs'] },
-    { id: 'hr', name: '人力资源 · 招聘', en: 'HR / TALENT', avatar: '人', grad: 'linear-gradient(140deg,#889144,#5c632b)', home: 'daily', duties: ['团队招聘：JD 制定、面试与 Offer 推进', '关键岗位人才地图与梯队建设', '新人入职培训与角色权限开通', '绩效考核与激励机制协同'], nav: ['overview', 'daily', 'docs'] }
+    { id: 'support', name: '客服支持', en: 'SUPPORT', avatar: '客', grad: 'linear-gradient(140deg,#5a6b8c,#3c4a66)', home: 'tickets', duties: ['品牌方 / KOL 工单响应', '玩家申诉受理与跨角色转办', 'FAQ 与帮助知识库维护', 'SLA 时效与满意度跟踪'], nav: ['overview', 'daily', 'tickets', 'partners', 'kolco', 'docs'] },
+    { id: 'hr', name: '人力资源 · 招聘', en: 'HR / TALENT', avatar: '人', grad: 'linear-gradient(140deg,#889144,#5c632b)', home: 'hire', duties: ['团队招聘：JD 制定、面试与 Offer 推进', '关键岗位人才地图与梯队建设', '新人入职培训与角色权限开通', '绩效考核与激励机制协同'], nav: ['overview', 'daily', 'hire', 'docs'] }
   ];
 
   // ── 操作权限分级（负责人全权限，其余按矩阵；未列出的操作全员可用）──
@@ -3877,9 +4066,11 @@ class Component extends DCLogic {
     kol:     { label: 'KOL 档案管理', roles: ['kolops'] },
     legal:   { label: '协议签署状态变更', roles: ['legal'] },
     settle:  { label: '结算管理', roles: ['finance'] },
+    ticket:  { label: '工单处理', roles: ['support', 'community'] },
+    hire:    { label: '招聘管理', roles: ['hr'] },
     admin:   { label: '数据导入 / 覆盖', roles: [] }
   };
-  MODAL_PERM = { partner: 'partner', task: 'board', version: 'board', roadver: 'board', comp: 'comp', doc: 'docs', newcase: 'content', creds: 'creds', vault: 'creds', settle: 'settle' };
+  MODAL_PERM = { partner: 'partner', task: 'board', version: 'board', roadver: 'board', comp: 'comp', doc: 'docs', newcase: 'content', creds: 'creds', vault: 'creds', settle: 'settle', ticket: 'ticket', cand: 'hire' };
   curRole() { return (this.state && this.state.data && this.state.data.role) || 'owner'; }
   can(k) { const r = this.curRole(); if (r === 'owner') return true; const p = this.PERM_DEFS[k]; return !!p && p.roles.includes(r); }
   denyToast(k) { const p = this.PERM_DEFS[k] || { label: k, roles: [] }; const names = p.roles.map(id => (this.ROLES.find(r => r.id === id) || {}).name).filter(Boolean).concat('项目负责人').join(' / '); this.showToast('当前角色无权：' + p.label + ' · 需 ' + names); }
@@ -4222,6 +4413,24 @@ class Component extends DCLogic {
     ];
   }
 
+  seedTickets() {
+    return [
+      { id: 'tk1', src: '品牌方', title: 'Gate：活动数据面板访问权限申请', assignee: 'biz', status: '处理中', due: this.plusDays(1), note: '需要开通只读账号', created: this.plusDays(-1) },
+      { id: 'tk2', src: 'KOL', title: 'CryptoLeo：上期分成金额有疑问，申请对账明细', assignee: 'finance', status: '待处理', due: this.plusDays(2), note: 'T+7 兑付争议期内', created: this.plusDays(0) },
+      { id: 'tk3', src: '玩家', title: '空投活动女巫误判申诉（TG @user8821）', assignee: 'community', status: '待处理', due: this.plusDays(1), note: '钱包地址复核', created: this.plusDays(0) },
+      { id: 'tk4', src: '玩家', title: '塔防 Playable 在 iOS 微信内打不开', assignee: 'qa', status: '已解决', due: this.plusDays(-2), note: '已修复 UA 判断', created: this.plusDays(-4) }
+    ];
+  }
+
+  seedCandidates() {
+    return [
+      { id: 'cd1', name: '陈默', job: '投放增长（渠道运营）', stage: '面试', cdate: this.plusDays(2), note: '二面 · 前 4399 海外投放' },
+      { id: 'cd2', name: 'Luna Wang', job: '数据分析师', stage: '初筛', cdate: this.plusDays(4), note: '简历来自内推 · 归因经验' },
+      { id: 'cd3', name: '赵启航', job: '设计 / 美术', stage: 'Offer', cdate: this.plusDays(1), note: 'Offer 已发 · 等回复' },
+      { id: 'cd4', name: '大鹏', job: 'Agent OS 工程师', stage: '已入职', cdate: this.plusDays(-10), note: '已入职 · 负责 Agent OS 搭建' }
+    ];
+  }
+
   seedSettlements() {
     const t = this.today();
     return [
@@ -4421,6 +4630,8 @@ class Component extends DCLogic {
       kolLib: this.seedKolLib(),
       role: 'owner',
       settlements: this.seedSettlements(),
+      tickets: this.seedTickets(),
+      candidates: this.seedCandidates(),
       userCases: [],
       partners: this.seedGamePartners().concat(this.seedIndPartners()).concat(this.seedLjhPartners()).concat([
         { id: 'p1', name: '币安 Binance', stage: '执行', owner: '李骏', contact: 'TG @bn_partnership', budget: 60000, nextDate: t, deadline: this.plusDays(24), exposure: 1240000, conversion: 8600, regs: 4200, deposit: 380000, trades: 2600000, channels: [
@@ -4878,6 +5089,26 @@ class Component extends DCLogic {
       });
       this.setState({ modal: null, draft: {} });
       return;
+    } else if (S.modal === 'ticket') {
+      if (!(dr.title || '').trim()) return;
+      this.setData(d => {
+        d.tickets = d.tickets || [];
+        const rec = { src: dr.src || '玩家', title: dr.title.trim(), assignee: dr.assignee || 'support', status: dr.status || '待处理', due: dr.due || '', note: dr.note || '' };
+        if (dr.id) { const i = d.tickets.findIndex(x => x.id === dr.id); if (i >= 0) d.tickets[i] = { ...d.tickets[i], ...rec }; }
+        else d.tickets.unshift({ id: this.uid('tk'), created: t, ...rec });
+      });
+      this.setState({ modal: null, draft: {} });
+      return;
+    } else if (S.modal === 'cand') {
+      if (!(dr.name || '').trim()) return;
+      this.setData(d => {
+        d.candidates = d.candidates || [];
+        const rec = { name: dr.name.trim(), job: dr.job || '', stage: dr.stage || '初筛', cdate: dr.cdate || '', note: dr.note || '' };
+        if (dr.id) { const i = d.candidates.findIndex(x => x.id === dr.id); if (i >= 0) d.candidates[i] = { ...d.candidates[i], ...rec }; }
+        else d.candidates.unshift({ id: this.uid('cd'), ...rec });
+      });
+      this.setState({ modal: null, draft: {} });
+      return;
     } else if (S.modal === 'version') {
       if (!(dr.name || '').trim()) return;
       this.setData(d => {
@@ -4980,7 +5211,7 @@ class Component extends DCLogic {
     const S = this.state, D = S.data;
     const roleCur = this.ROLES.find(r => r.id === (D.role || 'owner')) || this.ROLES[0];
     const todoMine = S.todoMine !== false && roleCur.id !== 'owner';
-    const NAV_KEYS = ['overview', 'daily', 'board', 'docs', 'partners', 'settle', 'tpl', 'kolco', 'cases', 'mkagent', 'flow', 'aigc', 'agentos', 'mkag2', 'map'];
+    const NAV_KEYS = ['overview', 'daily', 'board', 'docs', 'partners', 'settle', 'tickets', 'hire', 'tpl', 'kolco', 'cases', 'mkagent', 'flow', 'aigc', 'agentos', 'mkag2', 'map'];
     const navAllowed = roleCur.nav || NAV_KEYS;
     const navShow = {}; NAV_KEYS.forEach(k => { navShow['nav_' + k] = navAllowed.includes(k); });
     const today = this.today(), week = this.plusDays(7);
@@ -5005,7 +5236,7 @@ class Component extends DCLogic {
     const tiles = [['#ffd8c2', '#fcd1e1'], ['#d9d4ff', '#c9e3ff'], ['#c6efdc', '#d3e8c5'], ['#ffeec0', '#ffd8c2'], ['#c9e3ff', '#d9d4ff'], ['#fcd1e1', '#ffcfcf']];
 
     // nav
-    const pages = { overview: ['总览', 'OVERVIEW'], daily: ['每日待办', 'DAILY'], partners: ['品牌合作', 'PARTNERS'], comp: ['知识库 · 竞品分析', 'COMPETITORS'], exlist: ['知识库 · 合规交易所', 'EXCHANGES'], board: ['项目推进', 'PIPELINE'], docs: ['知识库 · 文档资料', 'LIBRARY'], flow: ['AICG 工作流', 'WORKFLOW'], agentos: ['Agent OS', 'AGENT OS'], kb: ['知识库 · 子库建设规划', 'KNOWLEDGE'], risk: ['知识库 · 风控体系', 'RISK'], cases: ['AP 案例库', 'CASES'], tpl: ['模板库', 'TEMPLATES'], kolco: ['KOL 合作库', 'KOL PARTNERS'], settle: ['结算中心', 'SETTLEMENT'], aigc: ['AIGC 架构', 'AIGC ARCHITECTURE'], mkagent: ['营销 Agent 案例', 'MARKETING AGENT'], mkag2: ['营销 Agent', 'MARKETING AGENT ENGINE'] };
+    const pages = { overview: ['总览', 'OVERVIEW'], daily: ['每日待办', 'DAILY'], partners: ['品牌合作', 'PARTNERS'], comp: ['知识库 · 竞品分析', 'COMPETITORS'], exlist: ['知识库 · 合规交易所', 'EXCHANGES'], board: ['项目推进', 'PIPELINE'], docs: ['知识库 · 文档资料', 'LIBRARY'], flow: ['AICG 工作流', 'WORKFLOW'], agentos: ['Agent OS', 'AGENT OS'], kb: ['知识库 · 子库建设规划', 'KNOWLEDGE'], risk: ['知识库 · 风控体系', 'RISK'], cases: ['AP 案例库', 'CASES'], tpl: ['模板库', 'TEMPLATES'], kolco: ['KOL 合作库', 'KOL PARTNERS'], settle: ['结算中心', 'SETTLEMENT'], tickets: ['工单中心', 'TICKETS'], hire: ['招聘管理', 'HIRING'], aigc: ['AIGC 架构', 'AIGC ARCHITECTURE'], mkagent: ['营销 Agent 案例', 'MARKETING AGENT'], mkag2: ['营销 Agent', 'MARKETING AGENT ENGINE'] };
     const navS = {};
     Object.keys(pages).forEach(k => {
       const on = S.page === k;
@@ -5684,7 +5915,7 @@ class Component extends DCLogic {
     if (S.page === 'docs') pageTitle = '知识库 · ' + DOC_GROUPS[dg].label;
 
     // draft field handlers
-    const fields = ['stype', 'party', 'amount', 'cur', 'note', 'name', 'stage', 'owner', 'contact', 'budget', 'nextDate', 'deadline', 'exposure', 'conversion', 'title', 'desc', 'col', 'assignee', 'priority', 'due', 'category', 'status', 'link', 'target', 'goal', 'track', 'threat', 'position', 'pros', 'cons', 'pricing', 'audience', 'backing', 'regs', 'deposit', 'trades', 'account', 'password', 'code', 'ver', 'scopeText', 'industry', 'docType', 'docVer', 'exp', 'revenue', 'funding'];
+    const fields = ['stype', 'party', 'amount', 'cur', 'note', 'src', 'job', 'cdate', 'name', 'stage', 'owner', 'contact', 'budget', 'nextDate', 'deadline', 'exposure', 'conversion', 'title', 'desc', 'col', 'assignee', 'priority', 'due', 'category', 'status', 'link', 'target', 'goal', 'track', 'threat', 'position', 'pros', 'cons', 'pricing', 'audience', 'backing', 'regs', 'deposit', 'trades', 'account', 'password', 'code', 'ver', 'scopeText', 'industry', 'docType', 'docVer', 'exp', 'revenue', 'funding'];
     const dOn = {};
     fields.forEach(f => { dOn[f] = e => { const v = e.target.value; this.setState(s => ({ draft: { ...s.draft, [f]: v } })); }; });
 
@@ -5693,7 +5924,7 @@ class Component extends DCLogic {
     const doneTasks = D.tasks.filter(tk => tk.col === '已完成').length;
     const activeP = D.partners.filter(p => p.stage === '执行' || p.stage === '结算').length;
 
-    const modalTitles = { partner: S.draft.id ? '编辑合作方' : '新增合作方', task: S.draft.id ? '编辑任务' : '新增需求 / 任务', doc: S.draft.id ? '编辑文档' : '收录文档', version: S.draft.id ? '编辑版本' : '新增版本', roadver: S.draft.id ? '编辑发布版本' : '新增发布版本', newcase: '新增案例', comp: S.draft.id ? '编辑竞品' : '新增竞品', creds: '录入营销账号（加密）', vault: '验证查看口令', settle: S.draft.id ? '编辑结算单' : '新增结算单' };
+    const modalTitles = { partner: S.draft.id ? '编辑合作方' : '新增合作方', task: S.draft.id ? '编辑任务' : '新增需求 / 任务', doc: S.draft.id ? '编辑文档' : '收录文档', version: S.draft.id ? '编辑版本' : '新增版本', roadver: S.draft.id ? '编辑发布版本' : '新增发布版本', newcase: '新增案例', comp: S.draft.id ? '编辑竞品' : '新增竞品', creds: '录入营销账号（加密）', vault: '验证查看口令', settle: S.draft.id ? '编辑结算单' : '新增结算单', ticket: S.draft.id ? '编辑工单' : '新增工单', cand: S.draft.id ? '编辑候选人' : '新增候选人' };
 
     return {
       // nav / header
@@ -6044,6 +6275,7 @@ class Component extends DCLogic {
       caseEditing: S.caseEditing, caseNotEditing: !S.caseEditing,
       caseDraft: S.caseDraft,
       onCaseDraft: e => this.setState({ caseDraft: e.target.value }),
+      caseDraftHtml: S.caseEditing ? React.createElement('div', { className: 'md-body', dangerouslySetInnerHTML: { __html: this.mdToHtml(S.caseDraft || '') } }) : null,
       startCaseEdit: this.startCaseEdit, cancelCaseEdit: this.cancelCaseEdit, saveCaseEdit: this.saveCaseEdit, resetCaseEdit: this.resetCaseEdit,
       caseEdited: (() => { const cf = this.allCases()[S.caseSel] || {}; return !cf.user && !!((D.mdEdits || {})[cf.file]); })(),
       caseLogView, hasCaseLog: caseLogView.length > 0 && S.caseView !== 'diagram',
@@ -6090,6 +6322,7 @@ class Component extends DCLogic {
       flowEditing: S.flowEditing, flowNotEditing: !S.flowEditing,
       flowDraft: S.flowDraft,
       onFlowDraft: e => this.setState({ flowDraft: e.target.value }),
+      flowDraftHtml: S.flowEditing ? React.createElement('div', { className: 'md-body', dangerouslySetInnerHTML: { __html: this.mdToHtml(S.flowDraft || '') } }) : null,
       startFlowEdit: this.startFlowEdit, cancelFlowEdit: this.cancelFlowEdit, saveFlowEdit: this.saveFlowEdit, resetFlowEdit: this.resetFlowEdit,
       flowEdited: !!((D.mdEdits || {})[(this.FLOW[S.flowSel] || {}).file]),
       flowLogView, hasFlowLog: flowLogView.length > 0,
@@ -6113,6 +6346,7 @@ class Component extends DCLogic {
       agentEditing: S.agentEditing, agentNotEditing: !S.agentEditing,
       agentDraft: S.agentDraft,
       onAgentDraft: e => this.setState({ agentDraft: e.target.value }),
+      agentDraftHtml: S.agentEditing ? React.createElement('div', { className: 'md-body', dangerouslySetInnerHTML: { __html: this.mdToHtml(S.agentDraft || '') } }) : null,
       startAgentEdit: this.startAgentEdit, cancelAgentEdit: this.cancelAgentEdit, saveAgentEdit: this.saveAgentEdit, resetAgentEdit: this.resetAgentEdit,
       agentEdited: !!((D.mdEdits || {})[(this.AGENT[S.agentSel] || {}).file]),
       agentLogView, hasAgentLog: agentLogView.length > 0,
@@ -6438,7 +6672,7 @@ class Component extends DCLogic {
       upcoming: upcomingView, hasUpcoming: upcomingView.length > 0, noUpcoming: upcomingView.length === 0,
       showTodoToggle: roleCur.id !== 'owner',
       ...navShow,
-      navGroupProj: ['docs', 'partners', 'settle', 'tpl', 'kolco', 'cases', 'mkagent'].some(k => navAllowed.includes(k)),
+      navGroupProj: ['docs', 'partners', 'settle', 'tickets', 'hire', 'tpl', 'kolco', 'cases', 'mkagent'].some(k => navAllowed.includes(k)),
       navGroupPlat: ['flow', 'aigc', 'agentos', 'mkag2', 'map'].some(k => navAllowed.includes(k)),
       todoFilterLabel: todoMine ? '只看 ' + roleCur.name : '全部角色',
       todoTogBd: todoMine ? '#5b4dff' : '#ddd9ec', todoTogFg: todoMine ? '#5b4dff' : '#8783a3', todoTogBg: todoMine ? '#efeeff' : '#fff',
@@ -6504,6 +6738,73 @@ class Component extends DCLogic {
       noSettle: !((D.settlements || []).length),
       openAddSettle: () => this.openModal('settle', { stype: '应收', cur: '$', status: '待对账' }),
       goSettle: () => this.setState({ page: 'settle' }),
+
+      // tickets
+      isTickets: S.page === 'tickets',
+      goTickets: () => this.setState({ page: 'tickets' }),
+      ticketSummary: (() => {
+        const L = D.tickets || [];
+        const open2 = L.filter(x => x.status !== '已解决');
+        const overdue = open2.filter(x => x.due && x.due < today).length;
+        return [
+          { label: '未解决工单', v: String(open2.length), sub: overdue + ' 件已超 SLA', color: overdue > 0 ? '#d94a4a' : '#5b4dff' },
+          { label: '今日到期', v: String(open2.filter(x => x.due === today).length), sub: 'SLA 倒计时', color: '#d15a1f' },
+          { label: '已解决', v: String(L.filter(x => x.status === '已解决').length), sub: '累计', color: '#2eaa70' }
+        ];
+      })(),
+      ticketSrcPills: ['全部', '品牌方', 'KOL', '玩家'].map(n => { const on = (S.tkSrc || '全部') === n; return { label: n, bg: on ? '#18172a' : '#fff', fg: on ? '#fff' : '#4b486a', bd: on ? '#18172a' : '#ddd9ec', click: () => this.setState({ tkSrc: n }) }; }),
+      ticketStPills: ['全部', '待处理', '处理中', '已解决'].map(n => { const on = (S.tkSt || '全部') === n; return { label: n, bg: on ? '#efeeff' : '#fff', fg: on ? '#5b4dff' : '#4b486a', bd: on ? '#c9c3f2' : '#ddd9ec', click: () => this.setState({ tkSt: n }) }; }),
+      ticketView: (D.tickets || [])
+        .filter(x => (S.tkSrc || '全部') === '全部' || x.src === S.tkSrc)
+        .filter(x => (S.tkSt || '全部') === '全部' || x.status === S.tkSt)
+        .slice().sort((a, b) => (a.status === '已解决' ? 1 : 0) - (b.status === '已解决' ? 1 : 0) || ((a.due || '9999') < (b.due || '9999') ? -1 : 1))
+        .map(x => {
+          const cm = { '品牌方': { bg: '#efeeff', fg: '#5b4dff' }, 'KOL': { bg: '#fcd1e1', fg: '#b03a72' }, '玩家': { bg: '#e2f4e9', fg: '#2eaa70' } }[x.src] || { bg: '#eeecf7', fg: '#8783a3' };
+          const sm = { '待处理': { bg: '#fde4e4', fg: '#d94a4a' }, '处理中': { bg: '#fdf3df', fg: '#a97b22' }, '已解决': { bg: '#e2f4e9', fg: '#2eaa70' } }[x.status] || { bg: '#eeecf7', fg: '#8783a3' };
+          const overdue = x.status !== '已解决' && x.due && x.due < today;
+          return { ...x,
+            assigneeName: (this.ROLES.find(r => r.id === x.assignee) || {}).name || '未指派',
+            assigneeSel: x.assignee || '',
+            reassign: e => { const v = e.target.value; this.guard('ticket', () => this.setData(d => { const y = (d.tickets || []).find(z => z.id === x.id); if (y) y.assignee = v; }))(); },
+            dueFmt: x.due ? (x.due.slice(5) + (overdue ? ' · 超时' : '')) : '—',
+            dueColor: overdue ? '#d94a4a' : '#8783a3',
+            cBg: cm.bg, cFg: cm.fg, sBg: sm.bg, sFg: sm.fg,
+            cycleSt: this.guard('ticket', () => this.setData(d => { const y = (d.tickets || []).find(z => z.id === x.id); if (y) { const o = ['待处理', '处理中', '已解决']; y.status = o[(o.indexOf(y.status) + 1) % o.length]; } })),
+            edit: () => this.openModal('ticket', { ...x }),
+            del: this.guard('ticket', () => this.askConfirm('删除工单「' + x.title + '」？', () => this.setData(d => { d.tickets = (d.tickets || []).filter(z => z.id !== x.id); })))
+          };
+        }),
+      noTickets: !((D.tickets || []).length),
+      openAddTicket: () => this.openModal('ticket', { src: '玩家', status: '待处理', assignee: 'support' }),
+      ticketRoleOpts: this.ROLES.map(r => ({ v: r.id, label: r.name })),
+
+      // hiring
+      isHire: S.page === 'hire',
+      goHire: () => this.setState({ page: 'hire' }),
+      hireSummary: (() => {
+        const L = D.candidates || [];
+        return [
+          { label: '在招候选人', v: String(L.filter(x => x.stage !== '已入职').length), sub: '初筛 / 面试 / Offer', color: '#5b4dff' },
+          { label: '面试中', v: String(L.filter(x => x.stage === '面试').length), sub: '待推进', color: '#d15a1f' },
+          { label: '已入职', v: String(L.filter(x => x.stage === '已入职').length), sub: '累计', color: '#2eaa70' }
+        ];
+      })(),
+      hireStagePills: ['全部', '初筛', '面试', 'Offer', '已入职'].map(n => { const on = (S.hireStage || '全部') === n; return { label: n, bg: on ? '#18172a' : '#fff', fg: on ? '#fff' : '#4b486a', bd: on ? '#18172a' : '#ddd9ec', click: () => this.setState({ hireStage: n }) }; }),
+      candView: (D.candidates || [])
+        .filter(x => (S.hireStage || '全部') === '全部' || x.stage === S.hireStage)
+        .map(x => {
+          const sm = { '初筛': { bg: '#eeecf7', fg: '#8783a3' }, '面试': { bg: '#fdf3df', fg: '#a97b22' }, 'Offer': { bg: '#efeeff', fg: '#5b4dff' }, '已入职': { bg: '#e2f4e9', fg: '#2eaa70' } }[x.stage] || { bg: '#eeecf7', fg: '#8783a3' };
+          return { ...x,
+            dateFmt: x.cdate ? x.cdate.slice(5) : '—',
+            sBg: sm.bg, sFg: sm.fg,
+            cycleStage: this.guard('hire', () => this.setData(d => { const y = (d.candidates || []).find(z => z.id === x.id); if (y) { const o = ['初筛', '面试', 'Offer', '已入职']; y.stage = o[(o.indexOf(y.stage) + 1) % o.length]; } })),
+            edit: () => this.openModal('cand', { ...x }),
+            del: this.guard('hire', () => this.askConfirm('删除候选人「' + x.name + '」？', () => this.setData(d => { d.candidates = (d.candidates || []).filter(z => z.id !== x.id); })))
+          };
+        }),
+      noCands: !((D.candidates || []).length),
+      openAddCand: () => this.openModal('cand', { stage: '初筛' }),
+      isTicketModal: S.modal === 'ticket', isCandModal: S.modal === 'cand',
 
       // backup
       backupModalOpen: !!S.backupModal,

@@ -107,6 +107,12 @@
         <span>品牌合作</span>
       </div>
       </sc-if>
+      <sc-if value="{{ nav_settle }}" hint-placeholder-val="{{ true }}">
+      <div onClick="{{ goSettle }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;color:{{ navS.settle.fg }};background:{{ navS.settle.bg }}" style-hover="background:#f5f4ff">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="3"></rect><path d="M2 10h20"></path><path d="M6 15h4"></path></svg>
+        <span>结算中心</span>
+      </div>
+      </sc-if>
       <sc-if value="{{ nav_tpl }}" hint-placeholder-val="{{ true }}">
       <div onClick="{{ goTpl }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;transition:background .15s ease;background:{{ navS.tpl.bg }};color:{{ navS.tpl.fg }};box-shadow:{{ navS.tpl.sh }}" style-hover="background:{{ navS.tpl.hbg }}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="2"></rect><rect x="13" y="3" width="8" height="8" rx="2"></rect><rect x="3" y="13" width="8" height="8" rx="2"></rect><path d="M17 13v8"></path><path d="M13 17h8"></path></svg>
@@ -2003,6 +2009,55 @@
       </div>
     </sc-if>
 
+    <!-- ======== PAGE: 结算中心 ======== -->
+    <sc-if value="{{ isSettle }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="结算中心">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px">
+          <sc-for list="{{ settleSummary }}" as="ss" hint-placeholder-count="3">
+            <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;padding:18px 20px;box-shadow:0 1px 2px rgba(24,23,42,.04)">
+              <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#8783a3">{{ ss.label }}</div>
+              <div style="font:800 26px/1.1 'Manrope',sans-serif;letter-spacing:-.02em;margin-top:8px;color:{{ ss.color }}">{{ ss.v }}</div>
+              <div style="font:500 11.5px 'Manrope','PingFang SC',sans-serif;color:#8783a3;margin-top:4px">{{ ss.sub }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+          <sc-for list="{{ settleTypePills }}" as="tp" hint-placeholder-count="3">
+            <div onClick="{{ tp.click }}" style="padding:6px 14px;border-radius:99px;cursor:pointer;font:600 12px 'Manrope','PingFang SC',sans-serif;background:{{ tp.bg }};color:{{ tp.fg }};border:1.5px solid {{ tp.bd }}" style-hover="border-color:#5b4dff">{{ tp.label }}</div>
+          </sc-for>
+          <span style="width:1px;height:18px;background:#ebe9f4"></span>
+          <sc-for list="{{ settleStPills }}" as="sp" hint-placeholder-count="4">
+            <div onClick="{{ sp.click }}" style="padding:6px 14px;border-radius:10px;cursor:pointer;font:700 12px 'Manrope','PingFang SC',sans-serif;background:{{ sp.bg }};color:{{ sp.fg }};border:1.5px solid {{ sp.bd }}" style-hover="border-color:#5b4dff">{{ sp.label }}</div>
+          </sc-for>
+          <div style="flex:1"></div>
+          <div onClick="{{ openAddSettle }}" style="background:#5b4dff;color:#fff;border-radius:10px;padding:9px 16px;font:700 13px 'Manrope','PingFang SC',sans-serif;cursor:pointer;box-shadow:0 8px 18px -6px rgba(91,77,255,.5)" style-hover="background:#4a3ce8">+ 新增结算单</div>
+        </div>
+        <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;box-shadow:0 1px 2px rgba(24,23,42,.04);overflow-x:auto">
+          <div style="display:grid;min-width:860px;grid-template-columns:70px 1.4fr 110px 110px 130px 1.6fr 120px;gap:10px;padding:12px 20px;background:#fafaff;border-bottom:1px solid #ebe9f4;font:700 9.5px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#b9b5d0">
+            <span>类型</span><span>结算对象</span><span>金额</span><span>状态</span><span>到期</span><span>备注</span><span style="text-align:right">操作</span>
+          </div>
+          <sc-for list="{{ settleView }}" as="st" hint-placeholder-count="5">
+            <div style="display:grid;min-width:860px;grid-template-columns:70px 1.4fr 110px 110px 130px 1.6fr 120px;gap:10px;align-items:center;padding:13px 20px;border-bottom:1px solid #f3f1fa">
+              <span><span style="padding:2px 9px;border-radius:6px;font:700 10.5px 'Manrope','PingFang SC',sans-serif;background:{{ st.tBg }};color:{{ st.tFg }}">{{ st.stype }}</span></span>
+              <span style="font:700 13px 'Manrope','PingFang SC',sans-serif;color:#18172a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ st.party }}</span>
+              <span style="font:700 12.5px 'IBM Plex Mono',Menlo,monospace;color:#18172a">{{ st.amountFmt }}</span>
+              <span><span onClick="{{ st.cycleSt }}" title="点击流转状态" style="padding:2px 10px;border-radius:99px;cursor:pointer;font:700 10.5px 'Manrope','PingFang SC',sans-serif;background:{{ st.sBg }};color:{{ st.sFg }}" style-hover="filter:brightness(.96)">{{ st.status }}</span></span>
+              <span style="font:600 11px 'IBM Plex Mono',Menlo,monospace;color:{{ st.dueColor }}">{{ st.dueFmt }}</span>
+              <span style="font:500 11.5px 'Manrope','PingFang SC',sans-serif;color:#8783a3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ st.note }}</span>
+              <span style="display:flex;gap:8px;justify-content:flex-end">
+                <span onClick="{{ st.edit }}" style="font:700 11.5px 'Manrope','PingFang SC',sans-serif;color:#5b4dff;cursor:pointer;border:1px solid #c9c3f2;border-radius:8px;padding:3px 10px" style-hover="background:#efeeff">编辑</span>
+                <span onClick="{{ st.del }}" style="font:700 11.5px 'Manrope','PingFang SC',sans-serif;color:#8783a3;cursor:pointer;border:1px solid #ddd9ec;border-radius:8px;padding:3px 10px" style-hover="border-color:#d94a4a;color:#d94a4a">删除</span>
+              </span>
+            </div>
+          </sc-for>
+          <sc-if value="{{ noSettle }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:30px;text-align:center;font:500 13px 'Manrope','PingFang SC',sans-serif;color:#b9b5d0">暂无结算单 —— 点击右上角新增</div>
+          </sc-if>
+        </div>
+        <div style="font:500 11.5px 'Manrope','PingFang SC',sans-serif;color:#b9b5d0;margin-top:10px">结算口径：以系统对账数据为唯一依据 · ¥ 金额按 7.2 折算美元计入汇总 · 状态流转与删除仅限 结算财务 / 负责人</div>
+      </div>
+    </sc-if>
+
     <!-- ======== PAGE: 案例库 ======== -->
     <sc-if value="{{ isCases }}" hint-placeholder-val="{{ false }}">
       <div data-screen-label="案例库">
@@ -3120,6 +3175,45 @@
         </div>
       </sc-if>
 
+      <sc-if value="{{ isSettleModal }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
+          <div style="grid-column:1/-1">
+            <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">结算对象 *</div>
+            <input value="{{ draft.party }}" onChange="{{ dOn.party }}" placeholder="例：币安 Binance / Aria（KOL 分成）" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'Manrope','PingFang SC',sans-serif;outline:none" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
+          </div>
+          <div>
+            <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">类型</div>
+            <select value="{{ draft.stype }}" onChange="{{ dOn.stype }}" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'Manrope','PingFang SC',sans-serif;outline:none;background:#fff">
+              <option>应收</option><option>应付</option>
+            </select>
+          </div>
+          <div>
+            <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">状态</div>
+            <select value="{{ draft.status }}" onChange="{{ dOn.status }}" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'Manrope','PingFang SC',sans-serif;outline:none;background:#fff">
+              <option>待对账</option><option>待发放</option><option>已结清</option>
+            </select>
+          </div>
+          <div>
+            <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">币种</div>
+            <select value="{{ draft.cur }}" onChange="{{ dOn.cur }}" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'Manrope','PingFang SC',sans-serif;outline:none;background:#fff">
+              <option>$</option><option>¥</option>
+            </select>
+          </div>
+          <div>
+            <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">金额</div>
+            <input value="{{ draft.amount }}" onChange="{{ dOn.amount }}" type="number" placeholder="0" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'IBM Plex Mono',Menlo,monospace;outline:none" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
+          </div>
+          <div>
+            <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">到期日</div>
+            <input value="{{ draft.due }}" onChange="{{ dOn.due }}" type="date" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'IBM Plex Mono',Menlo,monospace;outline:none" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
+          </div>
+          <div style="grid-column:1/-1">
+            <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">备注（结算口径 / 依据）</div>
+            <input value="{{ draft.note }}" onChange="{{ dOn.note }}" placeholder="例：第二期投放预算 · 依据系统对账数据" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'Manrope','PingFang SC',sans-serif;outline:none" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
+          </div>
+        </div>
+      </sc-if>
+
       <sc-if value="{{ isVersionModal }}" hint-placeholder-val="{{ false }}">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
           <div style="grid-column:1/-1">
@@ -3520,6 +3614,7 @@ class Component extends DCLogic {
           // 备注日期统一为 MM-DD（历史数据里混入过 YYYY-MM-DD，导致时间线排序错乱）
           (d.competitors || []).forEach(c => (c.notes || []).forEach(n => { if (/^\d{4}-\d{2}-\d{2}/.test(n.d)) n.d = n.d.slice(5); }));
           if (!d.role || !this.ROLES.some(r => r.id === d.role)) d.role = 'owner';
+          if (!d.settlements) d.settlements = this.seedSettlements();
           return d;
         }
       }
@@ -3723,13 +3818,13 @@ class Component extends DCLogic {
   // ── 角色体系（左下角用户卡切换）──
   ROLES = [
     { id: 'owner', name: '项目负责人', en: 'OWNER', avatar: '我', grad: 'linear-gradient(140deg,#5b4dff,#3c2fd0)', home: 'overview', duties: ['全局视角与跨角色资源协调', '版本计划与优先级最终审批', '结算与协议变更的最终审批', '对外关键合作关系维护'] },
-    { id: 'biz', name: '项目商务', en: 'BD', avatar: '商', grad: 'linear-gradient(140deg,#ff7a3d,#d15a1f)', home: 'partners', duties: ['品牌方需求对接与营销方案制定', '游戏团队模板批量合作洽谈', '合同 / SOW 推进与回款跟进', '合作方档案与沟通记录维护'], nav: ['overview', 'daily', 'partners', 'docs', 'tpl', 'kolco', 'cases', 'mkagent', 'map'] },
+    { id: 'biz', name: '项目商务', en: 'BD', avatar: '商', grad: 'linear-gradient(140deg,#ff7a3d,#d15a1f)', home: 'partners', duties: ['品牌方需求对接与营销方案制定', '游戏团队模板批量合作洽谈', '合同 / SOW 推进与回款跟进', '合作方档案与沟通记录维护'], nav: ['overview', 'daily', 'partners', 'settle', 'docs', 'tpl', 'kolco', 'cases', 'mkagent', 'map'] },
     { id: 'legal', name: '项目法务', en: 'LEGAL', avatar: '法', grad: 'linear-gradient(140deg,#d43d33,#8f231c)', home: 'risk', duties: ['平台 8 份协议维护与版本管理', '品牌方准入尽调与红线把关', 'Web3 合规：KYC 分级 / 地区屏蔽', '对外合作权益保障与争议处理'], nav: ['overview', 'daily', 'docs', 'partners', 'kolco'] },
     { id: 'kolops', name: 'KOL 运营', en: 'KOL OPS', avatar: 'K', grad: 'linear-gradient(140deg,#b03a72,#7d2450)', home: 'kolco', duties: ['KOL 招募准入与数据核验', '分层管理（S/A/B）与培训赋能', 'KOL 营销方案共创与排期', '达人舆情监控与紧急下架协同'], nav: ['overview', 'daily', 'kolco', 'partners', 'cases', 'mkagent', 'map'] },
     { id: 'product', name: '项目产品', en: 'PRODUCT', avatar: '产', grad: 'linear-gradient(140deg,#1d9f6e,#136b49)', home: 'cases', duties: ['营销案例方案设计与全流程推演', '模板标准与上架规范制定', '产品设计与 PRD / 版本规划', '漏斗定义与结算口径制定'], nav: ['overview', 'daily', 'board', 'docs', 'tpl', 'cases', 'mkagent', 'flow', 'aigc', 'mkag2'] },
     { id: 'tech', name: '项目技术', en: 'ENGINEERING', avatar: '技', grad: 'linear-gradient(140deg,#2b6fd4,#1b478c)', home: 'agentos', duties: ['Agent OS / AICG 工作流开发', '模板引擎与 H5 Builder 建设', '发布投放连接器与系统稳定性', '架构可拓展性与技术文档沉淀'], nav: ['overview', 'daily', 'board', 'flow', 'aigc', 'agentos', 'mkag2', 'tpl', 'map'] },
     { id: 'qa', name: '项目测试', en: 'QA', avatar: '测', grad: 'linear-gradient(140deg,#b97a1c,#8a5a12)', home: 'board', duties: ['模板 / Playable 功能兼容测试', '模拟测试机制运营与预览验收', '线上问题跟踪、反馈与回归', '发版门禁与质量报告'], nav: ['overview', 'daily', 'board', 'flow', 'tpl', 'cases'] },
-    { id: 'finance', name: '结算财务', en: 'FINANCE', avatar: '财', grad: 'linear-gradient(140deg,#0f9d8f,#0a6b62)', home: 'partners', duties: ['KOL 分成核算与发放执行', '品牌方账单、回款与对账', '积分发放与额度熔断监控', '提现审核（配合 KYC）与税务发票'], nav: ['overview', 'daily', 'partners', 'kolco', 'docs'] },
+    { id: 'finance', name: '结算财务', en: 'FINANCE', avatar: '财', grad: 'linear-gradient(140deg,#0f9d8f,#0a6b62)', home: 'settle', duties: ['KOL 分成核算与发放执行', '品牌方账单、回款与对账', '积分发放与额度熔断监控', '提现审核（配合 KYC）与税务发票'], nav: ['overview', 'daily', 'settle', 'partners', 'kolco', 'docs'] },
     { id: 'ts', name: '内容审核 · T&S', en: 'TRUST & SAFETY', avatar: '审', grad: 'linear-gradient(140deg,#7c4dcc,#54348c)', home: 'risk', duties: ['模板与 UGC 双审执行', '举报队列 24h SOP 响应', '违禁内容清单与分级标签更新', '未成年人保护措施执行'], nav: ['overview', 'daily', 'docs', 'tpl', 'cases', 'kolco'] },
     { id: 'community', name: '社区 / 玩家运营', en: 'COMMUNITY', avatar: '社', grad: 'linear-gradient(140deg,#e0558c,#a83263)', home: 'daily', duties: ['官方 TG / Discord 社群运营', '活动期玩家答疑与申诉处理', '女巫误判申诉复核与转办', '玩家侧激励活动执行'], nav: ['overview', 'daily', 'kolco', 'partners', 'mkagent', 'map'] },
     { id: 'design', name: '设计 / 美术', en: 'DESIGN', avatar: '设', grad: 'linear-gradient(140deg,#e8a13a,#b3781f)', home: 'tpl', duties: ['模板素材生产与风格统一', '品牌方定制皮肤（换皮）制作', '素材版权溯源登记', 'AI 生成素材审核与微调'], nav: ['overview', 'daily', 'tpl', 'cases', 'docs', 'flow'] },
@@ -3748,9 +3843,10 @@ class Component extends DCLogic {
     tpl:     { label: '模板库管理', roles: ['design', 'product'] },
     kol:     { label: 'KOL 档案管理', roles: ['kolops'] },
     legal:   { label: '协议签署状态变更', roles: ['legal'] },
+    settle:  { label: '结算管理', roles: ['finance'] },
     admin:   { label: '数据导入 / 覆盖', roles: [] }
   };
-  MODAL_PERM = { partner: 'partner', task: 'board', version: 'board', roadver: 'board', comp: 'comp', doc: 'docs', newcase: 'content', creds: 'creds', vault: 'creds' };
+  MODAL_PERM = { partner: 'partner', task: 'board', version: 'board', roadver: 'board', comp: 'comp', doc: 'docs', newcase: 'content', creds: 'creds', vault: 'creds', settle: 'settle' };
   curRole() { return (this.state && this.state.data && this.state.data.role) || 'owner'; }
   can(k) { const r = this.curRole(); if (r === 'owner') return true; const p = this.PERM_DEFS[k]; return !!p && p.roles.includes(r); }
   denyToast(k) { const p = this.PERM_DEFS[k] || { label: k, roles: [] }; const names = p.roles.map(id => (this.ROLES.find(r => r.id === id) || {}).name).filter(Boolean).concat('项目负责人').join(' / '); this.showToast('当前角色无权：' + p.label + ' · 需 ' + names); }
@@ -4093,6 +4189,17 @@ class Component extends DCLogic {
     ];
   }
 
+  seedSettlements() {
+    const t = this.today();
+    return [
+      { id: 'st1', stype: '应收', party: '币安 Binance', amount: 25000, cur: '$', status: '待对账', due: this.plusDays(6), note: '第二期投放预算 · 依据系统对账数据', created: this.plusDays(-2) },
+      { id: 'st2', stype: '应收', party: 'Gate', amount: 12000, cur: '$', status: '待发放', due: this.plusDays(10), note: '塔防联动活动结算 · 已过品牌方预审', created: this.plusDays(-5) },
+      { id: 'st3', stype: '应付', party: 'Aria（KOL 分成）', amount: 8400, cur: '$', status: '已结清', due: this.plusDays(-12), note: '累计 12 次合作分成 · 60/40', created: this.plusDays(-20) },
+      { id: 'st4', stype: '应付', party: 'CryptoLeo（KOL 分成）', amount: 3100, cur: '$', status: '待发放', due: this.plusDays(3), note: 'CPS 分成 · T+7 兑付', created: this.plusDays(-4) },
+      { id: 'st5', stype: '应付', party: '游戏主播小葵（坑位+佣金）', amount: 12000, cur: '¥', status: '待对账', due: this.plusDays(8), note: '经纪人对接 · 待平台数据核对', created: this.plusDays(-1) }
+    ];
+  }
+
   seedTplLib() {
     return [
     { id: 'tp1', name: '塔防', base: '塔防守卫', scene: '策略互动 · 品牌任务植入', status: '可用', owner: 'Airvana 平台自研', agreement: '平台自有 · 无需授权', intro: '经典塔防玩法轻量化：玩家布置防御塔抵御波次进攻，塔位/敌人皮肤可替换为品牌元素，通关奖励对接核销。单局 60-90 秒，支持难度递增与排行榜。' },
@@ -4276,6 +4383,7 @@ class Component extends DCLogic {
       tplLib: this.seedTplLib(),
       kolLib: this.seedKolLib(),
       role: 'owner',
+      settlements: this.seedSettlements(),
       userCases: [],
       partners: this.seedGamePartners().concat(this.seedIndPartners()).concat(this.seedLjhPartners()).concat([
         { id: 'p1', name: '币安 Binance', stage: '执行', owner: '李骏', contact: 'TG @bn_partnership', budget: 60000, nextDate: t, deadline: this.plusDays(24), exposure: 1240000, conversion: 8600, regs: 4200, deposit: 380000, trades: 2600000, channels: [
@@ -4728,6 +4836,16 @@ class Component extends DCLogic {
           d.tasks.push({ id: this.uid('t'), title: dr.title.trim(), desc: dr.desc || '', col: dr.col || '需求池', assignee: dr.assignee || '', priority: dr.priority || '中', due: dr.due || '' });
         }
       });
+    } else if (S.modal === 'settle') {
+      if (!(dr.party || '').trim()) return;
+      this.setData(d => {
+        d.settlements = d.settlements || [];
+        const rec = { stype: dr.stype || '应收', party: dr.party.trim(), amount: +dr.amount || 0, cur: dr.cur || '$', status: dr.status || '待对账', due: dr.due || '', note: dr.note || '' };
+        if (dr.id) { const i = d.settlements.findIndex(x => x.id === dr.id); if (i >= 0) d.settlements[i] = { ...d.settlements[i], ...rec }; }
+        else d.settlements.unshift({ id: this.uid('st'), created: t, ...rec });
+      });
+      this.setState({ modal: null, draft: {} });
+      return;
     } else if (S.modal === 'version') {
       if (!(dr.name || '').trim()) return;
       this.setData(d => {
@@ -4830,7 +4948,7 @@ class Component extends DCLogic {
     const S = this.state, D = S.data;
     const roleCur = this.ROLES.find(r => r.id === (D.role || 'owner')) || this.ROLES[0];
     const todoMine = S.todoMine !== false && roleCur.id !== 'owner';
-    const NAV_KEYS = ['overview', 'daily', 'board', 'docs', 'partners', 'tpl', 'kolco', 'cases', 'mkagent', 'flow', 'aigc', 'agentos', 'mkag2', 'map'];
+    const NAV_KEYS = ['overview', 'daily', 'board', 'docs', 'partners', 'settle', 'tpl', 'kolco', 'cases', 'mkagent', 'flow', 'aigc', 'agentos', 'mkag2', 'map'];
     const navAllowed = roleCur.nav || NAV_KEYS;
     const navShow = {}; NAV_KEYS.forEach(k => { navShow['nav_' + k] = navAllowed.includes(k); });
     const today = this.today(), week = this.plusDays(7);
@@ -4855,7 +4973,7 @@ class Component extends DCLogic {
     const tiles = [['#ffd8c2', '#fcd1e1'], ['#d9d4ff', '#c9e3ff'], ['#c6efdc', '#d3e8c5'], ['#ffeec0', '#ffd8c2'], ['#c9e3ff', '#d9d4ff'], ['#fcd1e1', '#ffcfcf']];
 
     // nav
-    const pages = { overview: ['总览', 'OVERVIEW'], daily: ['每日待办', 'DAILY'], partners: ['品牌合作', 'PARTNERS'], comp: ['知识库 · 竞品分析', 'COMPETITORS'], exlist: ['知识库 · 合规交易所', 'EXCHANGES'], board: ['项目推进', 'PIPELINE'], docs: ['知识库 · 文档资料', 'LIBRARY'], flow: ['AICG 工作流', 'WORKFLOW'], agentos: ['Agent OS', 'AGENT OS'], kb: ['知识库 · 子库建设规划', 'KNOWLEDGE'], risk: ['知识库 · 风控体系', 'RISK'], cases: ['AP 案例库', 'CASES'], tpl: ['模板库', 'TEMPLATES'], kolco: ['KOL 合作库', 'KOL PARTNERS'], aigc: ['AIGC 架构', 'AIGC ARCHITECTURE'], mkagent: ['营销 Agent 案例', 'MARKETING AGENT'], mkag2: ['营销 Agent', 'MARKETING AGENT ENGINE'] };
+    const pages = { overview: ['总览', 'OVERVIEW'], daily: ['每日待办', 'DAILY'], partners: ['品牌合作', 'PARTNERS'], comp: ['知识库 · 竞品分析', 'COMPETITORS'], exlist: ['知识库 · 合规交易所', 'EXCHANGES'], board: ['项目推进', 'PIPELINE'], docs: ['知识库 · 文档资料', 'LIBRARY'], flow: ['AICG 工作流', 'WORKFLOW'], agentos: ['Agent OS', 'AGENT OS'], kb: ['知识库 · 子库建设规划', 'KNOWLEDGE'], risk: ['知识库 · 风控体系', 'RISK'], cases: ['AP 案例库', 'CASES'], tpl: ['模板库', 'TEMPLATES'], kolco: ['KOL 合作库', 'KOL PARTNERS'], settle: ['结算中心', 'SETTLEMENT'], aigc: ['AIGC 架构', 'AIGC ARCHITECTURE'], mkagent: ['营销 Agent 案例', 'MARKETING AGENT'], mkag2: ['营销 Agent', 'MARKETING AGENT ENGINE'] };
     const navS = {};
     Object.keys(pages).forEach(k => {
       const on = S.page === k;
@@ -5522,7 +5640,7 @@ class Component extends DCLogic {
     if (S.page === 'docs') pageTitle = '知识库 · ' + DOC_GROUPS[dg].label;
 
     // draft field handlers
-    const fields = ['name', 'stage', 'owner', 'contact', 'budget', 'nextDate', 'deadline', 'exposure', 'conversion', 'title', 'desc', 'col', 'assignee', 'priority', 'due', 'category', 'status', 'link', 'target', 'goal', 'track', 'threat', 'position', 'pros', 'cons', 'pricing', 'audience', 'backing', 'regs', 'deposit', 'trades', 'account', 'password', 'code', 'ver', 'scopeText', 'industry', 'docType', 'docVer', 'exp', 'revenue', 'funding'];
+    const fields = ['stype', 'party', 'amount', 'cur', 'note', 'name', 'stage', 'owner', 'contact', 'budget', 'nextDate', 'deadline', 'exposure', 'conversion', 'title', 'desc', 'col', 'assignee', 'priority', 'due', 'category', 'status', 'link', 'target', 'goal', 'track', 'threat', 'position', 'pros', 'cons', 'pricing', 'audience', 'backing', 'regs', 'deposit', 'trades', 'account', 'password', 'code', 'ver', 'scopeText', 'industry', 'docType', 'docVer', 'exp', 'revenue', 'funding'];
     const dOn = {};
     fields.forEach(f => { dOn[f] = e => { const v = e.target.value; this.setState(s => ({ draft: { ...s.draft, [f]: v } })); }; });
 
@@ -5531,7 +5649,7 @@ class Component extends DCLogic {
     const doneTasks = D.tasks.filter(tk => tk.col === '已完成').length;
     const activeP = D.partners.filter(p => p.stage === '执行' || p.stage === '结算').length;
 
-    const modalTitles = { partner: S.draft.id ? '编辑合作方' : '新增合作方', task: S.draft.id ? '编辑任务' : '新增需求 / 任务', doc: S.draft.id ? '编辑文档' : '收录文档', version: S.draft.id ? '编辑版本' : '新增版本', roadver: S.draft.id ? '编辑发布版本' : '新增发布版本', newcase: '新增案例', comp: S.draft.id ? '编辑竞品' : '新增竞品', creds: '录入营销账号（加密）', vault: '验证查看口令' };
+    const modalTitles = { partner: S.draft.id ? '编辑合作方' : '新增合作方', task: S.draft.id ? '编辑任务' : '新增需求 / 任务', doc: S.draft.id ? '编辑文档' : '收录文档', version: S.draft.id ? '编辑版本' : '新增版本', roadver: S.draft.id ? '编辑发布版本' : '新增发布版本', newcase: '新增案例', comp: S.draft.id ? '编辑竞品' : '新增竞品', creds: '录入营销账号（加密）', vault: '验证查看口令', settle: S.draft.id ? '编辑结算单' : '新增结算单' };
 
     return {
       // nav / header
@@ -6275,7 +6393,7 @@ class Component extends DCLogic {
       upcoming: upcomingView, hasUpcoming: upcomingView.length > 0, noUpcoming: upcomingView.length === 0,
       showTodoToggle: roleCur.id !== 'owner',
       ...navShow,
-      navGroupProj: ['docs', 'partners', 'tpl', 'kolco', 'cases', 'mkagent'].some(k => navAllowed.includes(k)),
+      navGroupProj: ['docs', 'partners', 'settle', 'tpl', 'kolco', 'cases', 'mkagent'].some(k => navAllowed.includes(k)),
       navGroupPlat: ['flow', 'aigc', 'agentos', 'mkag2', 'map'].some(k => navAllowed.includes(k)),
       todoFilterLabel: todoMine ? '只看 ' + roleCur.name : '全部角色',
       todoTogBd: todoMine ? '#5b4dff' : '#ddd9ec', todoTogFg: todoMine ? '#5b4dff' : '#8783a3', todoTogBg: todoMine ? '#efeeff' : '#fff',
@@ -6297,6 +6415,43 @@ class Component extends DCLogic {
       cancelConfirm: () => this.setState({ confirm: null }),
       toast: (S.toast && (S.toast.text || S.toast)) || '',
       toastUndo: (S.toast && S.toast.undo) || null,
+
+      // settlement center
+      isSettle: S.page === 'settle',
+      settleSummary: (() => {
+        const L = D.settlements || [];
+        const sum = (arr) => arr.reduce((a, x) => a + (x.cur === '¥' ? (x.amount || 0) / 7.2 : (x.amount || 0)), 0);
+        const rcv = L.filter(x => x.stype === '应收' && x.status !== '已结清');
+        const pay = L.filter(x => x.stype === '应付' && x.status !== '已结清');
+        return [
+          { label: '应收 · 未结', v: '$' + Math.round(sum(rcv)).toLocaleString('en-US'), sub: rcv.length + ' 笔待收', color: '#5b4dff' },
+          { label: '应付 · 未结', v: '$' + Math.round(sum(pay)).toLocaleString('en-US'), sub: pay.length + ' 笔待付', color: '#d15a1f' },
+          { label: '已结清', v: String(L.filter(x => x.status === '已结清').length), sub: '累计笔数', color: '#2eaa70' }
+        ];
+      })(),
+      settleTypePills: ['全部', '应收', '应付'].map(n => { const on = (S.settleType || '全部') === n; return { label: n, bg: on ? '#18172a' : '#fff', fg: on ? '#fff' : '#4b486a', bd: on ? '#18172a' : '#ddd9ec', click: () => this.setState({ settleType: n }) }; }),
+      settleStPills: ['全部', '待对账', '待发放', '已结清'].map(n => { const on = (S.settleSt || '全部') === n; return { label: n, bg: on ? '#efeeff' : '#fff', fg: on ? '#5b4dff' : '#4b486a', bd: on ? '#c9c3f2' : '#ddd9ec', click: () => this.setState({ settleSt: n }) }; }),
+      settleView: (D.settlements || [])
+        .filter(x => (S.settleType || '全部') === '全部' || x.stype === S.settleType)
+        .filter(x => (S.settleSt || '全部') === '全部' || x.status === S.settleSt)
+        .slice().sort((a, b) => (a.status === '已结清' ? 1 : 0) - (b.status === '已结清' ? 1 : 0) || ((a.due || '9999') < (b.due || '9999') ? -1 : 1))
+        .map(x => {
+          const tm = x.stype === '应收' ? { bg: '#efeeff', fg: '#5b4dff' } : { bg: '#ffece1', fg: '#d15a1f' };
+          const sm = { '待对账': { bg: '#fdf3df', fg: '#a97b22' }, '待发放': { bg: '#efeeff', fg: '#5b4dff' }, '已结清': { bg: '#e2f4e9', fg: '#2eaa70' } }[x.status] || { bg: '#eeecf7', fg: '#8783a3' };
+          const overdue = x.status !== '已结清' && x.due && x.due < today;
+          return { ...x,
+            amountFmt: (x.cur || '$') + Number(x.amount || 0).toLocaleString('en-US'),
+            dueFmt: x.due ? (x.due.slice(5) + (overdue ? ' · 逾期' : '')) : '—',
+            dueColor: overdue ? '#d94a4a' : '#8783a3',
+            tBg: tm.bg, tFg: tm.fg, sBg: sm.bg, sFg: sm.fg,
+            cycleSt: this.guard('settle', () => this.setData(d => { const y = (d.settlements || []).find(z => z.id === x.id); if (y) { const o = ['待对账', '待发放', '已结清']; y.status = o[(o.indexOf(y.status) + 1) % o.length]; } })),
+            edit: () => this.openModal('settle', { ...x }),
+            del: this.guard('settle', () => this.askConfirm('删除结算单「' + x.party + '」？', () => this.setData(d => { d.settlements = (d.settlements || []).filter(z => z.id !== x.id); })))
+          };
+        }),
+      noSettle: !((D.settlements || []).length),
+      openAddSettle: () => this.openModal('settle', { stype: '应收', cur: '$', status: '待对账' }),
+      goSettle: () => this.setState({ page: 'settle' }),
 
       // backup
       backupModalOpen: !!S.backupModal,
@@ -6331,7 +6486,7 @@ class Component extends DCLogic {
 
       // modal
       showModal: !!S.modal,
-      isPartnerModal: S.modal === 'partner', isTaskModal: S.modal === 'task', isDocModal: S.modal === 'doc', isVersionModal: S.modal === 'version', isCompModal: S.modal === 'comp', isCredsModal: S.modal === 'creds', isVaultModal: S.modal === 'vault',
+      isPartnerModal: S.modal === 'partner', isTaskModal: S.modal === 'task', isDocModal: S.modal === 'doc', isVersionModal: S.modal === 'version', isCompModal: S.modal === 'comp', isCredsModal: S.modal === 'creds', isVaultModal: S.modal === 'vault', isSettleModal: S.modal === 'settle',
       modalSaveLabel: S.modal === 'vault' ? '验证' : '保存',
       vaultHint: (D.vault ? '已设置过查看口令 —— 输入同一口令才能保存。' : '首次使用：这个口令会用来加密账号密码，之后查看 / 更新都需要它。') + ' 口令忘记将无法找回。',
       modalTitle: modalTitles[S.modal] || '',

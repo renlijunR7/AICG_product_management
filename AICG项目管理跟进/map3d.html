@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>全球合规交易所地图</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
+<script src="./exchanges.js"></script>
+<script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js" integrity="sha384-Ukv1p/xTma6P4/2bY5KzWBw+ydSpXmhCMtyciIQVDJ1RmOxtCYNMF1uXT9T63H67" crossorigin="anonymous"></script>
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(900px 600px at 78% -10%,rgba(255,122,61,.1),transparent 60%),radial-gradient(1100px 700px at 12% 8%,rgba(91,77,255,.12),transparent 60%),#f6f5fb;font-family:'Manrope','PingFang SC','Microsoft YaHei',sans-serif;}
+  #stage{position:absolute;inset:0;cursor:grab}
+  #stage:active{cursor:grabbing}
+  .hud{position:absolute;left:24px;top:20px;pointer-events:none}
+  .eyebrow{font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.14em;color:#5b4dff;text-transform:uppercase}
+  .title{font:800 24px 'Manrope','PingFang SC',sans-serif;color:#18172a;letter-spacing:-.02em;margin-top:4px}
+  .sub{font:600 12px 'Manrope','PingFang SC',sans-serif;color:#8783a3;margin-top:4px;max-width:400px;line-height:1.5}
+  .filters{position:absolute;left:24px;bottom:24px;display:flex;gap:8px;flex-wrap:wrap;max-width:70%}
+  .chip{display:flex;align-items:center;gap:7px;padding:9px 16px;border-radius:99px;border:1.5px solid #ddd9ec;background:#fff;color:#4b486a;font:700 12.5px 'Manrope','PingFang SC',sans-serif;cursor:pointer;transition:all .15s ease;box-shadow:0 1px 2px rgba(24,23,42,.04)}
+  .chip:hover{border-color:#5b4dff}
+  .chip.on{background:#18172a;color:#fff;border-color:#18172a}
+  .chip .dot{width:8px;height:8px;border-radius:99px}
+  .chip .n{font:700 10.5px 'IBM Plex Mono',Menlo,monospace;opacity:.65}
+  .tip{position:absolute;pointer-events:none;background:#fff;border:1px solid #ebe9f4;border-radius:12px;padding:10px 14px;box-shadow:0 20px 60px -12px rgba(24,23,42,.25);opacity:0;transition:opacity .12s ease;min-width:160px;z-index:5}
+  .tip .tn{font:800 13.5px 'Manrope','PingFang SC',sans-serif;color:#18172a}
+  .tip .tl{font:600 11px 'IBM Plex Mono',Menlo,monospace;color:#8783a3;margin-top:3px}
+  .tip .tm{display:flex;gap:8px;font:600 12px 'Manrope','PingFang SC',sans-serif;color:#18172a;margin-top:5px}
+  .tip .tm b{flex:none;font:700 9.5px 'IBM Plex Mono',Menlo,monospace;color:#8783a3;padding-top:2px;width:26px}
+  .tip .tt{display:inline-block;margin-top:6px;margin-right:5px;font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.06em;padding:3px 8px;border-radius:99px}
+  .panel{position:absolute;right:24px;top:76px;width:330px;max-height:calc(100% - 180px);overflow-y:auto;background:#fff;border:1px solid #ebe9f4;border-radius:18px;box-shadow:0 30px 80px -16px rgba(24,23,42,.3);padding:20px;display:none;z-index:6}
+  .panel.show{display:block;animation:pin .16s ease}
+  @keyframes pin{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}
+  .panel .px{position:absolute;top:14px;right:14px;width:26px;height:26px;border-radius:99px;background:#f6f5fb;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#8783a3;font:700 13px 'Manrope',sans-serif}
+  .panel .px:hover{background:#eeecf7;color:#18172a}
+  .panel .pn{font:800 17px 'Manrope','PingFang SC',sans-serif;color:#18172a;letter-spacing:-.01em;padding-right:28px}
+  .panel .pl{font:600 11px 'IBM Plex Mono',Menlo,monospace;color:#8783a3;margin-top:4px}
+  .panel .ptag{display:inline-block;margin-top:8px;margin-right:6px;font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.06em;padding:3px 9px;border-radius:99px}
+  .panel .sec{font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#8783a3;margin:16px 0 8px}
+  .panel .row{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid #f1eff8;font:600 12.5px 'Manrope','PingFang SC',sans-serif;color:#18172a}
+  .panel .row:last-child{border-bottom:0}
+  .panel .row b{flex:none;width:70px;font:700 10px 'IBM Plex Mono',Menlo,monospace;color:#8783a3;padding-top:2px}
+  .panel .note{margin-top:12px;background:#fff7f1;border:1px dashed #ffb98f;border-radius:10px;padding:9px 12px;font:500 11px 'Manrope','PingFang SC',sans-serif;color:#4b486a;line-height:1.55}
+  .listov{display:none;position:absolute;inset:24px;z-index:8;background:#fff;border:1px solid #ebe9f4;border-radius:20px;box-shadow:0 40px 100px -20px rgba(24,23,42,.35);flex-direction:column;overflow:hidden}
+  .listov .lhead{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid #ebe9f4;flex:none}
+  .listov .lt{font:800 17px 'Manrope','PingFang SC',sans-serif;color:#18172a;letter-spacing:-.01em}
+  .listov .ls{font:600 11px 'IBM Plex Mono',Menlo,monospace;color:#8783a3;margin-top:3px}
+  .listov .lx{padding:8px 16px;border-radius:99px;background:#18172a;color:#fff;font:700 12.5px 'Manrope','PingFang SC',sans-serif;cursor:pointer}
+  .listov .lx:hover{background:#3c2fd0}
+  .listov .lwrap{overflow:auto;flex:1;padding:0 24px 20px}
+  .listov table{border-collapse:collapse;width:100%;font:500 12.5px 'Manrope','PingFang SC',sans-serif;color:#18172a}
+  .listov th{position:sticky;top:0;background:#fafaff;text-align:left;font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.06em;color:#8783a3;padding:10px 10px;border-bottom:1px solid #ebe9f4;white-space:nowrap}
+  .listov td{padding:9px 10px;border-bottom:1px solid #f3f1fa;vertical-align:top;line-height:1.5}
+  .listov .tt{display:inline-block;font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.04em;padding:2px 8px;border-radius:99px;white-space:nowrap}
+  .stat.clickable{cursor:pointer;transition:all .15s ease}
+  .stat.clickable:hover{border-color:#5b4dff;box-shadow:0 8px 20px -8px rgba(91,77,255,.3)}
+  .legend{position:absolute;right:24px;bottom:24px;display:flex;flex-direction:column;gap:6px;font:600 11.5px 'Manrope','PingFang SC',sans-serif;color:#8783a3}
+  .legend div{display:flex;align-items:center;gap:8px}
+  .legend i{width:9px;height:9px;border-radius:99px;display:inline-block}
+  .stats{position:absolute;left:24px;top:104px;display:flex;gap:8px}
+  .stat{background:#fff;border:1px solid #ebe9f4;border-radius:12px;padding:8px 14px;box-shadow:0 1px 2px rgba(24,23,42,.04)}
+  .stat .sv{font:800 16px 'Manrope',sans-serif;color:#18172a;letter-spacing:-.01em}
+  .stat .sl{font:700 9px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;color:#8783a3;margin-top:1px}
+</style>
+</head>
+<body>
+<svg id="stage"></svg>
+<div class="hud">
+  <div class="eyebrow">· COMPLIANT EXCHANGE MAP ·</div>
+  <div class="title">全球在营合规数字货币交易所</div>
+  <div class="sub">22 个监管辖区 · 165 条记录（139 名册 + 26 补录）· 拖拽旋转 · 点击标记查看持牌法人</div>
+</div>
+<div class="stats" id="stats"></div>
+<div class="filters" id="filters"></div>
+<div class="legend">
+  <div><i style="background:#ff7a3d;display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;color:#fff;font:700 8px Manrope">₿</i>交易所 · 已合作 / 洽谈中</div>
+  <div><i style="background:#5b4dff;display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;color:#fff;font:700 8px Manrope">₿</i>交易所 · 未合作</div>
+  <div><i style="background:#e0489e;display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px"><svg width="9" height="9" viewBox="0 0 10 10"><circle cx="5" cy="3.2" r="2" fill="#fff"/><path d="M1.5 9q3.5-4.8 7 0z" fill="#fff"/></svg></i>KOL 达人</div>
+</div>
+<div class="tip" id="tip"></div>
+<div class="listov" id="listov"></div>
+<div class="panel" id="panel"></div>
+<script>
+// 数据来源：全球在营合规数字货币交易所监管实体地图（研究版 1.0，截至 2026-08-06）
+// 合作口径：与 Airvana 已合作/洽谈中的品牌（Binance / Gate / OKX / 火币 / Bitget）
+const JURIS = window.EXCHANGE_JURIS;
+const HUBS = window.EXCHANGE_HUBS;
+// [brand, entity, status, jurisKey, hub, partner]
+const ROWS = window.EXCHANGE_ROWS;
+// spread co-located markers in a golden-angle spiral around the hub
+const hubCount = {};
+const EXCHANGES = ROWS.map(r => {
+  const [name, entity, status, jk, hub, partner] = r;
+  const k = hubCount[hub] = (hubCount[hub] || 0) + 1;
+  const a = k * 2.39996, rad = k > 1 ? .85 * Math.sqrt(k - 1) : 0;
+  const [hx, hy] = HUBS[hub];
+  return { name, entity, status, jk, partner: !!partner, lon: hx + rad * Math.cos(a), lat: hy + rad * Math.sin(a) };
+});
+const C_PART = '#ff7a3d', C_NO = '#5b4dff';
+// 品牌画像：[注册用户, 营收, 官网]（公开披露/行业估算，集团口径）
+const BRANDS = window.EXCHANGE_BRANDS;
+function profile(name) {
+  if (BRANDS[name]) return BRANDS[name];
+  const root = name.replace(/\s+(EU|UK|US|USA|SG|CA|NY|MENA|Asia|Japan|Canada|Bahrain|LatAm|Singapore|Thailand|Malaysia|Crypto|HK|TH)$/,'');
+  return BRANDS[root] || ['—', '—', ''];
+}
+// 创始人简介（公开资料）
+const FOUNDERS = {
+  'Binance': '赵长鹏 CZ · 2017 创立，前 BitMEX/OKCoin CTO，华裔加拿大籍',
+  'OKX': '徐明星 Star Xu · 2017 创立 OKEx，前豆丁网 CTO', 'OKJ': '徐明星 Star Xu · OK 集团日本合规主体',
+  'Gate': '韩林 Lin Han · 2013 创立，行业最早一批交易所创始人',
+  'Bitget': '2018 创立 · 现任 CEO Gracy Chen（陈瑶），主打跟单交易',
+  'Coinbase': 'Brian Armstrong & Fred Ehrsam · 2012 创立，美股上市（COIN）',
+  'Kraken': 'Jesse Powell · 2011 创立，现任 CEO Arjun Sethi 等联席',
+  'Crypto.com': 'Kris Marszalek · 2016 创立，总部新加坡',
+  'Gemini': 'Winklevoss 兄弟（Cameron & Tyler）· 2014 创立',
+  'Bitstamp': 'Nejc Kodrič & Damijan Merlak · 2011 创立，2023 年被 Robinhood 收购',
+  'Bybit EU': 'Ben Zhou（周本）· 2018 创立，衍生品起家',
+  'KuCoin EU': 'Michael Gan（甘晶）· 2017 创立，现任 CEO Johnny Lyu',
+  'eToro': 'Yoni & Ronen Assia · 2007 创立，社交跟单鼻祖',
+  'Revolut': 'Nikolay Storonsky · 2015 创立，英国数字银行巨头',
+  'Bitpanda': 'Eric Demuth 等三人 · 2014 创立于维也纳',
+  'Trade Republic': 'Christian Hecker 等 · 2015 创立，德国零佣金券商',
+  'Robinhood': 'Vlad Tenev & Baiju Bhatt · 2013 创立，美股上市（HOOD）',
+  'Bitvavo': 'Mark Nuvelstijn · 2018 创立于阿姆斯特丹',
+  'Bit2Me': 'Leif Ferreira · 2014 创立，西班牙最大本土交易所',
+  'WhiteBIT EU': 'Volodymyr Nosov · 2018 创立，乌克兰背景',
+  'Bullish': 'Brendan Blumer（Block.one）· 2021 创立，CEO Tom Farley（前 NYSE 总裁）',
+  'OSL': 'BC 科技集团旗下 · 香港首批持牌 VATP', 'OSL Exchange': 'BC 科技集团旗下 · 香港首批持牌 VATP',
+  'HashKey': '肖风博士 · HashKey Group，万向区块链生态',
+  'Upbit': '宋治亨 Song Chi-hyung · Dunamu · 2017 创立，韩国最大',
+  'Bithumb': '2014 创立 · 韩国老牌交易所',
+  'bitFlyer': '加纳裕三 Yuzo Kano · 2014 创立，前高盛交易员', 'bitFlyer USA': '加纳裕三 · bitFlyer 美国合规主体',
+  'Coincheck': '和田晃一良 · 2014 创立，现属 Monex 集团',
+  'Blockchain.com': 'Peter Smith 等 · 2011 创立，老牌钱包起家',
+  'Moomoo': '富途控股旗下（李华·腾讯早期员工创立）',
+  'Luno': 'Marcus Swanepoel · 2013 创立，现属 DCG 集团', 'Luno Malaysia': 'Marcus Swanepoel · Luno 马来西亚合规主体',
+  'VALR': 'Farzam Ehsani · 2018 创立，非洲最大',
+  'Bitkub': 'Jirayut “Topp” Srupsrisopa · 2018 创立，泰国独角兽',
+  'Coins.ph': 'Ron Hose · 2014 创立，菲律宾国民级钱包',
+  'Deribit': 'John Jansen · 2016 创立，加密期权龙头，2025 被 Coinbase 收购',
+  'Swissquote': 'Marc Bürki & Paolo Buzzi · 1996 创立，瑞士上市银行',
+  'Sygnum': 'Mathias Imbach & Gerald Goh · 2018 创立，数字资产银行',
+  'AMINA Bank': '前 SEBA Bank · 2018 创立于楚格加密谷',
+  'Bitfinex': 'iFinex 旗下 · 2012 创立，CTO Paolo Ardoino（Tether CEO）', 'Bitfinex Securities': 'iFinex 旗下数字证券平台',
+  'Backpack': 'Armani Ferrante · 2022 创立，Solana 生态背景',
+  'Gemini US': 'Winklevoss 兄弟 · 纽约信托主体'
+};
+function founder(name) {
+  if (FOUNDERS[name]) return FOUNDERS[name];
+  const root = name.replace(/\s+(EU|UK|US|USA|SG|CA|NY|MENA|Asia|Japan|Canada|Bahrain|LatAm|Singapore|Thailand|Malaysia|Crypto|HK|TH)$/,'');
+  return FOUNDERS[root] || '';
+}
+// KOL 合作库（由工作台通过 URL hash 传入）
+const KOL_GEO = { '美国': [-118.24, 34.05], '中国': [116.4, 39.9], '新加坡': [103.85, 1.29], '韩国': [126.98, 37.57], '日本': [139.69, 35.69], '英国': [-0.12, 51.51], '泰国': [100.5, 13.76], '马来西亚': [101.69, 3.14], '越南': [105.85, 21.03], '菲律宾': [120.98, 14.6], '印尼': [106.85, -6.21], '印度尼西亚': [106.85, -6.21], '印度': [77.21, 28.61], '阿联酋': [55.27, 25.2], '迪拜': [55.27, 25.2], '德国': [13.4, 52.52], '法国': [2.35, 48.86], '巴西': [-46.63, -23.55], '加拿大': [-79.38, 43.65], '澳大利亚': [151.21, -33.87], '土耳其': [28.98, 41.01], '尼日利亚': [3.38, 6.52], '中国香港': [114.17, 22.32], '香港': [114.17, 22.32], '中国台湾': [121.56, 25.03], '台湾': [121.56, 25.03] };
+const C_KOL = '#e0489e';
+let KOLS = [];
+try {
+  const m = location.hash.match(/kols=([^&]+)/);
+  if (m) {
+    const raw = JSON.parse(decodeURIComponent(m[1]));
+    const cc = {};
+    KOLS = raw.filter(k => KOL_GEO[(k.c || '').trim()]).map(k => {
+      const c = (k.c || '').trim(), i = cc[c] = (cc[c] || 0) + 1;
+      const a = i * 2.39996 + 1.2, rad = 1.1 * Math.sqrt(i);
+      const [hx, hy] = KOL_GEO[c];
+      return { name: k.n, country: c, plat: k.p || '—', fans: k.f || '—', tier: k.t || '—', status: k.s || '—', lon: hx + rad * Math.cos(a), lat: hy + rad * Math.sin(a) };
+    });
+  }
+} catch (e) {}
+const GRADE_BG = { 'A': 'rgba(56,176,96,.14);color:#2a9d54', 'A-': 'rgba(56,176,96,.1);color:#4b9d6e', 'B+': 'rgba(255,176,32,.16);color:#b07708', 'B': 'rgba(255,176,32,.16);color:#b07708', 'C': 'rgba(226,68,92,.12);color:#c22745' };
+let filter = 'all', land = null;
+const svg = d3.select('#stage'), tip = document.getElementById('tip');
+let W = innerWidth, H = innerHeight;
+const proj = d3.geoOrthographic().rotate([-80, -22]);
+const path = d3.geoPath(proj);
+const gGlobe = svg.append('g');
+function match(p) {
+  if (filter === 'all') return true;
+  if (filter === 'part') return p.partner;
+  if (filter === 'nopart') return !p.partner;
+  return p.jk === filter;
+}
+function size() {
+  W = innerWidth; H = innerHeight;
+  svg.attr('width', W).attr('height', H);
+  proj.translate([W / 2, H / 2 + 10]).scale(Math.min(W, H) / 2.75);
+  render();
+}
+function render() {
+  if (!land) return;
+  gGlobe.selectAll('*').remove();
+  const r = proj.scale(), cx = W / 2, cy = H / 2 + 10;
+  const defs = gGlobe.append('defs');
+  const grad = defs.append('radialGradient').attr('id', 'oc').attr('cx', '38%').attr('cy', '32%');
+  grad.append('stop').attr('offset', '0%').attr('stop-color', '#ffffff').attr('stop-opacity', 1);
+  grad.append('stop').attr('offset', '100%').attr('stop-color', '#e6e2f6').attr('stop-opacity', 1);
+  gGlobe.append('ellipse').attr('cx', cx).attr('cy', cy + r * 1.04).attr('rx', r * .7).attr('ry', r * .07).attr('fill', 'rgba(24,23,42,.08)');
+  gGlobe.append('circle').attr('cx', cx).attr('cy', cy).attr('r', r + 14).attr('fill', 'none').attr('stroke', 'rgba(91,77,255,.25)').attr('stroke-width', 1).attr('stroke-dasharray', '2 5');
+  gGlobe.append('circle').attr('cx', cx).attr('cy', cy).attr('r', r).attr('fill', 'url(#oc)').attr('stroke', 'rgba(91,77,255,.3)').attr('stroke-width', 1.2);
+  gGlobe.append('path').attr('d', path(d3.geoGraticule10())).attr('fill', 'none').attr('stroke', 'rgba(24,23,42,.05)');
+  gGlobe.append('path').attr('d', path(land)).attr('fill', '#c9c3e8').attr('stroke', '#fff').attr('stroke-width', .7);
+  const vis = EXCHANGES.filter(p => match(p) && d3.geoDistance([p.lon, p.lat], [-proj.rotate()[0], -proj.rotate()[1]]) < 1.55);
+  const g = gGlobe.selectAll('g.m').data(vis).enter().append('g');
+  g.each(function(p) {
+    const [x, y] = proj([p.lon, p.lat]), el = d3.select(this), c = p.partner ? C_PART : C_NO;
+    if (p.partner) el.append('circle').attr('cx', x).attr('cy', y).attr('r', 11).attr('fill', c).attr('opacity', .22);
+    const rr = p.partner ? 6.5 : 5.5;
+    el.append('circle').attr('cx', x).attr('cy', y).attr('r', rr).attr('fill', c).attr('stroke', '#fff').attr('stroke-width', 1.5);
+    el.append('text').attr('x', x).attr('y', y + (p.partner ? 3.2 : 2.9)).attr('text-anchor', 'middle')
+      .attr('fill', '#fff').style('font', '700 ' + (p.partner ? 9 : 8) + 'px Manrope, sans-serif').style('pointer-events', 'none').text('₿');
+    el.append('circle').attr('cx', x).attr('cy', y).attr('r', rr + 2).attr('fill', 'transparent')
+      .style('cursor', 'pointer')
+      .on('mouseenter', () => {
+        const j = JURIS[p.jk], pr = profile(p.name);
+        tip.innerHTML = '<div class="tn">' + p.name + '</div><div class="tl">' + j.lab + '</div>'
+          + '<div class="tm"><b>用户</b>' + pr[0] + '</div><div class="tm"><b>营收</b>' + pr[1] + '</div>'
+          + (pr[2] ? '<div class="tm"><b>官网</b>' + pr[2] + '</div>' : '')
+          + '<div style="margin-top:2px"><span class="tt" style="background:' + GRADE_BG[j.grade] + '">证据 ' + j.grade + '</span>'
+          + '<span class="tt" style="' + (p.partner ? 'background:rgba(255,122,61,.14);color:#e05f1f' : 'background:#eeecf7;color:#8783a3') + '">' + (p.partner ? '已合作' : '未合作') + '</span></div>';
+        tip.style.left = Math.min(x + 14, W - 220) + 'px'; tip.style.top = (y - 10) + 'px'; tip.style.opacity = 1;
+      })
+      .on('mouseleave', () => tip.style.opacity = 0)
+      .on('click', (ev) => { ev.stopPropagation(); openPanel(p); });
+  });
+  if (filter === 'all' || filter === 'kol') {
+    const kvis = KOLS.filter(k => d3.geoDistance([k.lon, k.lat], [-proj.rotate()[0], -proj.rotate()[1]]) < 1.55);
+    const kg = gGlobe.selectAll('g.k').data(kvis).enter().append('g');
+    kg.each(function(k) {
+      const [x, y] = proj([k.lon, k.lat]), el = d3.select(this);
+      el.append('circle').attr('cx', x).attr('cy', y).attr('r', 6.5).attr('fill', C_KOL).attr('stroke', '#fff').attr('stroke-width', 1.5);
+      // 人形：头 + 肩
+      el.append('circle').attr('cx', x).attr('cy', y - 1.6).attr('r', 1.7).attr('fill', '#fff').style('pointer-events', 'none');
+      el.append('path').attr('d', 'M ' + (x - 3.1) + ' ' + (y + 3.4) + ' q 3.1 -4.4 6.2 0 z').attr('fill', '#fff').style('pointer-events', 'none');
+      el.append('circle').attr('cx', x).attr('cy', y).attr('r', 8.5).attr('fill', 'transparent')
+        .style('cursor', 'pointer')
+        .on('mouseenter', () => {
+          tip.innerHTML = '<div class="tn">' + k.name + '</div><div class="tl">' + k.country + ' · ' + k.plat + '</div>'
+            + '<div class="tm"><b>粉丝</b>' + k.fans + '</div><div class="tm"><b>等级</b>' + k.tier + ' 级</div>'
+            + '<div style="margin-top:2px"><span class="tt" style="background:rgba(224,72,158,.12);color:#c22b7e">KOL</span>'
+            + '<span class="tt" style="background:#eeecf7;color:#8783a3">' + k.status + '</span></div>';
+          tip.style.left = Math.min(x + 14, W - 220) + 'px'; tip.style.top = (y - 10) + 'px'; tip.style.opacity = 1;
+        })
+        .on('mouseleave', () => tip.style.opacity = 0)
+        .on('click', (ev) => {
+          ev.stopPropagation(); spinning = false; tip.style.opacity = 0;
+          panel.innerHTML = '<div class="px" id="pclose">✕</div>'
+            + '<div class="pn">' + k.name + '</div><div class="pl">' + k.country + ' · KOL 合作库</div>'
+            + '<span class="ptag" style="background:rgba(224,72,158,.12);color:#c22b7e">KOL · ' + k.tier + ' 级</span>'
+            + '<span class="ptag" style="background:#eeecf7;color:#8783a3">' + k.status + '</span>'
+            + '<div class="sec">达人信息</div>'
+            + '<div class="row"><b>平台</b><span>' + k.plat + '</span></div>'
+            + '<div class="row"><b>粉丝量</b><span>' + k.fans + '</span></div>'
+            + '<div class="row"><b>所在地</b><span>' + k.country + '</span></div>'
+            + '<div class="note">详细画像、合作模式与沟通记录见工作台「KOL 合作库」页。</div>';
+          panel.classList.add('show');
+          document.getElementById('pclose').onclick = () => panel.classList.remove('show');
+        });
+    });
+  }
+}
+let spinning = true;
+d3.timer(() => { if (spinning) { const r = proj.rotate(); proj.rotate([r[0] + .06, r[1]]); render(); } });
+svg.call(d3.drag()
+  .on('start', () => { spinning = false; tip.style.opacity = 0; })
+  .on('drag', (e) => {
+    const r = proj.rotate(), k = 75 / proj.scale();
+    proj.rotate([r[0] + e.dx * k, Math.max(-70, Math.min(70, r[1] - e.dy * k))]);
+    render();
+  }));
+const panel = document.getElementById('panel');
+function openPanel(p) {
+  spinning = false; tip.style.opacity = 0;
+  const j = JURIS[p.jk], pr = profile(p.name);
+  panel.innerHTML = '<div class="px" id="pclose">✕</div>'
+    + '<div class="pn">' + p.name + '</div><div class="pl">' + j.lab + '</div>'
+    + '<span class="ptag" style="' + (p.partner ? 'background:rgba(255,122,61,.14);color:#e05f1f' : 'background:#eeecf7;color:#8783a3') + '">' + (p.partner ? '已合作 / 洽谈中' : '未合作') + '</span>'
+    + '<span class="ptag" style="background:' + GRADE_BG[j.grade] + '">证据等级 ' + j.grade + '</span>'
+    + '<div class="sec">基础信息</div>'
+    + '<div class="row"><b>注册用户</b><span>' + pr[0] + '</span></div>'
+    + '<div class="row"><b>营收</b><span>' + pr[1] + '</span></div>'
+    + (pr[2] ? '<div class="row"><b>官网</b><span><a href="https://' + pr[2] + '" target="_blank" style="color:#5b4dff;font-weight:700;text-decoration:none">' + pr[2] + ' ↗</a></span></div>' : '')
+    + (founder(p.name) ? '<div class="row"><b>创始人</b><span>' + founder(p.name) + '</span></div>' : '')
+    + '<div class="sec">监管名册信息</div>'
+    + '<div class="row"><b>持牌法人</b><span>' + p.entity + '</span></div>'
+    + '<div class="row"><b>监管状态</b><span>' + p.status + '</span></div>'
+    + '<div class="row"><b>辖区框架</b><span>' + j.lab + '</span></div>'
+    + '<div class="note">同一品牌在不同国家由不同法人运营；签约、付款、投放须对应当地法人。名册登记 ≠ 监管背书，上线前须回官方名册复核。</div>';
+  panel.classList.add('show');
+  document.getElementById('pclose').onclick = () => panel.classList.remove('show');
+}
+svg.on('click', () => panel.classList.remove('show'));
+const nPart = EXCHANGES.filter(p => p.partner).length;
+const FILTERS = [['all', '全部', EXCHANGES.length + KOLS.length], ['part', '已合作', nPart], ['nopart', '未合作', EXCHANGES.length - nPart], ['kol', 'KOL', KOLS.length]];
+const fEl = document.getElementById('filters');
+FILTERS.forEach(([k, label, n]) => {
+  const b = document.createElement('div');
+  b.className = 'chip' + (k === filter ? ' on' : '');
+  b.innerHTML = (k === 'part' ? '<span class="dot" style="background:#ff7a3d"></span>' : k === 'nopart' ? '<span class="dot" style="background:#5b4dff"></span>' : k === 'kol' ? '<span class="dot" style="background:#e0489e"></span>' : '') + label + '<span class="n">' + n + '</span>';
+  b.onclick = () => { filter = k; [...fEl.children].forEach(c => c.classList.remove('on')); b.classList.add('on'); render(); };
+  fEl.appendChild(b);
+});
+const sEl = document.getElementById('stats');
+[['165', '名册+补录', 1], ['22', '监管辖区', 0], [String(nPart), '已合作实体', 0], ['85', 'A 级证据', 0]].forEach(([v, l, c]) => {
+  const d = document.createElement('div');
+  d.className = 'stat' + (c ? ' clickable' : '');
+  d.innerHTML = '<div class="sv">' + v + (c ? ' <span style="font:700 10px Manrope;color:#5b4dff">列表 →</span>' : '') + '</div><div class="sl">' + l + '</div>';
+  if (c) d.onclick = showList;
+  sEl.appendChild(d);
+});
+const listov = document.getElementById('listov');
+function showList() {
+  spinning = false;
+  const gorder = { 'A': 0, 'A-': 1, 'B+': 2, 'B': 3, 'C': 4 };
+  const rows = EXCHANGES.slice().sort((a, b) => (a.partner === b.partner ? (gorder[JURIS[a.jk].grade] - gorder[JURIS[b.jk].grade]) : (a.partner ? -1 : 1)))
+    .map((p, i) => {
+      const j = JURIS[p.jk], pr = profile(p.name);
+      return '<tr><td style="color:#c2bfd6">' + (i + 1) + '</td><td><b>' + p.name + '</b></td><td>' + p.entity + '</td><td>' + j.lab + '</td><td>' + p.status + '</td>'
+        + '<td><span class="tt" style="background:' + GRADE_BG[j.grade] + '">' + j.grade + '</span></td>'
+        + '<td><span class="tt" style="' + (p.partner ? 'background:rgba(255,122,61,.14);color:#e05f1f' : 'background:#eeecf7;color:#8783a3') + '">' + (p.partner ? '已合作' : '未合作') + '</span></td>'
+        + '<td>' + (pr[2] ? '<a href="https://' + pr[2] + '" target="_blank" style="color:#5b4dff;font-weight:700;text-decoration:none">' + pr[2] + '</a>' : '—') + '</td></tr>';
+    }).join('');
+  listov.innerHTML = '<div class="lhead"><div><div class="lt">全球合规运营交易所 · 列表</div><div class="ls">' + EXCHANGES.length + ' 条 · 已合作优先 · 按证据等级排序</div></div><div class="lx" id="lclose">✕ 关闭</div></div>'
+    + '<div class="lwrap"><table><thead><tr><th>#</th><th>品牌</th><th>持牌法人</th><th>辖区框架</th><th>监管状态</th><th>证据</th><th>合作</th><th>官网</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+  listov.style.display = 'flex';
+  document.getElementById('lclose').onclick = () => listov.style.display = 'none';
+}
+addEventListener('resize', size);
+size();
+fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json').then(r => r.json()).then(topo => {
+  land = topojson.feature(topo, topo.objects.countries);
+  render();
+});
+</script>
+</body>
+</html>

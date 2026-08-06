@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=IBM+Plex+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#f6f5fb;background-image:radial-gradient(1100px 500px at 0% 0%,rgba(91,77,255,.07),transparent 60%),radial-gradient(900px 460px at 100% 0%,rgba(255,122,61,.06),transparent 60%);background-repeat:no-repeat;color:#18172a;-webkit-font-smoothing:antialiased}
+  a{color:#5b4dff;text-decoration:none} a:hover{color:#3c2fd0}
+</style>
+</helmet>
+
+<div style="width:1920px;box-sizing:border-box;padding:44px 48px 40px;font-family:'Manrope','PingFang SC','Microsoft YaHei',sans-serif">
+
+  <!-- ===== Header ===== -->
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:10px">
+    <div>
+      <div style="font:700 11px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;color:#8783a3;margin-bottom:8px">· AIRVANA AGENT OS · TECHNICAL ARCHITECTURE ·</div>
+      <div style="font:800 34px/1.05 'Manrope','PingFang SC',sans-serif;letter-spacing:-.02em">Agentic Playable 技术架构<span style="font-family:'Instrument Serif','Songti SC',serif;font-style:italic;font-weight:400;color:#5b4dff"> 逻辑图</span></div>
+      <div style="font:500 14px 'Manrope','PingFang SC',sans-serif;color:#4b486a;margin-top:8px">生成 → 验证 → 构建 → 发布 → 运营 → 回流，13 个环节 · 一条闭环 · 意图到发布 ≤ 5 分钟</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;max-width:760px">
+      <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;color:#8783a3;text-transform:uppercase;margin-right:2px">图例</span>
+      <span style="font:700 11px 'Manrope','PingFang SC',sans-serif;border:2px solid #5b4dff;background:#efeeff;color:#3c2fd0;border-radius:8px;padding:4px 10px">P0 · MVP 先跑通</span>
+      <span style="font:700 11px 'Manrope','PingFang SC',sans-serif;border:1.5px solid #e8bb66;background:#fdf3df;color:#a97b22;border-radius:8px;padding:4px 10px">P1 · 增强</span>
+      <span style="font:700 11px 'Manrope','PingFang SC',sans-serif;border:1.5px dashed #c9c5dd;background:#fff;color:#8783a3;border-radius:8px;padding:4px 10px">P2 · 扩展</span>
+      <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:4px 10px">◆ Agent</span>
+      <span style="font:600 10.5px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:4px 9px">data_object</span>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 300px;gap:18px;align-items:stretch;margin-top:22px">
+
+    <!-- ================= MAIN PIPELINE ================= -->
+    <div style="display:flex;flex-direction:column;min-width:0">
+
+      <!-- ── L1 输入层 ── -->
+      <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;padding:18px 22px;box-shadow:0 1px 2px rgba(24,23,42,.04)">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <span style="font:800 12px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#fff;border-radius:8px;padding:4px 10px;letter-spacing:.08em">L1</span>
+          <span style="font:800 17px 'Manrope','PingFang SC',sans-serif;letter-spacing:-.01em">输入层 · Identity &amp; Context</span>
+          <span style="font:500 12px 'Manrope','PingFang SC',sans-serif;color:#8783a3">谁在创作 · 给谁传播 · 为哪个项目服务</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div style="border:1.5px dashed #c9c5dd;border-radius:14px;padding:14px 16px;background:#fafaff">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:2px 7px">01</span>
+              <span style="font:800 14px 'Manrope','PingFang SC',sans-serif;flex:1">KOL / 项目方输入与身份上下文</span>
+              <span style="font:700 10px 'Manrope',sans-serif;border:1.5px dashed #c9c5dd;color:#8783a3;border-radius:6px;padding:2px 8px">P2</span>
+            </div>
+            <div style="font:500 12px/1.5 'Manrope','PingFang SC',sans-serif;color:#4b486a;margin-bottom:10px">注册信息 · 社媒连接器 · 历史 campaign · 项目资料 · 上传资产 → 转成 Agent 可用上下文</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Identity Agent</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Project Context Agent</span>
+            </div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap">
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">kol_context</span>
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">project_context</span>
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">audience_profile</span>
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">risk_profile</span>
+            </div>
+          </div>
+          <div style="border:2px solid #5b4dff;border-radius:14px;padding:14px 16px;background:#efeeff40">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:2px 7px">02</span>
+              <span style="font:800 14px 'Manrope','PingFang SC',sans-serif;flex:1">目标识别与生成模式选择</span>
+              <span style="font:700 10px 'Manrope',sans-serif;background:#5b4dff;color:#fff;border-radius:6px;padding:2px 8px">P0 · MVP</span>
+            </div>
+            <div style="font:500 12px/1.5 'Manrope','PingFang SC',sans-serif;color:#4b486a;margin-bottom:10px">先确定为什么做，再决定怎么生成 · 四种模式：template_based / ai_assisted_template / ai_generated / hybrid（MVP 默认）</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Goal Agent</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Generation Mode Agent</span>
+            </div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap">
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">campaign_goal</span>
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">generation_mode</span>
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">goal_constraints</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- connector -->
+      <div style="display:flex;align-items:center;gap:10px;justify-content:center;padding:8px 0">
+        <span style="font:600 10.5px 'IBM Plex Mono',Menlo,monospace;background:#fff;border:1px solid #ebe9f4;color:#4b486a;border-radius:99px;padding:3px 10px">kol_context · campaign_goal · generation_mode</span>
+        <span style="color:#5b4dff;font-size:16px;line-height:1">▼</span>
+      </div>
+
+      <!-- ── L2 理解与规划层 ── -->
+      <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;padding:18px 22px;box-shadow:0 1px 2px rgba(24,23,42,.04)">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <span style="font:800 12px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#fff;border-radius:8px;padding:4px 10px;letter-spacing:.08em">L2</span>
+          <span style="font:800 17px 'Manrope','PingFang SC',sans-serif;letter-spacing:-.01em">理解与规划层 · Knowledge &amp; Orchestration</span>
+          <span style="font:500 12px 'Manrope','PingFang SC',sans-serif;color:#8783a3">检索什么知识 · 哪些 Agent 执行 · 什么顺序</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1.25fr 1fr;gap:12px">
+          <div style="border:2px solid #5b4dff;border-radius:14px;padding:14px 16px;background:#efeeff40">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:2px 7px">03</span>
+              <span style="font:800 14px 'Manrope','PingFang SC',sans-serif;flex:1">RAG 上下文检索与知识注入</span>
+              <span style="font:700 10px 'Manrope',sans-serif;background:#5b4dff;color:#fff;border-radius:6px;padding:2px 8px">P0 · MVP</span>
+            </div>
+            <div style="font:500 12px/1.5 'Manrope','PingFang SC',sans-serif;color:#4b486a;margin-bottom:10px">不靠模型自由发挥 · 检索可追溯 · 6 大知识库：</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px">
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#e2f4e9;color:#1f7a50;border-radius:8px;padding:4px 8px;text-align:center">KOL Knowledge</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#e2f4e9;color:#1f7a50;border-radius:8px;padding:4px 8px;text-align:center">Template</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#e2f4e9;color:#1f7a50;border-radius:8px;padding:4px 8px;text-align:center">Project</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#e2f4e9;color:#1f7a50;border-radius:8px;padding:4px 8px;text-align:center">Compliance</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#e2f4e9;color:#1f7a50;border-radius:8px;padding:4px 8px;text-align:center">Case</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#e2f4e9;color:#1f7a50;border-radius:8px;padding:4px 8px;text-align:center">Performance</span>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Retrieval Agent</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Context Composer</span>
+            </div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap">
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">retrieval_context</span>
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">source_trace</span>
+            </div>
+          </div>
+          <div style="border:2px solid #5b4dff;border-radius:14px;padding:14px 16px;background:#efeeff40">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:2px 7px">04</span>
+              <span style="font:800 14px 'Manrope','PingFang SC',sans-serif;flex:1">多 Agent 任务编排 · Orchestrator</span>
+              <span style="font:700 10px 'Manrope',sans-serif;background:#5b4dff;color:#fff;border-radius:6px;padding:2px 8px">P0 · MVP</span>
+            </div>
+            <div style="font:500 12px/1.5 'Manrope','PingFang SC',sans-serif;color:#4b486a;margin-bottom:10px">MVP 线性编排（非自治协作）· 顺序 / 并行 / 校验回退 / 人工确认 · 状态机：Draft → Generated → Validated → Built → Published → Running → Reviewed</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Workflow Orchestrator</span>
+            </div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap">
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">agent_task_plan</span>
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">workflow_state</span>
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">artifact_manifest</span>
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">approval_checkpoint</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:10px;justify-content:center;padding:8px 0">
+        <span style="font:600 10.5px 'IBM Plex Mono',Menlo,monospace;background:#fff;border:1px solid #ebe9f4;color:#4b486a;border-radius:99px;padding:3px 10px">retrieval_context · agent_task_plan</span>
+        <span style="color:#5b4dff;font-size:16px;line-height:1">▼</span>
+      </div>
+
+      <!-- ── L3 生成层 ── -->
+      <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;padding:18px 22px;box-shadow:0 1px 2px rgba(24,23,42,.04)">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <span style="font:800 12px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#fff;border-radius:8px;padding:4px 10px;letter-spacing:.08em">L3</span>
+          <span style="font:800 17px 'Manrope','PingFang SC',sans-serif;letter-spacing:-.01em">生成层 · Planning &amp; Generation</span>
+          <span style="font:500 12px 'Manrope','PingFang SC',sans-serif;color:#8783a3">AI 生成不能绕过模板结构 · 全部落到可构建 schema</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:12px">
+          <div style="border:1.5px dashed #c9c5dd;border-radius:14px;padding:14px 16px;background:#fafaff">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:2px 7px">05</span>
+              <span style="font:800 14px 'Manrope','PingFang SC',sans-serif;flex:1">模板 / AI 生成规划</span>
+              <span style="font:700 10px 'Manrope',sans-serif;border:1.5px dashed #c9c5dd;color:#8783a3;border-radius:6px;padding:2px 8px">P2</span>
+            </div>
+            <div style="font:500 12px/1.5 'Manrope','PingFang SC',sans-serif;color:#4b486a;margin-bottom:10px">先生成玩法草案，再映射到模板 schema · MVP：AI 推荐模板 + 自动预填关键变量</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Template Agent</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Blueprint Agent</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Schema Mapping</span>
+            </div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap">
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">template_schema</span>
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">playable_blueprint</span>
+            </div>
+          </div>
+          <div style="border:1.5px dashed #c9c5dd;border-radius:14px;padding:14px 16px;background:#fafaff">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:2px 7px">06</span>
+              <span style="font:800 14px 'Manrope','PingFang SC',sans-serif;flex:1">内容 · 玩法规则 · Agent 策略生成（三路并行）</span>
+              <span style="font:700 10px 'Manrope',sans-serif;border:1.5px dashed #c9c5dd;color:#8783a3;border-radius:6px;padding:2px 8px">P2</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px">
+              <div style="border:1px solid #ebe9f4;border-radius:10px;padding:9px 11px;background:#fff">
+                <div style="font:600 11px 'Manrope','PingFang SC',sans-serif;color:#5b4dff;margin-bottom:3px">◆ Generation Agent</div>
+                <div style="font:500 11px/1.45 'Manrope','PingFang SC',sans-serif;color:#4b486a">文案 · 题目 · 任务 · 分享卡 · CTA</div>
+                <div style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:2px 7px;display:inline-block;margin-top:6px">content_assets</div>
+              </div>
+              <div style="border:1px solid #ebe9f4;border-radius:10px;padding:9px 11px;background:#fff">
+                <div style="font:600 11px 'Manrope','PingFang SC',sans-serif;color:#5b4dff;margin-bottom:3px">◆ Rule Agent</div>
+                <div style="font:500 11px/1.45 'Manrope','PingFang SC',sans-serif;color:#4b486a">状态机 · 完成条件 · 奖励 · 反作弊</div>
+                <div style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:2px 7px;display:inline-block;margin-top:6px">game_rules</div>
+              </div>
+              <div style="border:1px solid #ebe9f4;border-radius:10px;padding:9px 11px;background:#fff">
+                <div style="font:600 11px 'Manrope','PingFang SC',sans-serif;color:#5b4dff;margin-bottom:3px">◆ Policy Agent</div>
+                <div style="font:500 11px/1.45 'Manrope','PingFang SC',sans-serif;color:#4b486a">难度 · 提示 · 奖励节奏 · CTA 时机 · 分群</div>
+                <div style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:2px 7px;display:inline-block;margin-top:6px">agent_policy</div>
+              </div>
+            </div>
+            <div style="font:500 11px 'Manrope','PingFang SC',sans-serif;color:#8783a3">约束：agent_policy 不能突破 game_rules · MVP 先支持竞猜 / 空投模板</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:10px;justify-content:center;padding:8px 0">
+        <span style="font:600 10.5px 'IBM Plex Mono',Menlo,monospace;background:#fff;border:1px solid #ebe9f4;color:#4b486a;border-radius:99px;padding:3px 10px">content_assets · game_rules · agent_policy</span>
+        <span style="color:#5b4dff;font-size:16px;line-height:1">▼</span>
+      </div>
+
+      <!-- ── L4 验证与构建层 ── -->
+      <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;padding:18px 22px;box-shadow:0 1px 2px rgba(24,23,42,.04)">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <span style="font:800 12px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#fff;border-radius:8px;padding:4px 10px;letter-spacing:.08em">L4</span>
+          <span style="font:800 17px 'Manrope','PingFang SC',sans-serif;letter-spacing:-.01em">验证与构建层 · Validation &amp; Build</span>
+          <span style="font:500 12px 'Manrope','PingFang SC',sans-serif;color:#8783a3">不通过验证不能进入 Builder · 测试通过才能发布</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:12px">
+          <div style="border:2px solid #5b4dff;border-radius:14px;padding:14px 16px;background:#efeeff40">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:2px 7px">07</span>
+              <span style="font:800 14px 'Manrope','PingFang SC',sans-serif;flex:1">约束 · 合规 · 质量验证</span>
+              <span style="font:700 10px 'Manrope',sans-serif;background:#5b4dff;color:#fff;border-radius:6px;padding:2px 8px">P0 · MVP</span>
+            </div>
+            <div style="font:500 12px/1.5 'Manrope','PingFang SC',sans-serif;color:#4b486a;margin-bottom:8px">Schema / 规则 / 合规 / 品牌 / 安全 / 风控 / 埋点 七类校验 · 对上线有一票否决权</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Constraint Agent</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Critic</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Repair</span>
+            </div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">validation_report</span>
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">repair_suggestion</span>
+            </div>
+            <div style="font:600 11px 'Manrope','PingFang SC',sans-serif;color:#d94a4a;background:#fde4e4;border:1px dashed #f0b6b6;border-radius:8px;padding:6px 10px">⤺ 校验失败 → 回退对应生成环节（可解释 · 可修复 · 可审计）</div>
+          </div>
+          <div style="border:2px solid #5b4dff;border-radius:14px;padding:14px 16px;background:#efeeff40">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:2px 7px">08</span>
+              <span style="font:800 14px 'Manrope','PingFang SC',sans-serif;flex:1">H5 Builder + 版本管理</span>
+              <span style="font:700 10px 'Manrope',sans-serif;background:#5b4dff;color:#fff;border-radius:6px;padding:2px 8px">P0 · MVP</span>
+            </div>
+            <div style="font:500 12px/1.5 'Manrope','PingFang SC',sans-serif;color:#4b486a;margin-bottom:8px">结构化产物 → 可访问 H5 · 代码 / 配置 / 规则 / 策略四类版本 · 已发布版本不可原地覆盖，可回滚</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Builder Agent</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Version Agent</span>
+            </div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap">
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">playable_version</span>
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">preview_url</span>
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">tracking_map</span>
+            </div>
+          </div>
+          <div style="border:1.5px dashed #c9c5dd;border-radius:14px;padding:14px 16px;background:#fafaff">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:2px 7px">09</span>
+              <span style="font:800 14px 'Manrope','PingFang SC',sans-serif;flex:1">模拟测试 + KOL 二次编辑</span>
+              <span style="font:700 10px 'Manrope',sans-serif;border:1.5px dashed #c9c5dd;color:#8783a3;border-radius:6px;padding:2px 8px">P2</span>
+            </div>
+            <div style="font:500 12px/1.5 'Manrope','PingFang SC',sans-serif;color:#4b486a;margin-bottom:8px">模拟用户跑主路径 · KOL 只改结构化字段（标题 / 奖励表达 / 分享文案 / CTA），不改代码不改核心规则</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Simulation</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Review</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Patch Agent</span>
+            </div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap">
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">simulation_result</span>
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">config_patch</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:10px;justify-content:center;padding:8px 0">
+        <span style="font:600 10.5px 'IBM Plex Mono',Menlo,monospace;background:#fff;border:1px solid #ebe9f4;color:#4b486a;border-radius:99px;padding:3px 10px">approved_playable_version</span>
+        <span style="color:#5b4dff;font-size:16px;line-height:1">▼</span>
+      </div>
+
+      <!-- ── L5 发布与运营层 ── -->
+      <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;padding:18px 22px;box-shadow:0 1px 2px rgba(24,23,42,.04)">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <span style="font:800 12px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#fff;border-radius:8px;padding:4px 10px;letter-spacing:.08em">L5</span>
+          <span style="font:800 17px 'Manrope','PingFang SC',sans-serif;letter-spacing:-.01em">发布与运营层 · Publish &amp; Runtime</span>
+          <span style="font:500 12px 'Manrope','PingFang SC',sans-serif;color:#8783a3">让 KOL 能传播 · 让平台能追踪 · 让 Agent 在线上真正决策</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:12px">
+          <div style="border:1.5px solid #e8bb66;border-radius:14px;padding:14px 16px;background:#fdf3df40">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:2px 7px">10</span>
+              <span style="font:800 14px 'Manrope','PingFang SC',sans-serif;flex:1">发布投放 + 媒体连接器</span>
+              <span style="font:700 10px 'Manrope',sans-serif;background:#fdf3df;border:1px solid #e8bb66;color:#a97b22;border-radius:6px;padding:2px 8px">P1</span>
+            </div>
+            <div style="font:500 12px/1.5 'Manrope','PingFang SC',sans-serif;color:#4b486a;margin-bottom:8px">归因链接 + 分享卡 · 渠道：X / Telegram / Discord / 广告 / 官网 / 私域</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Publish Agent</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Connector Agent</span>
+            </div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap">
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">publish_url</span>
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">channel_links</span>
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">connector_status</span>
+            </div>
+          </div>
+          <div style="border:1.5px solid #e8bb66;border-radius:14px;padding:14px 16px;background:#fdf3df40">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:2px 7px">11</span>
+              <span style="font:800 14px 'Manrope','PingFang SC',sans-serif;flex:1">Runtime Agent 动态运营</span>
+              <span style="font:700 10px 'Manrope',sans-serif;background:#fdf3df;border:1px solid #e8bb66;color:#a97b22;border-radius:6px;padding:2px 8px">P1</span>
+            </div>
+            <div style="font:500 12px/1.5 'Manrope','PingFang SC',sans-serif;color:#4b486a;margin-bottom:8px">线上运行时决策：难度 / 提示 / 奖励节奏 / CTA 时机 / 分享 / 留存 / 风控 · 不突破 game_rules 与合规边界 · MVP：动态提示 + 动态 CTA + 基础风控</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Runtime Agent</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Risk Agent</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Recommendation</span>
+            </div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap">
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">runtime_decision</span>
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">agent_decision_applied</span>
+            </div>
+          </div>
+          <div style="border:2px solid #5b4dff;border-radius:14px;padding:14px 16px;background:#efeeff40">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:2px 7px">12</span>
+              <span style="font:800 14px 'Manrope','PingFang SC',sans-serif;flex:1">数据反馈 · Memory · 模板更新</span>
+              <span style="font:700 10px 'Manrope',sans-serif;background:#5b4dff;color:#fff;border-radius:6px;padding:2px 8px">P0 · MVP</span>
+            </div>
+            <div style="font:500 12px/1.5 'Manrope','PingFang SC',sans-serif;color:#4b486a;margin-bottom:8px">Agent OS 的学习层：漏斗诊断 + Agent 决策复盘 → 沉淀 KOL / Template Memory · 不用单次低样本污染全局模板</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Diagnosis Agent</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Memory Agent</span>
+              <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Template Ops</span>
+            </div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap">
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">diagnosis_result</span>
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">kol_memory</span>
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">template_memory</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 闭环回流 ── -->
+      <div style="margin-top:14px;background:linear-gradient(120deg,#18172a,#2a2240 55%,#3c2fd0);border-radius:16px;padding:16px 22px;display:flex;align-items:center;gap:16px;position:relative;overflow:hidden">
+        <div style="position:absolute;right:-50px;top:-70px;width:230px;height:230px;border-radius:99em;background:radial-gradient(circle,rgba(255,122,61,.32),transparent 65%)"></div>
+        <span style="font:800 22px 'Manrope',sans-serif;color:#ff9d6b;flex:none">↺</span>
+        <div style="position:relative;flex:1">
+          <div style="font:800 14.5px 'Manrope','PingFang SC',sans-serif;color:#fff">数据回流闭环 · Forge 自进化</div>
+          <div style="font:500 12.5px/1.6 'Manrope','PingFang SC',sans-serif;color:rgba(255,255,255,.72);margin-top:3px">kol_memory · template_memory · performance 回写 → <b style="color:#c9c3ff">RAG 知识库（Case / Performance）· 模板库 · 推荐权重</b> → 下一轮生成读取历史经验、改进默认值 —— 每次投放都变成下一次生成的<span style="font-family:'Instrument Serif','Songti SC',serif;font-style:italic;color:#ffb28a;font-size:14px">经验</span></div>
+        </div>
+        <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;color:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.25);border-radius:99px;padding:5px 12px;flex:none;position:relative">L5 → L2 · CLOSED LOOP</span>
+      </div>
+    </div>
+
+    <!-- ================= RIGHT RAIL ================= -->
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="border:1.5px solid #e8bb66;background:#fff;border-radius:18px;padding:18px 20px;box-shadow:0 1px 2px rgba(24,23,42,.04);flex:1">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <span style="font:800 14.5px 'Manrope','PingFang SC',sans-serif;flex:1">AI Gateway · 多模型路由</span>
+          <span style="font:700 10px 'Manrope',sans-serif;background:#fdf3df;border:1px solid #e8bb66;color:#a97b22;border-radius:6px;padding:2px 8px">P1</span>
+        </div>
+        <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:10px">横贯 L1–L5 · 服务全部 Agent</div>
+        <div style="font:500 12px/1.55 'Manrope','PingFang SC',sans-serif;color:#4b486a;margin-bottom:12px">统一模型调用入口 —— 选择 / Prompt 管理 / 重试 / 降级 / 日志 / 评估。高风险内容必须走强校验，不能只用低成本模型。MVP：抽取 / 小创作 / 强推理 3 类路由。</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+          <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Model Router</span>
+          <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Cost Controller</span>
+          <span style="font:600 11px 'Manrope','PingFang SC',sans-serif;background:#efeeff;color:#5b4dff;border-radius:99px;padding:3px 9px">◆ Fallback Handler</span>
+        </div>
+        <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:8px">任务 → 模型策略</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div style="display:flex;justify-content:space-between;gap:8px;font:500 11.5px 'Manrope','PingFang SC',sans-serif;color:#4b486a;border-bottom:1px solid #f3f1fa;padding-bottom:5px"><span>字段抽取</span><span style="font:600 10.5px 'IBM Plex Mono',Menlo,monospace;color:#8783a3">小模型</span></div>
+          <div style="display:flex;justify-content:space-between;gap:8px;font:500 11.5px 'Manrope','PingFang SC',sans-serif;color:#4b486a;border-bottom:1px solid #f3f1fa;padding-bottom:5px"><span>目标识别</span><span style="font:600 10.5px 'IBM Plex Mono',Menlo,monospace;color:#8783a3">小模型 + 规则</span></div>
+          <div style="display:flex;justify-content:space-between;gap:8px;font:500 11.5px 'Manrope','PingFang SC',sans-serif;color:#4b486a;border-bottom:1px solid #f3f1fa;padding-bottom:5px"><span>策略生成</span><span style="font:600 10.5px 'IBM Plex Mono',Menlo,monospace;color:#d15a1f">强推理模型</span></div>
+          <div style="display:flex;justify-content:space-between;gap:8px;font:500 11.5px 'Manrope','PingFang SC',sans-serif;color:#4b486a;border-bottom:1px solid #f3f1fa;padding-bottom:5px"><span>文案生成</span><span style="font:600 10.5px 'IBM Plex Mono',Menlo,monospace;color:#8783a3">创意模型</span></div>
+          <div style="display:flex;justify-content:space-between;gap:8px;font:500 11.5px 'Manrope','PingFang SC',sans-serif;color:#4b486a;border-bottom:1px solid #f3f1fa;padding-bottom:5px"><span>规则校验</span><span style="font:600 10.5px 'IBM Plex Mono',Menlo,monospace;color:#8783a3">规则引擎 + 模型辅助</span></div>
+          <div style="display:flex;justify-content:space-between;gap:8px;font:500 11.5px 'Manrope','PingFang SC',sans-serif;color:#4b486a;border-bottom:1px solid #f3f1fa;padding-bottom:5px"><span>复盘诊断</span><span style="font:600 10.5px 'IBM Plex Mono',Menlo,monospace;color:#d15a1f">强推理模型</span></div>
+          <div style="display:flex;justify-content:space-between;gap:8px;font:500 11.5px 'Manrope','PingFang SC',sans-serif;color:#4b486a"><span>Embedding</span><span style="font:600 10.5px 'IBM Plex Mono',Menlo,monospace;color:#8783a3">专用向量模型</span></div>
+        </div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:12px">
+          <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">model_route_plan</span>
+          <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#18172a;color:#c9c3ff;border-radius:6px;padding:3px 8px">llm_call_log</span>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;padding:18px 20px;box-shadow:0 1px 2px rgba(24,23,42,.04)">
+        <div style="font:800 14.5px 'Manrope','PingFang SC',sans-serif;margin-bottom:4px">Agent OS 总控对象</div>
+        <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:10px">任务级 · 全链路可追踪 / 可审计</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
+          <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:3px 8px">agent_os_run_id</span>
+          <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:3px 8px">workflow_state</span>
+          <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:3px 8px">artifact_manifest</span>
+          <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:3px 8px">model_call_logs</span>
+          <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:3px 8px">retrieval_trace</span>
+          <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:3px 8px">validation_trace</span>
+          <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:3px 8px">runtime_trace</span>
+          <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;background:#eeecf7;color:#4b486a;border-radius:6px;padding:3px 8px">feedback_trace</span>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;padding:18px 20px;box-shadow:0 1px 2px rgba(24,23,42,.04)">
+        <div style="font:800 14.5px 'Manrope','PingFang SC',sans-serif;margin-bottom:10px">核心设计原则</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font:500 12px/1.5 'Manrope','PingFang SC',sans-serif;color:#4b486a">
+          <div style="display:flex;gap:8px"><span style="color:#5b4dff;font-weight:800">01</span><span><b>约束优先</b> —— 模型输出必须服从产品规则，AI 生成不绕过模板结构</span></div>
+          <div style="display:flex;gap:8px"><span style="color:#5b4dff;font-weight:800">02</span><span><b>KOL 不改代码</b> —— 只改结构化字段、创作意图和局部补丁</span></div>
+          <div style="display:flex;gap:8px"><span style="color:#5b4dff;font-weight:800">03</span><span><b>全链路可追溯</b> —— 每次生成能说明用了哪些上下文、哪个模型、为何通过校验</span></div>
+          <div style="display:flex;gap:8px"><span style="color:#5b4dff;font-weight:800">04</span><span><b>闭环学习</b> —— 每次投放的数据都回写 Memory，让下一次生成更聪明</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1920}}"></script>
+</body>
+</html>

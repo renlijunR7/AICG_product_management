@@ -405,6 +405,11 @@
           <sc-for list="{{ stagePills }}" as="sp" hint-placeholder-count="6">
             <div onClick="{{ sp.click }}" style="display:flex;align-items:center;gap:6px;padding:6px 13px;border-radius:99px;cursor:{{ sp.cursor }};font:600 12px 'Manrope','PingFang SC',sans-serif;border:1.5px solid {{ sp.bd }};background:{{ sp.bg }};color:{{ sp.fg }};transition:border-color .15s ease" style-hover="border-color:{{ sp.hbd }}"><span>{{ sp.label }}</span><span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;color:{{ sp.cFg }}">{{ sp.count }}</span></div>
           </sc-for>
+          <div style="flex:1"></div>
+          <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3">排序</span>
+          <sc-for list="{{ pSortPills }}" as="ps" hint-placeholder-count="4">
+            <div onClick="{{ ps.click }}" style="padding:6px 13px;border-radius:10px;cursor:pointer;font:700 12px 'Manrope','PingFang SC',sans-serif;background:{{ ps.bg }};color:{{ ps.fg }};border:1.5px solid {{ ps.bd }}" style-hover="border-color:#5b4dff">{{ ps.label }}</div>
+          </sc-for>
         </div>
 
         <sc-if value="{{ noPartners }}" hint-placeholder-val="{{ false }}">
@@ -2557,12 +2562,18 @@
     <!-- ======== PAGE: 模板库 ======== -->
     <sc-if value="{{ isTpl }}" hint-placeholder-val="{{ false }}">
       <div data-screen-label="模板库">
+        <div style="display:flex;gap:8px;margin-bottom:12px;align-items:center">
+          <input value="{{ tplQ }}" onChange="{{ setTplQ }}" placeholder="搜索模板：名称 / 玩法基底 / 适用场景…" style="flex:1;min-width:0;padding:8px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 12.5px 'Manrope','PingFang SC',sans-serif;color:#18172a;outline:none;box-sizing:border-box;background:#fff" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
+          <div onClick="{{ toggleTplAdd }}" style="background:{{ tplAddBg }};border:1.5px solid {{ tplAddBd }};color:{{ tplAddFg }};border-radius:10px;padding:8px 16px;font:700 12.5px 'Manrope','PingFang SC',sans-serif;cursor:pointer;flex:none" style-hover="border-color:#5b4dff">{{ tplAddLabel }}</div>
+        </div>
+        <sc-if value="{{ tplAddOpen }}" hint-placeholder-val="{{ false }}">
         <form onSubmit="{{ addTpl }}" style="display:flex;gap:8px;margin-bottom:16px;background:#fff;border:1px solid #ebe9f4;border-radius:14px;padding:12px 14px;box-shadow:0 1px 2px rgba(24,23,42,.04)">
           <input name="tname" placeholder="模板名称" style="width:200px;flex:none;padding:8px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 12.5px 'Manrope','PingFang SC',sans-serif;color:#18172a;outline:none;box-sizing:border-box" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
           <input name="tbase" placeholder="玩法基底（如 二元预测）" style="width:190px;flex:none;padding:8px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 12.5px 'Manrope','PingFang SC',sans-serif;color:#18172a;outline:none;box-sizing:border-box" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
           <input name="tscene" placeholder="适用场景" style="flex:1;min-width:0;padding:8px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 12.5px 'Manrope','PingFang SC',sans-serif;color:#18172a;outline:none;box-sizing:border-box" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
           <button type="submit" style="background:#5b4dff;border:none;color:#fff;border-radius:10px;padding:8px 16px;font:700 12.5px 'Manrope','PingFang SC',sans-serif;cursor:pointer;flex:none;box-shadow:0 8px 18px -6px rgba(91,77,255,.5)" style-hover="background:#3c2fd0">+ 新增模板</button>
         </form>
+        </sc-if>
         <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;padding:18px 20px;box-shadow:0 1px 2px rgba(24,23,42,.04);margin-bottom:16px">
           <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#8783a3;margin-bottom:12px">· 模板制作工作流 · TEMPLATE PIPELINE ·</div>
           <div style="display:flex;gap:0;align-items:stretch">
@@ -2634,6 +2645,17 @@
     <!-- ======== PAGE: KOL 合作库 ======== -->
     <sc-if value="{{ isKolco }}" hint-placeholder-val="{{ false }}">
       <div data-screen-label="KOL 合作库">
+        <div style="display:flex;gap:8px;margin-bottom:12px;align-items:center;flex-wrap:wrap">
+          <input value="{{ kolQ }}" onChange="{{ setKolQ }}" placeholder="搜索达人：名称 / 平台 / 国家 / 属性…" style="flex:1;min-width:180px;padding:8px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 12.5px 'Manrope','PingFang SC',sans-serif;color:#18172a;outline:none;box-sizing:border-box;background:#fff" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
+          <sc-for list="{{ kolTierPills }}" as="tp" hint-placeholder-count="4">
+            <div onClick="{{ tp.click }}" style="padding:7px 13px;border-radius:99px;cursor:pointer;font:700 12px 'Manrope','PingFang SC',sans-serif;background:{{ tp.bg }};color:{{ tp.fg }};border:1.5px solid {{ tp.bd }};flex:none" style-hover="border-color:#5b4dff">{{ tp.label }}</div>
+          </sc-for>
+          <sc-for list="{{ kolSortPills }}" as="sp" hint-placeholder-count="3">
+            <div onClick="{{ sp.click }}" style="padding:7px 13px;border-radius:10px;cursor:pointer;font:700 12px 'Manrope','PingFang SC',sans-serif;background:{{ sp.bg }};color:{{ sp.fg }};border:1.5px solid {{ sp.bd }};flex:none" style-hover="border-color:#5b4dff">{{ sp.label }}</div>
+          </sc-for>
+          <div onClick="{{ toggleKolAdd }}" style="background:{{ kolAddBg }};border:1.5px solid {{ kolAddBd }};color:{{ kolAddFg }};border-radius:10px;padding:8px 16px;font:700 12.5px 'Manrope','PingFang SC',sans-serif;cursor:pointer;flex:none" style-hover="border-color:#5b4dff">{{ kolAddLabel }}</div>
+        </div>
+        <sc-if value="{{ kolAddOpen }}" hint-placeholder-val="{{ false }}">
         <form onSubmit="{{ addKolco }}" style="display:flex;gap:8px;margin-bottom:16px;background:#fff;border:1px solid #ebe9f4;border-radius:14px;padding:12px 14px;box-shadow:0 1px 2px rgba(24,23,42,.04)">
           <input name="kname" placeholder="达人名称" style="width:160px;flex:none;padding:8px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 12.5px 'Manrope','PingFang SC',sans-serif;color:#18172a;outline:none;box-sizing:border-box" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
           <input name="kplat" placeholder="平台（TikTok · X…）" style="width:170px;flex:none;padding:8px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 12.5px 'Manrope','PingFang SC',sans-serif;color:#18172a;outline:none;box-sizing:border-box" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
@@ -2642,6 +2664,7 @@
           <input name="kmode" placeholder="合作模式（CPS 分成 / 坑位费…）" style="flex:1;min-width:0;padding:8px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 12.5px 'Manrope','PingFang SC',sans-serif;color:#18172a;outline:none;box-sizing:border-box" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
           <button type="submit" style="background:#5b4dff;border:none;color:#fff;border-radius:10px;padding:8px 16px;font:700 12.5px 'Manrope','PingFang SC',sans-serif;cursor:pointer;flex:none;box-shadow:0 8px 18px -6px rgba(91,77,255,.5)" style-hover="background:#3c2fd0">+ 新增达人</button>
         </form>
+        </sc-if>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px">
           <sc-for list="{{ kolcoView }}" as="k" hint-placeholder-count="4">
             <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;padding:16px 18px;box-shadow:0 1px 2px rgba(24,23,42,.04);transition:box-shadow .15s ease,transform .15s ease" style-hover="transform:translateY(-2px);box-shadow:0 10px 24px -10px rgba(24,23,42,.18)">
@@ -2850,6 +2873,7 @@
           <sc-for list="{{ exPills }}" as="ep" hint-placeholder-count="3">
             <div onClick="{{ ep.click }}" style="display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:99px;cursor:pointer;font:600 12px 'Manrope','PingFang SC',sans-serif;border:1.5px solid {{ ep.bd }};background:{{ ep.bg }};color:{{ ep.fg }};transition:border-color .15s ease" style-hover="border-color:#5b4dff"><span>{{ ep.label }}</span><span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;opacity:.65">{{ ep.count }}</span></div>
           </sc-for>
+          <input value="{{ exQ }}" onChange="{{ setExQ }}" placeholder="搜索交易所 / 持牌法人…" style="margin-left:auto;width:240px;padding:7px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 12.5px 'Manrope','PingFang SC',sans-serif;color:#18172a;outline:none;box-sizing:border-box;background:#fff" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
         </div>
         <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;box-shadow:0 1px 2px rgba(24,23,42,.04);overflow:hidden">
           <div style="display:grid;grid-template-columns:36px 1.1fr 1.5fr 1fr 1.2fr 60px 68px 130px;gap:10px;padding:12px 20px;background:#fafaff;border-bottom:1px solid #ebe9f4;font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.06em;color:#8783a3">
@@ -5008,9 +5032,21 @@ class Component extends DCLogic {
     const overdueCount = autoItems.filter(a => a.overdue && !a.done).length;
 
     // partners
+    const pSort = S.pSort || '';
+    const pSortPills = [['', '默认'], ['follow', '跟进日期 · 逾期置顶'], ['budget', '预算 ↓'], ['name', '名称']].map(([v, label]) => { const on = pSort === v; return { label, bg: on ? '#efeeff' : '#fff', fg: on ? '#5b4dff' : '#4b486a', bd: on ? '#c9c3f2' : '#ddd9ec', click: () => this.setState({ pSort: v }) }; });
     const partnersView = D.partners
       .filter(p => S.filterStage === '全部' || p.stage === S.filterStage)
       .filter(p => S.filterInd === '全部' || (p.industry || 'Web3') === S.filterInd)
+      .slice().sort((a, b) => {
+        if (pSort === 'follow') {
+          const ao = a.nextDate && a.nextDate < today ? 0 : 1, bo = b.nextDate && b.nextDate < today ? 0 : 1;
+          if (ao !== bo) return ao - bo;
+          return (a.nextDate || '9999') < (b.nextDate || '9999') ? -1 : 1;
+        }
+        if (pSort === 'budget') return (b.budget || 0) - (a.budget || 0);
+        if (pSort === 'name') return (a.name || '').localeCompare(b.name || '', 'zh');
+        return 0;
+      })
       .map((p, i) => {
         const sm = stageMeta[p.stage] || stageMeta['接触'];
         const tile = tiles[(p.name.charCodeAt(0) + i) % tiles.length];
@@ -5625,7 +5661,16 @@ class Component extends DCLogic {
         return TCATS.map(c => ({ label: c, count: cnt(c), click: () => this.setState({ tplCat: c }),
           bg: cur === c ? '#18172a' : '#fff', fg: cur === c ? '#fff' : '#4b486a', bd: cur === c ? '#18172a' : '#ddd9ec' }));
       })(),
-      tplView: (D.tplLib || []).filter(t => !S.tplCat || S.tplCat === '全部' || (t.cat || '可发布模板') === S.tplCat).map(t => {
+      tplQ: S.tplQ || '',
+      setTplQ: e => this.setState({ tplQ: e.target.value }),
+      tplAddOpen: !!S.tplAddOpen,
+      toggleTplAdd: () => this.setState({ tplAddOpen: !S.tplAddOpen }),
+      tplAddLabel: S.tplAddOpen ? '收起' : '+ 新增模板',
+      tplAddBg: S.tplAddOpen ? '#efeeff' : '#5b4dff', tplAddBd: S.tplAddOpen ? '#c9c3f2' : '#5b4dff', tplAddFg: S.tplAddOpen ? '#5b4dff' : '#fff',
+      tplView: (D.tplLib || [])
+        .filter(t => !S.tplCat || S.tplCat === '全部' || (t.cat || '可发布模板') === S.tplCat)
+        .filter(t => { const q = (S.tplQ || '').trim().toLowerCase(); return !q || ((t.name || '') + ' ' + (t.base || '') + ' ' + (t.scene || '') + ' ' + (t.intro || '')).toLowerCase().includes(q); })
+        .map(t => {
         const m = { '可用': { bg: '#e2f4e9', fg: '#2eaa70' }, '开发中': { bg: '#efeeff', fg: '#5b4dff' }, '下架': { bg: '#eeecf7', fg: '#8783a3' } }[t.status] || { bg: '#eeecf7', fg: '#8783a3' };
         const agOk = (t.agreement || '').indexOf('自有') >= 0;
         const cat = t.cat || '可发布模板';
@@ -5646,7 +5691,22 @@ class Component extends DCLogic {
         f.tname.value = ''; f.tbase.value = ''; f.tscene.value = '';
         this.setData(d => { d.tplLib = d.tplLib || []; d.tplLib.unshift({ id: this.uid('tp'), name, base, scene, status: '开发中', cat: '原始模板', owner: 'Airvana 平台自研', agreement: '平台自有 · 无需授权', intro: '' }); });
       },
-      kolcoView: (D.kolLib || []).map(k => {
+      kolQ: S.kolQ || '',
+      setKolQ: e => this.setState({ kolQ: e.target.value }),
+      kolAddOpen: !!S.kolAddOpen,
+      toggleKolAdd: () => this.setState({ kolAddOpen: !S.kolAddOpen }),
+      kolAddLabel: S.kolAddOpen ? '收起' : '+ 新增达人',
+      kolAddBg: S.kolAddOpen ? '#efeeff' : '#5b4dff', kolAddBd: S.kolAddOpen ? '#c9c3f2' : '#5b4dff', kolAddFg: S.kolAddOpen ? '#5b4dff' : '#fff',
+      kolTierPills: ['全部', 'S', 'A', 'B'].map(t => { const on = (S.kolTier || '全部') === t; return { label: t === '全部' ? '层级 · 全部' : t + ' 级', bg: on ? '#18172a' : '#fff', fg: on ? '#fff' : '#4b486a', bd: on ? '#18172a' : '#ddd9ec', click: () => this.setState({ kolTier: t }) }; }),
+      kolSortPills: [['', '默认'], ['fans', '粉丝 ↓'], ['rating', '评分 ↓']].map(([v, label]) => { const on = (S.kolSort || '') === v; return { label, bg: on ? '#efeeff' : '#fff', fg: on ? '#5b4dff' : '#4b486a', bd: on ? '#c9c3f2' : '#ddd9ec', click: () => this.setState({ kolSort: v }) }; }),
+      kolcoView: (D.kolLib || [])
+        .filter(k => (S.kolTier || '全部') === '全部' || k.tier === S.kolTier)
+        .filter(k => { const q = (S.kolQ || '').trim().toLowerCase(); return !q || ((k.name || '') + ' ' + (k.plat || '') + ' ' + (k.country || '') + ' ' + (k.attrs || '') + ' ' + (k.mode || '')).toLowerCase().includes(q); })
+        .slice().sort((a, b) => {
+          if (S.kolSort === 'fans') return (parseFloat(b.fans) || 0) - (parseFloat(a.fans) || 0);
+          if (S.kolSort === 'rating') return (b.rating || 0) - (a.rating || 0);
+          return 0;
+        }).map(k => {
         const m = { '洽谈中': { bg: '#fdf3df', fg: '#a97b22' }, '已签约': { bg: '#efeeff', fg: '#5b4dff' }, '合作中': { bg: '#e2f4e9', fg: '#2eaa70' }, '暂停': { bg: '#eeecf7', fg: '#8783a3' } }[k.status] || { bg: '#eeecf7', fg: '#8783a3' };
         const tm = { S: { bg: '#ffece1', fg: '#d15a1f' }, A: { bg: '#efeeff', fg: '#5b4dff' }, B: { bg: '#eeecf7', fg: '#8783a3' } }[k.tier] || { bg: '#eeecf7', fg: '#8783a3' };
         const am = k.agreement === '已签署' ? { bg: '#e2f4e9', fg: '#2eaa70' } : { bg: '#fdf3df', fg: '#a97b22' };
@@ -5683,7 +5743,9 @@ class Component extends DCLogic {
             label: n, count: c, click: () => this.setState({ exFilter: n }),
             bg: f === n ? '#18172a' : '#fff', fg: f === n ? '#fff' : '#4b486a', bd: f === n ? '#18172a' : '#ddd9ec'
           })),
-          exRows: all.filter(x => f === '全部' || (f === '已合作' ? x.partner : !x.partner)).map((x, i) => {
+          exQ: S.exQ || '',
+          setExQ: e => this.setState({ exQ: e.target.value }),
+          exRows: all.filter(x => f === '全部' || (f === '已合作' ? x.partner : !x.partner)).filter(x => { const q = (S.exQ || '').trim().toLowerCase(); return !q || ((x.name || '') + ' ' + (x.entity || '') + ' ' + (x.status || '')).toLowerCase().includes(q); }).map((x, i) => {
             const j = JR[x.jk] || { lab: '—', grade: '—' }, g = GB[j.grade] || ['#eeecf7', '#8783a3'];
             const BR = window.EXCHANGE_BRANDS || {};
             const root = x.name.replace(/\s+(EU|UK|US|USA|SG|CA|NY|MENA|Asia|Japan|Canada|Bahrain|LatAm|Singapore|Thailand|Malaysia|Crypto|HK|TH)$/, '');
@@ -5951,7 +6013,7 @@ class Component extends DCLogic {
       goBoardLink: e => { e.preventDefault(); this.setState({ page: 'board' }); },
 
       // partners
-      stagePills, indTabs, partnersView, noPartners: partnersView.length === 0,
+      stagePills, indTabs, partnersView, pSortPills, noPartners: partnersView.length === 0,
       emptyPartnersText,
       canClearStage: S.filterStage !== '全部',
       clearStage: () => this.setState({ filterStage: '全部' }),

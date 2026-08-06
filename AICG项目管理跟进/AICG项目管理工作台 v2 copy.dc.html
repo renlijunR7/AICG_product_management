@@ -372,9 +372,11 @@
             <sc-for list="{{ remindersView }}" as="rm" hint-placeholder-count="1">
               <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;background:{{ rm.bg }};border:1px solid {{ rm.bd }}">
                 <span style="font:700 11px 'IBM Plex Mono',Menlo,monospace;color:{{ rm.dateColor }};white-space:nowrap">{{ rm.dateLabel }}</span>
-                <sc-if value="{{ rm.roleTag }}" hint-placeholder-val="{{ false }}">
-                  <span style="font:700 9.5px 'Manrope','PingFang SC',sans-serif;background:#eeecf7;color:#5f5a7d;border-radius:5px;padding:2px 7px;flex:none">{{ rm.roleTag }}</span>
-                </sc-if>
+                <select value="{{ rm.roleSel }}" onChange="{{ rm.reassign }}" title="改派给其他角色" style="flex:none;font:700 9.5px 'Manrope','PingFang SC',sans-serif;background:#eeecf7;color:#5f5a7d;border:none;border-radius:5px;padding:2px 4px;outline:none;cursor:pointer;max-width:92px">
+                  <sc-for list="{{ roleOpts }}" as="op" hint-placeholder-count="3">
+                    <option value="{{ op.v }}">{{ op.label }}</option>
+                  </sc-for>
+                </select>
                 <span onClick="{{ rm.toggle }}" style="font:600 13px 'Manrope','PingFang SC',sans-serif;flex:1;min-width:0;cursor:pointer;color:{{ rm.fg }};text-decoration:{{ rm.deco }}">{{ rm.text }}</span>
                 <sc-if value="{{ rm.urgent }}" hint-placeholder-val="{{ false }}">
                   <span style="font:700 9.5px 'IBM Plex Mono',Menlo,monospace;background:#fde4e4;color:#d94a4a;border-radius:5px;padding:2px 7px;flex:none">急</span>
@@ -1964,7 +1966,15 @@
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"></path></svg>
                   </sc-if>
                 </div>
+                <sc-if value="{{ m.dateLabel }}" hint-placeholder-val="{{ false }}">
+                  <span style="font:700 10.5px 'IBM Plex Mono',Menlo,monospace;color:#8783a3;flex:none">{{ m.dateLabel }}</span>
+                </sc-if>
                 <span style="font:600 13px 'Manrope','PingFang SC',sans-serif;flex:1;min-width:0;text-decoration:{{ m.deco }};opacity:{{ m.op }}">{{ m.text }}</span>
+                <select value="{{ m.roleSel }}" onChange="{{ m.reassign }}" title="改派给其他角色" style="flex:none;font:700 9.5px 'Manrope','PingFang SC',sans-serif;background:#eeecf7;color:#5f5a7d;border:none;border-radius:5px;padding:2px 4px;outline:none;cursor:pointer;max-width:92px">
+                  <sc-for list="{{ roleOpts }}" as="op" hint-placeholder-count="3">
+                    <option value="{{ op.v }}">{{ op.label }}</option>
+                  </sc-for>
+                </select>
                 <div onClick="{{ m.del }}" style="font:700 11px 'Manrope','PingFang SC',sans-serif;color:#b9b5d0;cursor:pointer;padding:2px 4px" style-hover="color:#d94a4a">删除</div>
               </div>
             </sc-for>
@@ -3615,6 +3625,7 @@ class Component extends DCLogic {
           (d.competitors || []).forEach(c => (c.notes || []).forEach(n => { if (/^\d{4}-\d{2}-\d{2}/.test(n.d)) n.d = n.d.slice(5); }));
           if (!d.role || !this.ROLES.some(r => r.id === d.role)) d.role = 'owner';
           if (!d.settlements) d.settlements = this.seedSettlements();
+          if (d.todos && d.todos.length) { d.reminders = (d.reminders || []).concat(d.todos.map(m => ({ id: m.id, text: m.text, done: !!m.done, date: '', role: m.role || '' }))); d.todos = []; }
           return d;
         }
       }
@@ -4330,7 +4341,11 @@ class Component extends DCLogic {
       { id: 'rw82', date: '2026-08-03', text: '业务源头多元化：火币营销指标谈注册 · 研究交易所入金环节 · 模式支持传统游戏项目 —（产品侧 / 技术侧）', done: false },
       { id: 'rw83', date: '2026-08-03', text: '新增模板支持传统游戏 + AIGC 框架进一步优化 —（产品侧 / 技术侧）', done: false },
       { id: 'rw84', date: '2026-08-03', text: '创作平台用户流程优化：完成英文版 + UI 更换 — 孙睿核心推进', done: false },
-      { id: 'rw85', date: '2026-08-03', text: '和凯总对接：索游模板 · KOL 运营协助 · 火币新注册营销 KPI', done: false }
+      { id: 'rw85', date: '2026-08-03', text: '和凯总对接：索游模板 · KOL 运营协助 · 火币新注册营销 KPI', done: false },
+      { id: 'm1', date: '', text: '上午同步：跟李骏对齐币安 A/B 上线检查项', done: false, role: 'biz' },
+      { id: 'm2', date: '', text: '给火币补发数据面板截图', done: false, role: 'biz' },
+      { id: 'm3', date: '', text: '审白皮书 v0.9 第 3 章', done: false, role: 'product' },
+      { id: 'm4', date: '', text: '上周会纪要发群', done: true }
     ];
   }
 
@@ -4433,12 +4448,7 @@ class Component extends DCLogic {
         { id: 'd6', title: 'Gate 合作协议（待回签）', category: '合作文档', status: '评审', link: '', updated: y2 },
         { id: 'd7', title: 'Playable 数据口径说明', category: '产品资料', status: '草稿', link: '', updated: this.plusDays(-5) }
       ],
-      todos: [
-        { id: 'm1', text: '上午同步：跟李骏对齐币安 A/B 上线检查项', done: false },
-        { id: 'm2', text: '给火币补发数据面板截图', done: false },
-        { id: 'm3', text: '审白皮书 v0.9 第 3 章', done: false },
-        { id: 'm4', text: '上周会纪要发群', done: true }
-      ],
+      todos: [],
       autoDone: [],
       reminders: this.seedRemindersW720(),
       remindersW720: 1,
@@ -5132,20 +5142,24 @@ class Component extends DCLogic {
     }));
 
     // manual todos
-    const todosView = D.todos.map(m => ({
+    const REM_LIST = (D.reminders || []).filter(rm => !todoMine || !rm.role || rm.role === roleCur.id);
+    const todosView = REM_LIST.slice().sort((a, b) => (a.done - b.done) || ((a.date || '9999') > (b.date || '9999') ? 1 : -1)).map(m => ({
       ...m,
+      dateLabel: m.date ? m.date.slice(5) : '',
+      roleSel: m.role || '',
+      reassign: e => { const v = e.target.value; this.setData(d => { const x = (d.reminders || []).find(y => y.id === m.id); if (x) x.role = v; }); },
       deco: m.done ? 'line-through' : 'none',
       op: m.done ? '.45' : '1',
       ckBd: m.done ? '#5b4dff' : '#ddd9ec',
       ckBg: m.done ? '#5b4dff' : '#fff',
-      toggle: () => this.setData(d => { const x = d.todos.find(y => y.id === m.id); if (x) x.done = !x.done; }),
-      del: () => this.undoable('已删除待办', () => this.setData(d => { d.todos = d.todos.filter(y => y.id !== m.id); }))
+      toggle: () => this.setData(d => { const x = (d.reminders || []).find(y => y.id === m.id); if (x) x.done = !x.done; }),
+      del: () => this.undoable('已删除待办', () => this.setData(d => { d.reminders = (d.reminders || []).filter(y => y.id !== m.id); }))
     }));
 
     const openAuto = autoItems.filter(a => !a.done).length;
-    const openTodos = D.todos.filter(m => !m.done).length;
-    const doneCount = autoItems.filter(a => a.done).length + D.todos.filter(m => m.done).length;
-    const totalCount = autoItems.length + D.todos.length;
+    const openTodos = (D.reminders || []).filter(m => !m.done).length;
+    const doneCount = autoItems.filter(a => a.done).length + (D.reminders || []).filter(m => m.done).length;
+    const totalCount = autoItems.length + (D.reminders || []).length;
     const kpiToday = openAuto + openTodos;
     const overdueCount = autoItems.filter(a => a.overdue && !a.done).length;
 
@@ -5603,14 +5617,16 @@ class Component extends DCLogic {
     const taskToday = D.tasks.filter(tk => tk.due && tk.due <= today && tk.col !== '已完成').length;
     const taskOver = D.tasks.filter(tk => tk.due && tk.due < today && tk.col !== '已完成').length;
     const taskWeek = upcoming.filter(u => u.kind === 't').length;
-    const manualDone = D.todos.filter(m => m.done).length;
-    const remindersView = (D.reminders || []).filter(rm => !todoMine || !rm.role || rm.role === roleCur.id).slice().sort((a, b) => (a.done - b.done) || (a.date > b.date ? 1 : -1)).map(rm => {
+    const manualDone = (D.reminders || []).filter(m => m.done).length;
+    const remindersView = REM_LIST.slice().sort((a, b) => (a.done - b.done) || (a.date > b.date ? 1 : -1)).map(rm => {
       const overdue = !rm.done && rm.date && rm.date < today;
       const urgent = !rm.done && rm.date && rm.date >= today && rm.date <= this.plusDays(3);
       return {
         ...rm,
         dateLabel: rm.date ? md(rm.date) : '—',
         roleTag: rm.role ? ((this.ROLES.find(r => r.id === rm.role) || {}).name || '') : '',
+        roleSel: rm.role || '',
+        reassign: e => { const v = e.target.value; this.setData(d => { const x = (d.reminders || []).find(y => y.id === rm.id); if (x) x.role = v; }); },
         dateColor: rm.done ? '#b9b5d0' : (overdue ? '#d94a4a' : (urgent ? '#d15a1f' : '#8783a3')),
         bg: rm.done ? '#fafaff' : (overdue ? '#fef7f7' : '#fafaff'),
         bd: rm.done ? '#ebe9f4' : (overdue ? '#f5d3d3' : (urgent ? '#ffd8c2' : '#ebe9f4')),
@@ -6125,6 +6141,7 @@ class Component extends DCLogic {
       }),
       closeAiSeg: () => this.setState({ aiSeg: null }),
       remindersView, addReminder, remindCount: remindersView.length, noReminders: remindersView.length === 0,
+      roleOpts: [{ v: '', label: '通用' }].concat(this.ROLES.map(r => ({ v: r.id, label: r.name }))),
       versionsProg, noVersions: versionsProg.length === 0,
       verKpiName, verKpiPct, verKpiSub,
       kpiWeek: upcoming.length,
@@ -6386,7 +6403,7 @@ class Component extends DCLogic {
         const inp = e.target.elements.todo;
         const v = (inp.value || '').trim(); if (!v) return;
         inp.value = '';
-        this.setData(d => { d.todos.unshift({ id: this.uid('m'), text: v, done: false }); });
+        this.setData(d => { (d.reminders = d.reminders || []).unshift({ id: this.uid('rm'), text: v, done: false, date: '', role: this.curRole() }); });
       },
       doneCount, totalCount,
       donePct: (totalCount ? Math.round(doneCount / totalCount * 100) : 0) + '%',

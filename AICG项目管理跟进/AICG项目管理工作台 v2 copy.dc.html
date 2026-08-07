@@ -16,6 +16,10 @@
   input::placeholder,textarea::placeholder{color:#b9b5d0}
   input,select,textarea,button{font-family:inherit}
   @keyframes fadeIn{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}
+  .side-scroll{scrollbar-width:thin;scrollbar-color:#e3e0f0 transparent}
+  .side-scroll::-webkit-scrollbar{width:4px}
+  .side-scroll::-webkit-scrollbar-thumb{background:#e3e0f0;border-radius:99px}
+  .side-scroll::-webkit-scrollbar-track{background:transparent}
   .md-body{font:500 13.5px/1.75 'Manrope','PingFang SC','Microsoft YaHei',sans-serif;color:#4b486a}
   .md-body h1{font:800 22px/1.3 'Manrope','PingFang SC',sans-serif;color:#18172a;letter-spacing:-.02em;margin:0 0 14px}
   .md-body h2{font:800 16.5px/1.35 'Manrope','PingFang SC',sans-serif;color:#18172a;letter-spacing:-.01em;margin:26px 0 10px;padding-top:16px;border-top:1px solid #f3f1fa}
@@ -70,6 +74,7 @@
       </div>
     </div>
 
+    <div class="side-scroll" style="flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;margin:0 -6px;padding:0 6px 8px">
     <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#8783a3;padding:6px 10px 6px">· 工作台 ·</div>
     <div style="display:flex;flex-direction:column;gap:4px">
       <div onClick="{{ goOverview }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;transition:background .15s ease;background:{{ navS.overview.bg }};color:{{ navS.overview.fg }};box-shadow:{{ navS.overview.sh }}" style-hover="background:{{ navS.overview.hbg }}">
@@ -186,8 +191,8 @@
       </div>
       </sc-if>
     </div>
+    </div>
 
-    <div style="flex:1"></div>
     <div onClick="{{ openBackupModal }}" style="display:flex;align-items:center;gap:8px;padding:7px 10px;margin-bottom:8px;border-radius:10px;cursor:pointer;font:600 11.5px 'Manrope','PingFang SC',sans-serif;color:#8783a3" style-hover="background:#fafaff;color:#5b4dff">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"></path><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"></path></svg>
       <span style="flex:1">数据备份</span>

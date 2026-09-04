@@ -184,6 +184,12 @@
         <span>营销 Agent</span>
       </div>
       </sc-if>
+      <sc-if value="{{ nav_audience }}" hint-placeholder-val="{{ true }}">
+      <div onClick="{{ goAudience }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;transition:background .15s ease;background:{{ navS.audience.bg }};color:{{ navS.audience.fg }};box-shadow:{{ navS.audience.sh }}" style-hover="background:{{ navS.audience.hbg }}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3"></circle><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"></path><path d="M19 4l2 2-4 4-2-2z"></path></svg>
+        <span>受众画像</span>
+      </div>
+      </sc-if>
       <sc-if value="{{ nav_map }}" hint-placeholder-val="{{ true }}">
       <div onClick="{{ openMapMode }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;font:600 13.5px 'Manrope','PingFang SC',sans-serif;transition:background .15s ease;color:#4b486a" style-hover="background:rgba(91,77,255,.06)">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9s1.3-6.4 3.8-9z"></path></svg>
@@ -2656,7 +2662,7 @@
           <div style="position:absolute;top:-40px;right:-30px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,122,61,.28),transparent 70%)"></div>
           <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:#a49ef0;margin-bottom:8px;position:relative">· MARKETING AGENT ENGINE · 基于 Airvana AIGC 平台</div>
           <div style="font:800 21px 'Manrope','PingFang SC',sans-serif;color:#fff;letter-spacing:-.02em;position:relative;margin-bottom:8px">营销 Agent：懂客户、会选点、能<span style="font:italic 700 23px 'Instrument Serif','Songti SC',serif;color:#ff9d6b"> 自进化</span>的营销大脑</div>
-          <div style="font:500 13px 'Manrope','PingFang SC',sans-serif;color:#c9c5e8;line-height:1.75;max-width:780px;position:relative">基于 Airvana 的 AIGC 互动营销游戏生成能力，营销 Agent 把「一句话需求」变成完整营销行动：<b style="color:#fff">意图识别</b>解析任务 → <b style="color:#fff">用户记忆</b>调取客户偏好 → <b style="color:#fff">切入点推荐</b>给出 Top 3 方案 → 生成分发后<b style="color:#fff">自进化</b>迭代 —— 四个机制构成持续变准的营销闭环。</div>
+          <div style="font:500 13px 'Manrope','PingFang SC',sans-serif;color:#c9c5e8;line-height:1.75;max-width:820px;position:relative">基于 Airvana 的 AIGC 互动营销游戏生成能力，营销 Agent 把「一句话需求」变成完整营销行动：<b style="color:#fff">意图识别</b>解析任务 → <b style="color:#fff">身份与画像</b>识别合规受众 → <b style="color:#fff">用户记忆</b>调取客户偏好 → <b style="color:#fff">切入点推荐</b>给出 Top 3 方案 → 生成分发后<b style="color:#fff">自进化</b>迭代 —— 五个机制构成持续变准的营销闭环。</div>
         </div>
         <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;padding:20px 22px;box-shadow:0 1px 2px rgba(24,23,42,.04);margin-bottom:16px">
           <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#8783a3;margin-bottom:12px">如何工作 · 感知 → 决策 → 执行 → 反思 <span style="color:#c2bfd6">（循环）</span></div>
@@ -2670,7 +2676,7 @@
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:14px">
-          <sc-for list="{{ mkagMechs }}" as="mm2" hint-placeholder-count="4">
+          <sc-for list="{{ mkagMechs }}" as="mm2" hint-placeholder-count="5">
             <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;box-shadow:0 1px 2px rgba(24,23,42,.04);display:flex;overflow:hidden">
               <div style="width:130px;flex:none;background:linear-gradient(140deg,{{ mm2.tileA }},{{ mm2.tileB }});border-right:1px solid #ebe9f4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:20px 10px">
                 <span style="font-size:38px;line-height:1">{{ mm2.icon }}</span>
@@ -2697,6 +2703,35 @@
       </div>
     </sc-if>
 
+    <!-- ======== PAGE: 受众画像（DID / 钱包身份） ======== -->
+    <sc-if value="{{ isAudience }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="受众画像">
+        <div style="background:linear-gradient(135deg,#18172a,#292443 58%,#174f52);border-radius:18px;padding:24px 28px;margin-bottom:16px;position:relative;overflow:hidden">
+          <div style="position:absolute;top:-55px;right:-25px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(64,220,184,.25),transparent 70%)"></div>
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:9px;position:relative"><span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.12em;color:#8de3cf">· AUDIENCE IDENTITY ·</span><span style="padding:3px 8px;border:1px solid rgba(255,255,255,.24);border-radius:99px;font:700 9px 'IBM Plex Mono',Menlo,monospace;color:#fff">目标设计 · LOCAL DEMO</span></div>
+          <div style="font:800 21px 'Manrope','PingFang SC',sans-serif;color:#fff;margin-bottom:8px;position:relative">钱包身份识别与<span style="font:italic 700 23px 'Instrument Serif','Songti SC',serif;color:#8de3cf"> 可验证受众画像</span></div>
+          <div style="font:500 13px 'Manrope','PingFang SC',sans-serif;color:#c9dcd9;line-height:1.75;max-width:860px;position:relative">以 <b style="color:#fff">airvana_uid</b> 作为长期主键；用户授权连接钱包后生成 DID 关联，并通过可验证凭证、链上行为和第一方互动事件构建可撤销画像。DID 不授予账号角色、预算、奖励或结算权限。</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px">
+          <sc-for list="{{ audienceKpis }}" as="ak" hint-placeholder-count="4"><div style="background:#fff;border:1px solid #ebe9f4;border-radius:14px;padding:15px 16px"><div style="font:700 9.5px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;color:#8783a3;margin-bottom:7px">{{ ak.l }}</div><div style="font:800 16px 'Manrope','PingFang SC',sans-serif;color:{{ ak.c }};margin-bottom:4px">{{ ak.v }}</div><div style="font:500 11px 'Manrope','PingFang SC',sans-serif;color:#8783a3;line-height:1.45">{{ ak.d }}</div></div></sc-for>
+        </div>
+        <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;padding:20px 22px;margin-bottom:16px">
+          <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;color:#8783a3;margin-bottom:13px">身份链路 · 主键与权限分离</div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+            <sc-for list="{{ audienceFlow }}" as="af" hint-placeholder-count="5"><div style="background:{{ af.bg }};border-radius:12px;padding:13px 14px;min-height:92px"><div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;color:#5b4dff;margin-bottom:5px">{{ af.n }}</div><div style="font:800 13px 'Manrope','PingFang SC',sans-serif;color:#18172a;margin-bottom:5px">{{ af.t }}</div><div style="font:500 11px 'Manrope','PingFang SC',sans-serif;color:#4b486a;line-height:1.5">{{ af.d }}</div></div></sc-for>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1.05fr .95fr;gap:14px;margin-bottom:16px">
+          <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;padding:20px 22px"><div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;color:#8783a3;margin-bottom:12px">可运营受众分群</div><div style="display:flex;flex-direction:column;gap:8px"><sc-for list="{{ audienceSegments }}" as="seg" hint-placeholder-count="5"><div style="display:flex;gap:11px;align-items:center;padding:10px 12px;background:#fafaff;border-radius:10px"><span style="font-size:22px">{{ seg.i }}</span><div style="flex:1"><div style="font:700 12.5px 'Manrope','PingFang SC',sans-serif;color:#18172a">{{ seg.t }}</div><div style="font:500 11px 'Manrope','PingFang SC',sans-serif;color:#8783a3;line-height:1.5">{{ seg.d }}</div></div><span style="font:700 9px 'IBM Plex Mono',Menlo,monospace;color:{{ seg.c }}">{{ seg.s }}</span></div></sc-for></div></div>
+          <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;padding:20px 22px"><div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;color:#8783a3;margin-bottom:12px">三维评分 · 禁止合成单一黑箱分</div><div style="display:flex;flex-direction:column;gap:10px"><sc-for list="{{ audienceScores }}" as="as" hint-placeholder-count="3"><div style="padding:12px 14px;border:1px solid #eeecf7;border-radius:11px"><div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font:800 12.5px 'Manrope','PingFang SC',sans-serif;color:#18172a">{{ as.t }}</span><span style="font:700 9px 'IBM Plex Mono',Menlo,monospace;color:{{ as.c }}">{{ as.en }}</span></div><div style="font:500 11px 'Manrope','PingFang SC',sans-serif;color:#4b486a;line-height:1.55">{{ as.d }}</div></div></sc-for></div></div>
+        </div>
+        <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;padding:20px 22px">
+          <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;color:#8783a3;margin-bottom:12px">Campaign Contract 强制边界</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"><sc-for list="{{ audienceGuards }}" as="ag" hint-placeholder-count="6"><div style="background:#f6f5fb;border-radius:10px;padding:11px 13px"><div style="font:700 12px 'Manrope','PingFang SC',sans-serif;color:#18172a;margin-bottom:4px">{{ ag.t }}</div><div style="font:500 11px 'Manrope','PingFang SC',sans-serif;color:#4b486a;line-height:1.5">{{ ag.d }}</div></div></sc-for></div>
+        </div>
+      </div>
+    </sc-if>
+
     <!-- ======== PAGE: 营销 Agent 案例 ======== -->
     <sc-if value="{{ isMkagent }}" hint-placeholder-val="{{ false }}">
       <div data-screen-label="营销 Agent 案例">
@@ -2715,7 +2750,7 @@
             <span>框架 / 组件</span><span>核心功能</span><span>典型技术选型</span>
           </div>
           <div style="display:flex;flex-direction:column;gap:5px">
-            <sc-for list="{{ mkagFw }}" as="fw" hint-placeholder-count="5">
+            <sc-for list="{{ mkagFw }}" as="fw" hint-placeholder-count="8">
               <div style="display:grid;grid-template-columns:150px minmax(260px,1fr) 260px;gap:10px;align-items:center;padding:10px 12px;border-radius:10px;background:#fafaff">
                 <span style="font:700 12.5px 'Manrope','PingFang SC',sans-serif;color:#18172a">{{ fw.c }}</span>
                 <span style="font:500 12px 'Manrope','PingFang SC',sans-serif;color:#4b486a;line-height:1.55">{{ fw.f }}</span>
@@ -2725,7 +2760,7 @@
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:14px">
-          <sc-for list="{{ mkagCases }}" as="mk" hint-placeholder-count="3">
+          <sc-for list="{{ mkagCases }}" as="mk" hint-placeholder-count="4">
             <div style="background:#fff;border:1px solid #ebe9f4;border-radius:18px;box-shadow:0 1px 2px rgba(24,23,42,.04);transition:box-shadow .15s ease,transform .15s ease;display:flex;overflow:hidden" style-hover="transform:translateY(-2px);box-shadow:0 10px 24px -10px rgba(24,23,42,.18)">
               <div style="width:130px;flex:none;background:linear-gradient(140deg,{{ mk.tileA }},{{ mk.tileB }});border-right:1px solid #ebe9f4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:20px 10px">
                 <span style="font-size:38px;line-height:1">{{ mk.icon }}</span>
@@ -3983,6 +4018,7 @@ class Component extends DCLogic {
   AGENT = [
     { num: '★', title: 'Agent OS 架构总体方案', file: 'uploads/30. Agent_OS_架构总体方案.md' },
     { num: '★', title: 'Agent OS 评测体系方案', file: 'uploads/31. Agent_OS_评测体系方案.md' },
+    { num: '32', title: '钱包身份识别与用户画像体系', file: 'uploads/32. 钱包身份识别与用户画像体系结构化梳理.md' },
     { num: '16', title: '关键业务链路 · 总目录', file: 'uploads/16. Airvana_Agent_OS_关键业务链路结构化文档目录.md' },
     { num: '+', title: '模板上传和解析', file: 'uploads/16a. 模板上传和解析结构化梳理.md' },
     { num: '17', title: 'KOL / 项目方输入与身份上下文', file: 'uploads/17. KOL_项目方输入与身份上下文机制结构化梳理.md' },
@@ -4000,7 +4036,7 @@ class Component extends DCLogic {
     { num: '29', title: '数据反馈 Memory 与模板更新', file: 'uploads/29. 数据反馈Memory与模板更新机制结构化梳理.md' }
   ];
 
-  PAGE_KEYS = ['overview', 'daily', 'partners', 'comp', 'exlist', 'board', 'docs', 'flow', 'agentos', 'kb', 'risk', 'cases', 'tpl', 'kolco', 'settle', 'tickets', 'hire', 'aigc', 'mkagent', 'mkag2'];
+  PAGE_KEYS = ['overview', 'daily', 'partners', 'comp', 'exlist', 'board', 'docs', 'flow', 'agentos', 'kb', 'risk', 'cases', 'tpl', 'kolco', 'settle', 'tickets', 'hire', 'aigc', 'mkagent', 'mkag2', 'audience'];
   setState(st, cb) {
     super.setState(st, cb);
     if (st && typeof st === 'object' && st.page && this.PAGE_KEYS.indexOf(st.page) >= 0) {
@@ -4045,14 +4081,14 @@ class Component extends DCLogic {
   // ── 角色体系（左下角用户卡切换）──
   ROLES = [
     { id: 'owner', name: '项目负责人', en: 'OWNER', avatar: '我', grad: 'linear-gradient(140deg,#5b4dff,#3c2fd0)', home: 'overview', duties: ['全局视角与跨角色资源协调', '版本计划与优先级最终审批', '结算与协议变更的最终审批', '对外关键合作关系维护'] },
-    { id: 'biz', name: '项目商务', en: 'BD', avatar: '商', grad: 'linear-gradient(140deg,#ff7a3d,#d15a1f)', home: 'partners', duties: ['品牌方需求对接与营销方案制定', '游戏团队模板批量合作洽谈', '合同 / SOW 推进与回款跟进', '合作方档案与沟通记录维护'], nav: ['overview', 'daily', 'partners', 'settle', 'docs', 'tpl', 'kolco', 'cases', 'mkagent', 'map'] },
-    { id: 'legal', name: '项目法务', en: 'LEGAL', avatar: '法', grad: 'linear-gradient(140deg,#d43d33,#8f231c)', home: 'risk', duties: ['平台 8 份协议维护与版本管理', '品牌方准入尽调与红线把关', 'Web3 合规：KYC 分级 / 地区屏蔽', '对外合作权益保障与争议处理'], nav: ['overview', 'daily', 'docs', 'partners', 'kolco'] },
+    { id: 'biz', name: '项目商务', en: 'BD', avatar: '商', grad: 'linear-gradient(140deg,#ff7a3d,#d15a1f)', home: 'partners', duties: ['品牌方需求对接与营销方案制定', '游戏团队模板批量合作洽谈', '合同 / SOW 推进与回款跟进', '合作方档案与沟通记录维护'], nav: ['overview', 'daily', 'partners', 'settle', 'docs', 'tpl', 'kolco', 'cases', 'mkagent', 'audience', 'map'] },
+    { id: 'legal', name: '项目法务', en: 'LEGAL', avatar: '法', grad: 'linear-gradient(140deg,#d43d33,#8f231c)', home: 'risk', duties: ['平台 8 份协议维护与版本管理', '品牌方准入尽调与红线把关', 'Web3 合规：KYC 分级 / 地区屏蔽', '对外合作权益保障与争议处理'], nav: ['overview', 'daily', 'docs', 'partners', 'kolco', 'audience'] },
     { id: 'kolops', name: 'KOL 运营', en: 'KOL OPS', avatar: 'K', grad: 'linear-gradient(140deg,#b03a72,#7d2450)', home: 'kolco', duties: ['KOL 招募准入与数据核验', '分层管理（S/A/B）与培训赋能', 'KOL 营销方案共创与排期', '达人舆情监控与紧急下架协同'], nav: ['overview', 'daily', 'kolco', 'partners', 'cases', 'mkagent', 'map'] },
-    { id: 'product', name: '项目产品', en: 'PRODUCT', avatar: '产', grad: 'linear-gradient(140deg,#1d9f6e,#136b49)', home: 'cases', duties: ['营销案例方案设计与全流程推演', '模板标准与上架规范制定', '产品设计与 PRD / 版本规划', '漏斗定义与结算口径制定'], nav: ['overview', 'daily', 'board', 'docs', 'tpl', 'cases', 'mkagent', 'flow', 'aigc', 'mkag2'] },
-    { id: 'tech', name: '项目技术', en: 'ENGINEERING', avatar: '技', grad: 'linear-gradient(140deg,#2b6fd4,#1b478c)', home: 'agentos', duties: ['Agent OS / AICG 工作流开发', '模板引擎与 H5 Builder 建设', '发布投放连接器与系统稳定性', '架构可拓展性与技术文档沉淀'], nav: ['overview', 'daily', 'board', 'flow', 'aigc', 'agentos', 'mkag2', 'tpl', 'map'] },
+    { id: 'product', name: '项目产品', en: 'PRODUCT', avatar: '产', grad: 'linear-gradient(140deg,#1d9f6e,#136b49)', home: 'cases', duties: ['营销案例方案设计与全流程推演', '模板标准与上架规范制定', '产品设计与 PRD / 版本规划', '漏斗定义与结算口径制定'], nav: ['overview', 'daily', 'board', 'docs', 'tpl', 'cases', 'mkagent', 'flow', 'aigc', 'mkag2', 'audience'] },
+    { id: 'tech', name: '项目技术', en: 'ENGINEERING', avatar: '技', grad: 'linear-gradient(140deg,#2b6fd4,#1b478c)', home: 'agentos', duties: ['Agent OS / AICG 工作流开发', '模板引擎与 H5 Builder 建设', '发布投放连接器与系统稳定性', '架构可拓展性与技术文档沉淀'], nav: ['overview', 'daily', 'board', 'flow', 'aigc', 'agentos', 'mkag2', 'audience', 'tpl', 'map'] },
     { id: 'qa', name: '项目测试', en: 'QA', avatar: '测', grad: 'linear-gradient(140deg,#b97a1c,#8a5a12)', home: 'board', duties: ['模板 / Playable 功能兼容测试', '模拟测试机制运营与预览验收', '线上问题跟踪、反馈与回归', '发版门禁与质量报告'], nav: ['overview', 'daily', 'board', 'flow', 'tpl', 'cases'] },
     { id: 'finance', name: '结算财务', en: 'FINANCE', avatar: '财', grad: 'linear-gradient(140deg,#0f9d8f,#0a6b62)', home: 'settle', duties: ['KOL 分成核算与发放执行', '品牌方账单、回款与对账', '积分发放与额度熔断监控', '提现审核（配合 KYC）与税务发票'], nav: ['overview', 'daily', 'settle', 'partners', 'kolco', 'docs'] },
-    { id: 'ts', name: '内容审核 · T&S', en: 'TRUST & SAFETY', avatar: '审', grad: 'linear-gradient(140deg,#7c4dcc,#54348c)', home: 'risk', duties: ['模板与 UGC 双审执行', '举报队列 24h SOP 响应', '违禁内容清单与分级标签更新', '未成年人保护措施执行'], nav: ['overview', 'daily', 'docs', 'tpl', 'cases', 'kolco'] },
+    { id: 'ts', name: '内容审核 · T&S', en: 'TRUST & SAFETY', avatar: '审', grad: 'linear-gradient(140deg,#7c4dcc,#54348c)', home: 'risk', duties: ['模板与 UGC 双审执行', '举报队列 24h SOP 响应', '违禁内容清单与分级标签更新', '未成年人保护措施执行'], nav: ['overview', 'daily', 'docs', 'tpl', 'cases', 'kolco', 'audience'] },
     { id: 'community', name: '社区 / 玩家运营', en: 'COMMUNITY', avatar: '社', grad: 'linear-gradient(140deg,#e0558c,#a83263)', home: 'daily', duties: ['官方 TG / Discord 社群运营', '活动期玩家答疑与申诉处理', '女巫误判申诉复核与转办', '玩家侧激励活动执行'], nav: ['overview', 'daily', 'tickets', 'kolco', 'partners', 'mkagent', 'map'] },
     { id: 'design', name: '设计 / 美术', en: 'DESIGN', avatar: '设', grad: 'linear-gradient(140deg,#e8a13a,#b3781f)', home: 'tpl', duties: ['模板素材生产与风格统一', '品牌方定制皮肤（换皮）制作', '素材版权溯源登记', 'AI 生成素材审核与微调'], nav: ['overview', 'daily', 'tpl', 'cases', 'docs', 'flow'] },
     { id: 'support', name: '客服支持', en: 'SUPPORT', avatar: '客', grad: 'linear-gradient(140deg,#5a6b8c,#3c4a66)', home: 'tickets', duties: ['品牌方 / KOL 工单响应', '玩家申诉受理与跨角色转办', 'FAQ 与帮助知识库维护', 'SLA 时效与满意度跟踪'], nav: ['overview', 'daily', 'tickets', 'partners', 'kolco', 'docs'] },
@@ -5216,7 +5252,7 @@ class Component extends DCLogic {
     const S = this.state, D = S.data;
     const roleCur = this.ROLES.find(r => r.id === (D.role || 'owner')) || this.ROLES[0];
     const todoMine = S.todoMine !== false && roleCur.id !== 'owner';
-    const NAV_KEYS = ['overview', 'daily', 'board', 'docs', 'partners', 'settle', 'tickets', 'hire', 'tpl', 'kolco', 'cases', 'mkagent', 'flow', 'aigc', 'agentos', 'mkag2', 'map'];
+    const NAV_KEYS = ['overview', 'daily', 'board', 'docs', 'partners', 'settle', 'tickets', 'hire', 'tpl', 'kolco', 'cases', 'mkagent', 'flow', 'aigc', 'agentos', 'mkag2', 'audience', 'map'];
     const navAllowed = roleCur.nav || NAV_KEYS;
     const navShow = {}; NAV_KEYS.forEach(k => { navShow['nav_' + k] = navAllowed.includes(k); });
     const today = this.today(), week = this.plusDays(7);
@@ -5241,7 +5277,7 @@ class Component extends DCLogic {
     const tiles = [['#ffd8c2', '#fcd1e1'], ['#d9d4ff', '#c9e3ff'], ['#c6efdc', '#d3e8c5'], ['#ffeec0', '#ffd8c2'], ['#c9e3ff', '#d9d4ff'], ['#fcd1e1', '#ffcfcf']];
 
     // nav
-    const pages = { overview: ['总览', 'OVERVIEW'], daily: ['每日待办', 'DAILY'], partners: ['品牌合作', 'PARTNERS'], comp: ['知识库 · 竞品分析', 'COMPETITORS'], exlist: ['知识库 · 合规交易所', 'EXCHANGES'], board: ['项目推进', 'PIPELINE'], docs: ['知识库 · 文档资料', 'LIBRARY'], flow: ['AICG 工作流', 'WORKFLOW'], agentos: ['Agent OS', 'AGENT OS'], kb: ['知识库 · 子库建设规划', 'KNOWLEDGE'], risk: ['知识库 · 风控体系', 'RISK'], cases: ['AP 案例库', 'CASES'], tpl: ['模板库', 'TEMPLATES'], kolco: ['KOL 合作库', 'KOL PARTNERS'], settle: ['结算中心', 'SETTLEMENT'], tickets: ['工单中心', 'TICKETS'], hire: ['招聘管理', 'HIRING'], aigc: ['AIGC 架构', 'AIGC ARCHITECTURE'], mkagent: ['营销 Agent 案例', 'MARKETING AGENT'], mkag2: ['营销 Agent', 'MARKETING AGENT ENGINE'] };
+    const pages = { overview: ['总览', 'OVERVIEW'], daily: ['每日待办', 'DAILY'], partners: ['品牌合作', 'PARTNERS'], comp: ['知识库 · 竞品分析', 'COMPETITORS'], exlist: ['知识库 · 合规交易所', 'EXCHANGES'], board: ['项目推进', 'PIPELINE'], docs: ['知识库 · 文档资料', 'LIBRARY'], flow: ['AICG 工作流', 'WORKFLOW'], agentos: ['Agent OS', 'AGENT OS'], kb: ['知识库 · 子库建设规划', 'KNOWLEDGE'], risk: ['知识库 · 风控体系', 'RISK'], cases: ['AP 案例库', 'CASES'], tpl: ['模板库', 'TEMPLATES'], kolco: ['KOL 合作库', 'KOL PARTNERS'], settle: ['结算中心', 'SETTLEMENT'], tickets: ['工单中心', 'TICKETS'], hire: ['招聘管理', 'HIRING'], aigc: ['AIGC 架构', 'AIGC ARCHITECTURE'], mkagent: ['营销 Agent 案例', 'MARKETING AGENT'], mkag2: ['营销 Agent', 'MARKETING AGENT ENGINE'], audience: ['受众画像', 'AUDIENCE IDENTITY'] };
     const navS = {};
     Object.keys(pages).forEach(k => {
       const on = S.page === k;
@@ -5967,6 +6003,40 @@ class Component extends DCLogic {
       ],
       goMkagent: go('mkagent'), isMkagent: S.page === 'mkagent',
       goMkag2: go('mkag2'), isMkag2: S.page === 'mkag2',
+      goAudience: go('audience'), isAudience: S.page === 'audience',
+      audienceKpis: [
+        { l: '长期主键', v: 'airvana_uid', d: '账号身份不依赖单一钱包', c: '#5b4dff' },
+        { l: 'DID 状态', v: '目标设计', d: '授权连接后建立可撤销关联', c: '#1d9f6e' },
+        { l: '数据原则', v: '最小披露', d: '只保存声明与证据摘要', c: '#d15a1f' },
+        { l: '商业权限', v: '服务端控制', d: 'Campaign entitlement 不由 DID 授予', c: '#d43d33' }
+      ],
+      audienceFlow: [
+        { n: '01', t: '用户授权', d: '明确用途、数据源、期限与撤回入口', bg: '#efeeff' },
+        { n: '02', t: '钱包签名', d: '验证控制权；不采集私钥或助记词', bg: '#e8f2ff' },
+        { n: '03', t: 'DID / 凭证', d: '关联 did:pkh 与 KYC 等级等可验证声明', bg: '#e6f8ef' },
+        { n: '04', t: '身份图谱', d: '在同意范围内连接钱包、社交与互动事件', bg: '#fff1e8' },
+        { n: '05', t: 'Campaign 决策', d: '按合同规则形成分群、投放与审计记录', bg: '#f6f5fb' }
+      ],
+      audienceSegments: [
+        { i: '✓', t: '高可信活跃用户', d: '签名有效 + 活跃历史 + 低风险；适合进阶玩法', s: '可定向', c: '#1d9f6e' },
+        { i: '⛓', t: 'DeFi / 交易行为人群', d: '只采用公开链上特征与授权标签，不推断敏感属性', s: '需同意', c: '#5b4dff' },
+        { i: '🎮', t: 'Playable 高参与人群', d: '基于第一方完玩、复玩、分享等隐私安全事件', s: '第一方', c: '#2b6fd4' },
+        { i: '◌', t: '新钱包 / 低信息人群', d: '不做负面推断，以探索型内容逐步建立偏好', s: '冷启动', c: '#a97b22' },
+        { i: '⚠', t: '异常与疑似女巫群体', d: '只进入复核或限流队列，不自动永久封禁', s: '人工复核', c: '#d43d33' }
+      ],
+      audienceScores: [
+        { t: '身份质量', en: 'IDENTITY QUALITY', c: '#5b4dff', d: '控制权、凭证有效性、账号稳定性；用于判断证据可靠度。' },
+        { t: '价值潜力', en: 'VALUE POTENTIAL', c: '#1d9f6e', d: '参与、转化与兴趣信号；用于内容与渠道匹配，不等于财富评级。' },
+        { t: '欺诈风险', en: 'FRAUD RISK', c: '#d43d33', d: '批量钱包、异常邀请与设备冲突；与价值分隔离并保留申诉。' }
+      ],
+      audienceGuards: [
+        { t: '数据源白名单', d: '只使用合同批准的钱包、渠道和第一方事件。' },
+        { t: '同意版本', d: '记录目的、地区、期限；撤回后停止新增使用。' },
+        { t: '字段锁定', d: '预算、奖励、CTA、地区、归因和结算禁止 Agent 改写。' },
+        { t: '隐私边界', d: '不保存私钥、助记词、原始 KYC 文档或敏感画像。' },
+        { t: '决策审计', d: '保存 segment_rule_version 与采用的凭证摘要。' },
+        { t: '申诉与删除', d: '支持解除钱包关联、画像更正、凭证撤销和风险复核。' }
+      ],
       mkagLoop: [
         { n: '01', t: '感知', en: 'PERCEIVE', d: '接收意图（对话触发）· 监听事件（行情波动 / 转化异常）· 定时巡检（日报 / 投放盘点），三种触发并存' },
         { n: '02', t: '决策', en: 'DECIDE', d: '检索三层记忆 + 知识库（案例库 / 玩法基底 / KOL 语料），产出切入点 Top 3 打分排序供选择' },
@@ -5977,27 +6047,34 @@ class Component extends DCLogic {
         { n: '①', t: '意图识别', en: 'INTENT RECOGNITION', tileA: '#c9e3ff', tileB: '#e8f2ff', icon: '🎯',
           d: '把一句话需求解析为结构化营销任务：目标（拉新 / 留存 / 核销 / 裂变）× 行业（交易所 / 游戏 / 品牌）× 渠道偏好 × 预算约束，再映射到玩法基底（空投 / 竞猜 / 塔防 / 模拟交易）。',
           pts: ['解析输出：{目标, 行业, 渠道, 预算, 时限} 五元组，缺项按客户档案默认值补齐', '玩法映射：目标 × 行业 → 玩法基底候选（拉新+交易所 → 空投 / 竞猜优先）', '兜底策略：意图置信度低时不硬猜 —— 直接给 3 个候选方案让用户选，选择结果回流训练意图模型'] },
-        { n: '②', t: '用户记忆', en: 'CUSTOMER MEMORY', tileA: '#d9d4ff', tileB: '#efeeff', icon: '🧠',
+        { n: '②', t: '受众身份与画像', en: 'AUDIENCE IDENTITY', tileA: '#bdeedd', tileB: '#e8faf3', icon: '🪪',
+          d: '以 airvana_uid 维持长期身份，在用户明确授权后关联钱包 DID、可验证凭证、公开链上行为与第一方互动事件，形成可解释、可撤销的营销分群。',
+          pts: ['身份分层：账号主键 → 钱包控制权 → DID / VC 声明 → 同意范围内的身份图谱；DID 不授予业务权限', '画像分离：身份质量、价值潜力、欺诈风险三套评分独立，防止把资产规模等同用户价值', '隐私保护：不采集私钥、助记词和原始 KYC；支持钱包解绑、同意撤回、凭证吊销与申诉复核'] },
+        { n: '③', t: '用户记忆', en: 'CUSTOMER MEMORY', tileA: '#d9d4ff', tileB: '#efeeff', icon: '🧠',
           d: '三层记忆结构，让 Agent 越用越懂这个客户：会话记忆（本次上下文）→ 客户档案记忆（长期）→ 全局经验记忆（跨客户脱敏沉淀）。',
           pts: ['客户档案字段：品牌偏好 / 历史投放与 ROI / 预算等级 / 合规红线与禁用项 / KOL 风格语料', '写入时机：每次投放结束自动归档复盘结论；对话中用户纠正的偏好即时更新', '隔离原则：客户档案租户隔离；进入全局经验层的爆款模式一律脱敏，不泄漏客户数据'] },
-        { n: '③', t: '最佳营销切入点', en: 'BEST ENTRY POINT', tileA: '#ffd8c2', tileB: '#ffece1', icon: '🧭',
+        { n: '④', t: '最佳营销切入点', en: 'BEST ENTRY POINT', tileA: '#ffd8c2', tileB: '#ffece1', icon: '🧭',
           d: '推荐引擎四路信号加权：客户画像 × 案例库匹配（TG / X 等 8 平台案例）× 实时热点信号（行情波动 / 平台热榜）× 历史 ROI 数据，输出打分排序的切入点方案。',
           pts: ['输出格式：Top 3「切入点 + 玩法基底 + 渠道组合 + 预期指标区间」，附推荐理由与相似案例', '预期指标：行业基准估算起步，平台自有数据积累后逐步替换（标注数据来源与置信度）', '热点抢量：行情剧烈波动等事件触发时，2 小时内主动推送即时方案（对接 K 线竞猜 Agent 案例）'] },
-        { n: '④', t: '自进化', en: 'SELF-EVOLUTION', tileA: '#c6efdc', tileB: '#e6f8ef', icon: '🔁',
+        { n: '⑤', t: '自进化', en: 'SELF-EVOLUTION', tileA: '#c6efdc', tileB: '#e6f8ef', icon: '🔁',
           d: '每次投放都是一次训练：数据回流驱动变体淘汰赛与策略迭代，让下一次推荐更准、生成更好。',
           pts: ['变体淘汰赛：表现差的变体自动下线，爆款特征（玩法参数 / 文案模式 / 投放时段）结构化入库', '权重更新：切入点推荐引擎按实际 ROI 校准四路信号权重', '版本迭代：提示词与策略变更走 Golden Set 回归测试（对接评测体系），分数下降即阻断', '人工卡点：策略级变更（预算分配 / 推荐逻辑）上线前需人工确认，日常变体优化全自动'] }
       ],
       mkagFw: [
-        { c: '用户画像系统', f: '收集分析玩家行为数据，构建 360° 用户视图', t: 'Snowflake、ClickHouse' },
+        { c: '身份主键与账号图谱', f: '以 airvana_uid 统一钱包、社交账号和第一方事件；保留来源与同意状态', t: 'Identity Graph + Consent Ledger' },
+        { c: 'DID / 可验证凭证', f: '验证钱包控制权、KYC 等级或资格声明；支持过期、撤销和最小披露', t: 'did:pkh、VC / Attestation' },
+        { c: '用户画像系统', f: '将身份质量、价值潜力与欺诈风险拆分建模，构建可解释受众分群', t: 'ClickHouse、Feature Store' },
         { c: '营销归因引擎', f: '追踪游戏内营销活动效果，计算 ROI', t: 'Google Analytics 4、Adjust' },
         { c: 'A/B 测试平台', f: '对比不同游戏版本 / 营销方案效果', t: 'Optimizely、VWO' },
         { c: '实时推荐系统', f: '基于玩家行为推荐个性化游戏内容与营销活动', t: 'TensorFlow Recommenders、LightFM' },
-        { c: '忠诚度管理', f: '积分系统、成就解锁、奖励发放，提升用户粘性', t: '自定义规则引擎 + 数据库' }
+        { c: '忠诚度管理', f: '积分系统、成就解锁、奖励发放，提升用户粘性', t: '自定义规则引擎 + 数据库' },
+        { c: '隐私与风控策略', f: '执行数据最小化、地区限制、同意撤回、女巫识别与人工申诉', t: 'Policy Engine + Audit Log' }
       ],
       mkagCases: [
         { n: '01', t: '空投裂变 Agent', tileA: '#ffd8c2', tileB: '#ffece1', icon: '🪂', st: '进行中', stBg: '#efeeff', stFg: '#5b4dff', goal: '目标：TG 社群 7 日拉新 10,000 注册', flow: '空投模板生成 → TG 多群定时发布 → 邀请裂变追踪 → 转化数据回流 → 变体自动淘汰', kpi: '曝光 / 注册转化率 / 邀请系数 K 值', brand: '交易所品牌方（核销闭环对接中）' },
         { n: '02', t: 'K 线竞猜行情热点 Agent', tileA: '#c9e3ff', tileB: '#e8f2ff', icon: '📈', st: '方案', stBg: '#fdf3df', stFg: '#a97b22', goal: '目标：行情剧烈波动时 2 小时内自动蹭量', flow: '行情监听触发 → 竞猜 Playable 即时生成（交易对自适配）→ KOL 分发 → 开户转化归因', kpi: '触发时效 / 分享率 / 开户 CPA', brand: '币圈 KOL × 交易所' },
-        { n: '03', t: '塔防品牌任务 Agent', tileA: '#d9d4ff', tileB: '#efeeff', icon: '🏰', st: '方案', stBg: '#fdf3df', stFg: '#a97b22', goal: '目标：品牌任务完成率 ≥ 40%', flow: '塔防模板换皮（品牌塔位/敌人皮肤）→ 关卡内品牌任务植入 → 通关奖励核销 → 复玩留存运营', kpi: '完玩率 / 任务完成率 / 核销率', brand: 'Web3 交易所 · 营销切入点方案衍生' }
+        { n: '03', t: '塔防品牌任务 Agent', tileA: '#d9d4ff', tileB: '#efeeff', icon: '🏰', st: '方案', stBg: '#fdf3df', stFg: '#a97b22', goal: '目标：品牌任务完成率 ≥ 40%', flow: '塔防模板换皮（品牌塔位/敌人皮肤）→ 关卡内品牌任务植入 → 通关奖励核销 → 复玩留存运营', kpi: '完玩率 / 任务完成率 / 核销率', brand: 'Web3 交易所 · 营销切入点方案衍生' },
+        { n: '04', t: '钱包画像定向空投 Agent', tileA: '#bdeedd', tileB: '#e8faf3', icon: '🪪', st: '目标设计', stBg: '#e2f4e9', stFg: '#1d9f6e', goal: '目标：在隐私与合规边界内提升合格用户转化率', flow: 'Campaign Brief → Campaign Contract → 用户授权连接钱包 → DID / 凭证校验 → 可解释分群 → Agentic Playable 变体分发 → 隐私安全事件归因 → 撤回 / 复核', kpi: '授权率 / 合格转化率 / 凭证撤销率 / 风险误判申诉率', brand: '交易所 / Web3 项目 · 预算、奖励、CTA 与地区由合同锁定' }
       ],
       aigcPlat: [
         { n: '01', t: '业务与组织管理', en: 'ORG & BILLING', color: '#d9d4ff', items: ['多租户管理', '组织与团队', '项目与工作空间', '用户 / 角色 / RBAC 权限', '审批流与操作授权', '订阅计费与套餐', '配额与用量管理', 'API / SDK / Webhook 管理'] },

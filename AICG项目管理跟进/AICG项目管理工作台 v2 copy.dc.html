@@ -20,6 +20,15 @@
   .side-scroll::-webkit-scrollbar{width:4px}
   .side-scroll::-webkit-scrollbar-thumb{background:#e3e0f0;border-radius:99px}
   .side-scroll::-webkit-scrollbar-track{background:transparent}
+  /* 移动端基线：窄屏下多列 grid 坍缩为单列，主区收紧内边距 */
+  @media (max-width: 760px){
+    div[data-screen-label] div[style*="grid-template-columns"]{grid-template-columns:1fr !important;min-width:0 !important}
+    div[style*="padding:26px 36px"]{padding:14px 12px 40px !important}
+    div[style*="width:228px"]{width:188px !important}
+  }
+  /* 暗色模式（实验性，反色方案）：html.aicg-dark 开启 */
+  html.aicg-dark{filter:invert(.93) hue-rotate(180deg);background:#0f0e1a}
+  html.aicg-dark img,html.aicg-dark iframe,html.aicg-dark [data-noinvert]{filter:invert(1) hue-rotate(180deg)}
   .md-body{font:500 13.5px/1.75 'Manrope','PingFang SC','Microsoft YaHei',sans-serif;color:#4b486a}
   .md-body h1{font:800 22px/1.3 'Manrope','PingFang SC',sans-serif;color:#18172a;letter-spacing:-.02em;margin:0 0 14px}
   .md-body h2{font:800 16.5px/1.35 'Manrope','PingFang SC',sans-serif;color:#18172a;letter-spacing:-.01em;margin:26px 0 10px;padding-top:16px;border-top:1px solid #f3f1fa}
@@ -238,6 +247,38 @@
               <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
                 <div style="font:500 12.5px 'Manrope','PingFang SC',sans-serif;color:#8783a3;padding:10px 12px">没有匹配「{{ qTrim }}」的结果</div>
               </sc-if>
+            </div>
+          </sc-if>
+        </div>
+        <div onClick="{{ toggleDark }}" title="切换暗色模式" style="width:34px;height:34px;border-radius:99px;background:#fff;border:1px solid #ebe9f4;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none" style-hover="border-color:#5b4dff">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4b486a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"></path></svg>
+        </div>
+        <div style="position:relative">
+          <div onClick="{{ toggleNotif }}" title="通知中心" style="position:relative;width:34px;height:34px;border-radius:99px;background:#fff;border:1px solid #ebe9f4;display:flex;align-items:center;justify-content:center;cursor:pointer" style-hover="border-color:#5b4dff">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4b486a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.7 21a2 2 0 01-3.4 0"></path></svg>
+            <sc-if value="{{ notifHas }}" hint-placeholder-val="{{ false }}">
+              <span style="position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;border-radius:99px;background:#d94a4a;color:#fff;font:700 9.5px 'IBM Plex Mono',Menlo,monospace;display:flex;align-items:center;justify-content:center;padding:0 4px">{{ notifCount }}</span>
+            </sc-if>
+          </div>
+          <sc-if value="{{ notifOpenFlag }}" hint-placeholder-val="{{ false }}">
+            <div onClick="{{ notifStop }}" style="position:absolute;top:42px;right:0;width:360px;background:#fff;border:1px solid #ebe9f4;border-radius:14px;box-shadow:0 24px 60px -12px rgba(24,23,42,.18);padding:10px;z-index:55;animation:fadeIn .14s ease">
+              <div style="display:flex;align-items:baseline;gap:8px;padding:4px 8px 8px">
+                <span style="font:800 13px 'Manrope','PingFang SC',sans-serif">通知</span>
+                <span style="font:700 9px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;color:#c2bfd6">今日到期与逾期 · {{ notifRoleLabel }}</span>
+              </div>
+              <div style="max-height:380px;overflow:auto;display:flex;flex-direction:column;gap:3px">
+                <sc-for list="{{ notifList }}" as="nf" hint-placeholder-count="3">
+                  <div onClick="{{ nf.go }}" style="display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:9px;cursor:pointer" style-hover="background:#fafaff">
+                    <span style="width:6px;height:6px;border-radius:99px;background:{{ nf.col }};flex:none"></span>
+                    <span style="font:700 9.5px 'IBM Plex Mono',Menlo,monospace;color:#8783a3;flex:none">{{ nf.tag }}</span>
+                    <span style="font:600 12px 'Manrope','PingFang SC',sans-serif;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ nf.text }}</span>
+                    <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;color:{{ nf.dateColor }};flex:none">{{ nf.dateLabel }}</span>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ noNotif }}" hint-placeholder-val="{{ false }}">
+                  <div style="font:500 12px 'Manrope','PingFang SC',sans-serif;color:#b9b5d0;padding:10px 12px">今日没有到期事项 🎉</div>
+                </sc-if>
+              </div>
             </div>
           </sc-if>
         </div>
@@ -562,6 +603,13 @@
                 </sc-if>
               </div>
 
+              <sc-if value="{{ p.hasSettle }}" hint-placeholder-val="{{ false }}">
+                <div onClick="{{ p.goSettlePage }}" title="打开结算中心" style="border:1px solid #ebe9f4;border-radius:12px;background:#fafaff;margin-bottom:8px;display:flex;align-items:center;gap:9px;padding:9px 12px;cursor:pointer" style-hover="border-color:#c9c3f2">
+                  <span style="font:700 11px 'IBM Plex Mono',Menlo,monospace;color:#b9b5d0;flex:none;width:10px">→</span>
+                  <div style="flex:1;font:700 9.5px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;color:#8783a3;text-transform:uppercase">结算</div>
+                  <span style="font:700 10.5px 'IBM Plex Mono',Menlo,monospace;color:{{ p.settleColor }}">{{ p.settleLabel }}</span>
+                </div>
+              </sc-if>
               <div style="border:1px solid #ebe9f4;border-radius:12px;background:#fafaff;margin-bottom:8px;overflow:hidden">
                 <div onClick="{{ p.togCred }}" style="display:flex;align-items:center;gap:9px;padding:9px 12px;cursor:pointer" style-hover="background:#f3f1fa">
                   <span style="font:700 11px 'IBM Plex Mono',Menlo,monospace;color:#b9b5d0;flex:none;width:10px">{{ p.carCred }}</span>
@@ -2947,6 +2995,12 @@
                   <span style="font:700 9.5px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.06em;color:#c2bfd6;flex:none;width:58px">累计合作</span>
                   <span style="font:600 11.5px 'IBM Plex Mono',Menlo,monospace;color:#4b486a;line-height:1.6">{{ k.coopDataLabel }}</span>
                 </div>
+                <sc-if value="{{ k.settleLine }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;gap:8px;align-items:baseline">
+                    <span style="font:700 9.5px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.06em;color:#c2bfd6;flex:none;width:58px">结算中心</span>
+                    <span onClick="{{ k.goSettlePage }}" title="打开结算中心" style="font:600 11.5px 'IBM Plex Mono',Menlo,monospace;color:{{ k.settleLineColor }};cursor:pointer;border-bottom:1px dashed #ddd9ec" style-hover="color:#5b4dff">{{ k.settleLine }}</span>
+                  </div>
+                </sc-if>
                 <div style="display:flex;gap:8px;align-items:center">
                   <span style="font:700 9.5px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.06em;color:#c2bfd6;flex:none;width:58px">评分</span>
                   <span style="font:700 12px 'Manrope',sans-serif;color:#ff7a3d;letter-spacing:.04em">{{ k.ratingStars }}</span>
@@ -3355,10 +3409,15 @@
       </sc-if>
 
       <sc-if value="{{ isSettleModal }}" hint-placeholder-val="{{ false }}">
+        <datalist id="aicg-settle-parties">
+          <sc-for list="{{ settlePartyOpts }}" as="spo" hint-placeholder-count="5">
+            <option value="{{ spo.v }}"></option>
+          </sc-for>
+        </datalist>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
           <div style="grid-column:1/-1">
             <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">结算对象 *</div>
-            <input value="{{ draft.party }}" onChange="{{ dOn.party }}" placeholder="例：币安 Binance / Aria（KOL 分成）" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'Manrope','PingFang SC',sans-serif;outline:none" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
+            <input value="{{ draft.party }}" onChange="{{ dOn.party }}" list="aicg-settle-parties" placeholder="例：币安 Binance / Aria（KOL 分成）" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid #ddd9ec;border-radius:10px;font:500 13px 'Manrope','PingFang SC',sans-serif;outline:none" style-focus="border-color:#5b4dff;box-shadow:0 0 0 4px #efeeff">
           </div>
           <div>
             <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin-bottom:5px">类型</div>
@@ -3652,6 +3711,18 @@
           <div style="font:500 12px 'Manrope','PingFang SC',sans-serif;color:#b9b5d0;padding:6px 2px">暂无自动备份 —— 明天首次打开时会自动生成</div>
         </sc-if>
       </div>
+      <sc-if value="{{ auditVisible }}" hint-placeholder-val="{{ false }}">
+        <div style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8783a3;margin:18px 0 8px">操作日志 · 最近 50 条（仅负责人可见）</div>
+        <div style="max-height:260px;overflow:auto;display:flex;flex-direction:column;gap:4px">
+          <sc-for list="{{ auditList }}" as="al" hint-placeholder-count="5">
+            <div style="display:flex;align-items:baseline;gap:9px;padding:7px 11px;border:1px solid #f3f1fa;border-radius:9px;background:#fafaff">
+              <span style="font:600 10px 'IBM Plex Mono',Menlo,monospace;color:#b9b5d0;flex:none">{{ al.t }}</span>
+              <span style="font:700 10.5px 'Manrope','PingFang SC',sans-serif;color:#5b4dff;flex:none">{{ al.roleName }}</span>
+              <span style="font:500 11.5px 'Manrope','PingFang SC',sans-serif;color:#4b486a;min-width:0">{{ al.text }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
     </div>
   </div>
 </sc-if>
@@ -3861,7 +3932,12 @@ class Component extends DCLogic {
     } catch (e) {}
     return this.seed();
   }
-  persist(data) { try { localStorage.setItem('aicg-pm-v1', JSON.stringify(data)); } catch (e) {} }
+  persist(data) {
+    this._pendingPersist = data;
+    clearTimeout(this._pt);
+    this._pt = setTimeout(() => { this._pt = null; try { localStorage.setItem('aicg-pm-v1', JSON.stringify(this._pendingPersist)); } catch (e) { this.showToast('保存失败：浏览器存储空间不足'); } }, 300);
+  }
+  flushPersist() { if (this._pt) { clearTimeout(this._pt); this._pt = null; try { localStorage.setItem('aicg-pm-v1', JSON.stringify(this._pendingPersist)); } catch (e) {} } }
   setData(mut) {
     const data = JSON.parse(JSON.stringify(this.state.data));
     mut(data);
@@ -4060,7 +4136,9 @@ class Component extends DCLogic {
       }
     };
     document.addEventListener('keydown', this._hotkey);
-    this._closeMenu = () => { if (this.state.taskMenu) this.setState({ taskMenu: null }); };
+    window.addEventListener('beforeunload', () => this.flushPersist());
+    try { if (localStorage.getItem('aicg-theme') === 'dark') document.documentElement.classList.add('aicg-dark'); } catch (e) {}
+    this._closeMenu = () => { const st = {}; if (this.state.taskMenu) st.taskMenu = null; if (this.state.notifOpen) st.notifOpen = false; if (Object.keys(st).length) this.setState(st); };
     document.addEventListener('click', this._closeMenu);
     if (this.state.page === 'flow') this.loadFlow(this.state.flowSel || 0);
     if (this.state.page === 'agentos') this.loadAgent(this.state.agentSel || 0);
@@ -4356,17 +4434,23 @@ class Component extends DCLogic {
     if (kind === 'p') this.setState({ page: 'partners', filterStage: '全部', highlight: refId });
     else this.setState({ page: 'board', verFilter: 'all', highlight: refId });
   }
+  // 操作审计：写入 data.activityLog（上限 200 条），负责人在数据备份弹窗查看
+  pushAudit(d, text) {
+    (d.activityLog = d.activityLog || []).unshift({ t: new Date().toISOString().slice(0, 16).replace('T', ' '), role: d.role || 'owner', text: String(text).slice(0, 120) });
+    if (d.activityLog.length > 200) d.activityLog.length = 200;
+  }
   showToast(msg) {
     this.setState({ toast: msg });
     clearTimeout(this._tt);
     this._tt = setTimeout(() => this.setState({ toast: null }), 2600);
   }
   // 快照式可撤销操作：先存整棵数据快照，toast 提供 6 秒撤销
-  undoable(msg, fn) {
+  undoable(msg, fn, auditText) {
     const snap = JSON.stringify(this.state.data);
     fn();
+    this.setData(d => this.pushAudit(d, auditText || msg));
     this.setState({ toast: { text: msg, undo: () => {
-      try { const d = JSON.parse(snap); this.setState({ data: d, toast: null }); this.persist(d); this.showToast('已恢复'); } catch (e) {}
+      try { const d = JSON.parse(snap); this.pushAudit(d, '撤销了上一次删除'); this.setState({ data: d, toast: null }); this.persist(d); this.showToast('已恢复'); } catch (e) {}
     } } });
     clearTimeout(this._tt);
     this._tt = setTimeout(() => this.setState({ toast: null }), 6000);
@@ -4395,7 +4479,7 @@ class Component extends DCLogic {
     this.askConfirm('用 ' + day + ' 的自动备份覆盖当前数据？操作后 6 秒内可撤销。', () => {
       try {
         const d = JSON.parse(localStorage.getItem('aicg-pm-bak-' + day));
-        if (d && d.partners) { this.setState({ data: d, backupModal: false }); this.persist(d); }
+        if (d && d.partners) { this.pushAudit(d, '从备份恢复数据（' + day + '）'); this.setState({ data: d, backupModal: false }); this.persist(d); }
         else this.showToast('备份数据无效');
       } catch (e) { this.showToast('恢复失败：备份已损坏'); }
     });
@@ -5100,6 +5184,10 @@ class Component extends DCLogic {
   openModal(type, draft) { const k = this.MODAL_PERM[type]; if (k && !this.can(k)) { this.denyToast(k); return; } this.setState({ modal: type, draft }); }
   saveModal = () => {
     const S = this.state, dr = S.draft, t = this.today();
+    if (S.modal && S.modal !== 'vault') {
+      const _lbl = (dr.id ? '编辑' : '新增') + '「' + (dr.name || dr.title || dr.party || dr.ver || '') + '」（' + S.modal + '）';
+      setTimeout(() => { if (!this.state.modal) this.setData(d => this.pushAudit(d, _lbl)); }, 0);
+    }
     if (S.modal === 'partner') {
       if (!(dr.name || '').trim()) return;
       this.setData(d => {
@@ -5475,10 +5563,16 @@ class Component extends DCLogic {
       })
       .map((p, i) => {
         const sm = stageMeta[p.stage] || stageMeta['接触'];
+        const pStl = (D.settlements || []).filter(x => (x.party || '').includes((p.name || '').split('（')[0].split(' ')[0]) || (p.name || '').includes((x.party || '').split('（')[0]));
+        const pStlOpen = pStl.filter(x => x.status !== '已结清');
         const tile = tiles[(p.name.charCodeAt(0) + i) % tiles.length];
         return {
           ...p,
           initial: (p.name || '?').trim().charAt(0),
+          hasSettle: pStl.length > 0,
+          settleLabel: pStl.length ? (pStlOpen.length ? pStlOpen.length + ' 笔未结 · ' + pStlOpen.map(x => (x.cur || '$') + Number(x.amount || 0).toLocaleString('en-US')).join(' / ') : pStl.length + ' 笔已全部结清') : '',
+          settleColor: pStlOpen.length ? '#d15a1f' : '#2eaa70',
+          goSettlePage: () => this.setState({ page: 'settle', settleType: '全部', settleSt: '全部' }),
           hlBd: S.highlight === p.id ? '#5b4dff' : '#ebe9f4',
           tileA: tile[0], tileB: tile[1],
           stBg: sm.bg, stFg: sm.fg,
@@ -5983,7 +6077,7 @@ class Component extends DCLogic {
         { label: '平台架构', k: 'arch' },
         { label: '框架选型', k: 'fw' }
       ].map(t => { const on = (S.aigcView || 'arch') === t.k; return { label: t.label, click: () => this.setState({ aigcView: t.k }), bg: on ? '#18172a' : '#fff', fg: on ? '#fff' : '#4b486a', bd: on ? '#18172a' : '#ddd9ec' }; }),
-      fwGroups: [
+      fwGroups: this._sv_fwGroups || (this._sv_fwGroups = [
         { t: '代码级编排框架', en: 'CODE-FIRST', d: '工程团队用 · 核心生成管线与多 Agent 协作', items: [
           { name: 'LangChain / LangGraph', tag: '135K★ 生态最全', tagBg: 'rgba(91,77,255,.1)', tagFg: '#5b4dff', org: 'LangChain Inc', d: 'Agent 工程平台 + 有向图编排引擎：300+ 集成工具，状态图原生支持循环、持久化与人工干预节点，LangSmith 观测 / LangGraph Cloud 部署配套齐全。', fit: '意图→生成→审核→发布主管线；人工干预节点契合 D6「先审后发」定稿口径' },
           { name: 'CrewAI', tag: '上手最快', tagBg: 'rgba(56,176,96,.12)', tagFg: '#2a9d54', org: 'CrewAI', d: '角色分工范式：把任务拆成职责明确的 Agent 团队（策划 / 美术 / 投放），快速原型效率领先，学习成本最低；生产级监控需自建。', fit: '营销 Agent 多角色协作层 · MVP 快速验证' },
@@ -5998,7 +6092,7 @@ class Component extends DCLogic {
           { name: 'n8n', tag: '自动化管道', tagBg: 'rgba(255,122,61,.12)', tagFg: '#e05f1f', org: 'n8n GmbH', d: '通用工作流自动化 + AI 节点：定时任务、Webhook、数百 SaaS 连接器，适合把 AI 环节嵌进运营流程。', fit: '巡查 / 日报 / 数据回流等 D9 巡检类自动化' },
           { name: 'Eino / AgentScope', tag: '国产大厂开源', tagBg: 'rgba(91,77,255,.1)', tagFg: '#5b4dff', org: '字节 / 阿里', d: 'Eino（Go）与 AgentScope（Python）均为国内大厂开源框架，国内云部署与中文生态友好；社区规模小于海外头部。', fit: '国内云合规部署备选 · 观察项' }
         ] }
-      ],
+      ]),
       fwPicks: [
         { scene: '核心生成管线', pick: 'LangGraph', why: '状态图 + 人工审核节点，契合先审后发风控' },
         { scene: '多角色营销 Agent', pick: 'CrewAI', why: '角色分工上手最快，或用 LangGraph 子图替代' },
@@ -6008,46 +6102,46 @@ class Component extends DCLogic {
       goMkagent: go('mkagent'), isMkagent: S.page === 'mkagent',
       goMkag2: go('mkag2'), isMkag2: S.page === 'mkag2',
       goAudience: go('audience'), isAudience: S.page === 'audience',
-      audienceKpis: [
+      audienceKpis: this._sv_audienceKpis || (this._sv_audienceKpis = [
         { l: '长期主键', v: 'airvana_uid', d: '账号身份不依赖单一钱包', c: '#5b4dff' },
         { l: 'DID 状态', v: '目标设计', d: '授权连接后建立可撤销关联', c: '#1d9f6e' },
         { l: '数据原则', v: '最小披露', d: '只保存声明与证据摘要', c: '#d15a1f' },
         { l: '商业权限', v: '服务端控制', d: 'Campaign entitlement 不由 DID 授予', c: '#d43d33' }
-      ],
-      audienceFlow: [
+      ]),
+      audienceFlow: this._sv_audienceFlow || (this._sv_audienceFlow = [
         { n: '01', t: '用户授权', d: '明确用途、数据源、期限与撤回入口', bg: '#efeeff' },
         { n: '02', t: '钱包签名', d: '验证控制权；不采集私钥或助记词', bg: '#e8f2ff' },
         { n: '03', t: 'DID / 凭证', d: '关联 did:pkh 与 KYC 等级等可验证声明', bg: '#e6f8ef' },
         { n: '04', t: '身份图谱', d: '在同意范围内连接钱包、社交与互动事件', bg: '#fff1e8' },
         { n: '05', t: 'Campaign 决策', d: '按合同规则形成分群、投放与审计记录', bg: '#f6f5fb' }
-      ],
-      audienceSegments: [
+      ]),
+      audienceSegments: this._sv_audienceSegments || (this._sv_audienceSegments = [
         { i: '✓', t: '高可信活跃用户', d: '签名有效 + 活跃历史 + 低风险；适合进阶玩法', s: '可定向', c: '#1d9f6e' },
         { i: '⛓', t: 'DeFi / 交易行为人群', d: '只采用公开链上特征与授权标签，不推断敏感属性', s: '需同意', c: '#5b4dff' },
         { i: '🎮', t: 'Playable 高参与人群', d: '基于第一方完玩、复玩、分享等隐私安全事件', s: '第一方', c: '#2b6fd4' },
         { i: '◌', t: '新钱包 / 低信息人群', d: '不做负面推断，以探索型内容逐步建立偏好', s: '冷启动', c: '#a97b22' },
         { i: '⚠', t: '异常与疑似女巫群体', d: '只进入复核或限流队列，不自动永久封禁', s: '人工复核', c: '#d43d33' }
-      ],
-      audienceScores: [
+      ]),
+      audienceScores: this._sv_audienceScores || (this._sv_audienceScores = [
         { t: '身份质量', en: 'IDENTITY QUALITY', c: '#5b4dff', d: '控制权、凭证有效性、账号稳定性；用于判断证据可靠度。' },
         { t: '价值潜力', en: 'VALUE POTENTIAL', c: '#1d9f6e', d: '参与、转化与兴趣信号；用于内容与渠道匹配，不等于财富评级。' },
         { t: '欺诈风险', en: 'FRAUD RISK', c: '#d43d33', d: '批量钱包、异常邀请与设备冲突；与价值分隔离并保留申诉。' }
-      ],
-      audienceGuards: [
+      ]),
+      audienceGuards: this._sv_audienceGuards || (this._sv_audienceGuards = [
         { t: '数据源白名单', d: '只使用合同批准的钱包、渠道和第一方事件。' },
         { t: '同意版本', d: '记录目的、地区、期限；撤回后停止新增使用。' },
         { t: '字段锁定', d: '预算、奖励、CTA、地区、归因和结算禁止 Agent 改写。' },
         { t: '隐私边界', d: '不保存私钥、助记词、原始 KYC 文档或敏感画像。' },
         { t: '决策审计', d: '保存 segment_rule_version 与采用的凭证摘要。' },
         { t: '申诉与删除', d: '支持解除钱包关联、画像更正、凭证撤销和风险复核。' }
-      ],
+      ]),
       mkagLoop: [
         { n: '01', t: '感知', en: 'PERCEIVE', d: '接收意图（对话触发）· 监听事件（行情波动 / 转化异常）· 定时巡检（日报 / 投放盘点），三种触发并存' },
         { n: '02', t: '决策', en: 'DECIDE', d: '检索三层记忆 + 知识库（案例库 / 玩法基底 / KOL 语料），产出切入点 Top 3 打分排序供选择' },
         { n: '03', t: '执行', en: 'EXECUTE', d: '生成 Playable 与变体 → 合规预审 → 多平台分发 → 托管运营（盯数据 / 回复互动 / 追投止损）' },
         { n: '04', t: '反思', en: 'REFLECT', d: '数据回流对比预期 → 变体淘汰赛 → 爆款特征入库 → 推荐权重与策略版本迭代（回归测试防退化）' }
       ],
-      mkagMechs: [
+      mkagMechs: this._sv_mkagMechs || (this._sv_mkagMechs = [
         { n: '①', t: '意图识别', en: 'INTENT RECOGNITION', tileA: '#c9e3ff', tileB: '#e8f2ff', icon: '🎯',
           d: '把一句话需求解析为结构化营销任务：目标（拉新 / 留存 / 核销 / 裂变）× 行业（交易所 / 游戏 / 品牌）× 渠道偏好 × 预算约束，再映射到玩法基底（空投 / 竞猜 / 塔防 / 模拟交易）。',
           pts: ['解析输出：{目标, 行业, 渠道, 预算, 时限} 五元组，缺项按客户档案默认值补齐', '玩法映射：目标 × 行业 → 玩法基底候选（拉新+交易所 → 空投 / 竞猜优先）', '兜底策略：意图置信度低时不硬猜 —— 直接给 3 个候选方案让用户选，选择结果回流训练意图模型'] },
@@ -6063,8 +6157,8 @@ class Component extends DCLogic {
         { n: '⑤', t: '自进化', en: 'SELF-EVOLUTION', tileA: '#c6efdc', tileB: '#e6f8ef', icon: '🔁',
           d: '每次投放都是一次训练：数据回流驱动变体淘汰赛与策略迭代，让下一次推荐更准、生成更好。',
           pts: ['变体淘汰赛：表现差的变体自动下线，爆款特征（玩法参数 / 文案模式 / 投放时段）结构化入库', '权重更新：切入点推荐引擎按实际 ROI 校准四路信号权重', '版本迭代：提示词与策略变更走 Golden Set 回归测试（对接评测体系），分数下降即阻断', '人工卡点：策略级变更（预算分配 / 推荐逻辑）上线前需人工确认，日常变体优化全自动'] }
-      ],
-      mkagFw: [
+      ]),
+      mkagFw: this._sv_mkagFw || (this._sv_mkagFw = [
         { c: '身份主键与账号图谱', f: '以 airvana_uid 统一钱包、社交账号和第一方事件；保留来源与同意状态', t: 'Identity Graph + Consent Ledger' },
         { c: 'DID / 可验证凭证', f: '验证钱包控制权、KYC 等级或资格声明；支持过期、撤销和最小披露', t: 'did:pkh、VC / Attestation' },
         { c: '用户画像系统', f: '将身份质量、价值潜力与欺诈风险拆分建模，构建可解释受众分群', t: 'ClickHouse、Feature Store' },
@@ -6073,14 +6167,14 @@ class Component extends DCLogic {
         { c: '实时推荐系统', f: '基于玩家行为推荐个性化游戏内容与营销活动', t: 'TensorFlow Recommenders、LightFM' },
         { c: '忠诚度管理', f: '积分系统、成就解锁、奖励发放，提升用户粘性', t: '自定义规则引擎 + 数据库' },
         { c: '隐私与风控策略', f: '执行数据最小化、地区限制、同意撤回、女巫识别与人工申诉', t: 'Policy Engine + Audit Log' }
-      ],
+      ]),
       mkagCases: [
         { n: '01', t: '空投裂变 Agent', tileA: '#ffd8c2', tileB: '#ffece1', icon: '🪂', st: '进行中', stBg: '#efeeff', stFg: '#5b4dff', goal: '目标：TG 社群 7 日拉新 10,000 注册', flow: '空投模板生成 → TG 多群定时发布 → 邀请裂变追踪 → 转化数据回流 → 变体自动淘汰', kpi: '曝光 / 注册转化率 / 邀请系数 K 值', brand: '交易所品牌方（核销闭环对接中）' },
         { n: '02', t: 'K 线竞猜行情热点 Agent', tileA: '#c9e3ff', tileB: '#e8f2ff', icon: '📈', st: '方案', stBg: '#fdf3df', stFg: '#a97b22', goal: '目标：行情剧烈波动时 2 小时内自动蹭量', flow: '行情监听触发 → 竞猜 Playable 即时生成（交易对自适配）→ KOL 分发 → 开户转化归因', kpi: '触发时效 / 分享率 / 开户 CPA', brand: '币圈 KOL × 交易所' },
         { n: '03', t: '塔防品牌任务 Agent', tileA: '#d9d4ff', tileB: '#efeeff', icon: '🏰', st: '方案', stBg: '#fdf3df', stFg: '#a97b22', goal: '目标：品牌任务完成率 ≥ 40%', flow: '塔防模板换皮（品牌塔位/敌人皮肤）→ 关卡内品牌任务植入 → 通关奖励核销 → 复玩留存运营', kpi: '完玩率 / 任务完成率 / 核销率', brand: 'Web3 交易所 · 营销切入点方案衍生' },
         { n: '04', t: '钱包画像定向空投 Agent', tileA: '#bdeedd', tileB: '#e8faf3', icon: '🪪', st: '目标设计', stBg: '#e2f4e9', stFg: '#1d9f6e', goal: '目标：在隐私与合规边界内提升合格用户转化率', flow: 'Campaign Brief → Campaign Contract → 用户授权连接钱包 → DID / 凭证校验 → 可解释分群 → Agentic Playable 变体分发 → 隐私安全事件归因 → 撤回 / 复核', kpi: '授权率 / 合格转化率 / 凭证撤销率 / 风险误判申诉率', brand: '交易所 / Web3 项目 · 预算、奖励、CTA 与地区由合同锁定' }
       ],
-      aigcPlat: [
+      aigcPlat: this._sv_aigcPlat || (this._sv_aigcPlat = [
         { n: '01', t: '业务与组织管理', en: 'ORG & BILLING', color: '#d9d4ff', items: ['多租户管理', '组织与团队', '项目与工作空间', '用户 / 角色 / RBAC 权限', '审批流与操作授权', '订阅计费与套餐', '配额与用量管理', 'API / SDK / Webhook 管理'] },
         { n: '02', t: '需求与创作工作台', en: 'CREATION WORKSPACE', color: '#c9e3ff', items: ['创作 Brief 管理', '用户意图解析', 'Prompt / Agent 模板管理', '品牌语气与角色设定', '创作任务与批量生成', '任务队列与优先级', '草稿 / 版本 / 分支', '多人协同编辑', '人工确认节点', '生成结果对比与二次创作', '创作历史记录'] },
         { n: '03', t: 'Agent 编排与执行引擎', en: 'AGENT ORCHESTRATION', color: '#ffd8c2', items: ['Agent 注册中心与生命周期', 'Agent 角色配置与任务规划', '任务拆解与子任务', 'Workflow / DAG 编排', '状态机', '上下文管理', 'Memory 长期记忆 / Session 短期记忆', 'Tool 工具注册中心', '外部 API 调用', 'Agent 间协作', 'Human-in-the-loop', '失败重试 / 超时 / 降级回滚', '幂等与任务恢复', '定时任务与事件触发'] },
@@ -6095,7 +6189,7 @@ class Component extends DCLogic {
         { n: '12', t: '数据反馈与增长分析', en: 'ANALYTICS & FEEDBACK LOOP', color: '#c9e3ff', items: ['埋点 SDK 与事件模型', '行为 / 生成 / 消费数据采集', '漏斗 / 留存 / 转化分析', '用户分群与渠道归因', '内容 / 模板 / Agent 效果分析', '生成成本与 Token 消耗分析', '运营与实时监控看板', '异常检测与原因诊断', '策略推荐与自动复盘', 'Memory 更新与模板自动优化', '版本效果对比', '反馈闭环管理'] },
         { n: '13', t: '平台运维与可观测性', en: 'OBSERVABILITY & OPS', color: '#eeecf7', items: ['日志中心 / 指标监控 / 链路追踪', 'Agent 执行与模型调用监控', 'API / 任务队列 / 资源 / GPU / 存储监控', '告警中心与故障工单', 'SLA 管理', '成本中心 / 预算预警 / 容量管理', '缓存 / 消息队列 / 对象存储管理', '数据备份恢复与灾难恢复', '运维审计与管理后台'] },
         { n: '14', t: '插件与生态扩展', en: 'PLUGINS & ECOSYSTEM', color: '#ffece1', items: ['插件注册中心', '第三方模型 / 数据源 / 素材库接入', '支付 / CRM / 广告平台 / 社媒接入', '游戏引擎与 Figma / Unity / Unreal 接入', 'OpenAPI / SDK / Webhook', '自定义 Tool 与自定义 Agent', '扩展市场', '开发者文档 / API 调试 / 沙盒测试'] }
-      ].filter(x => {
+      ]).filter(x => {
         const MAP = { '业务场景': ['01', '14'], '创作 Brief': ['02'], 'Schema / 模板': ['07'], 'Agent 编排': ['03'], '内容生成': ['04', '05'], '约束校验': ['09'], 'Builder 构建': ['08'], '预览审核': ['08', '09'], '发布': ['10'], 'Runtime 决策': ['11'], '数据反馈': ['12'], '自动诊断': ['13'], 'Memory 与模板迭代': ['06'] };
         const m = MAP[S.aigcStage];
         return !m || m.indexOf(x.n) >= 0;
@@ -6112,7 +6206,7 @@ class Component extends DCLogic {
           aigcStageLabel: cur
         };
       })(),
-      aigcMods: [
+      aigcMods: this._sv_aigcMods || (this._sv_aigcMods = [
         { n: '01', t: 'RAG 检索增强', en: 'RETRIEVAL-AUGMENTED GENERATION', color: '#d9d4ff', color2: '#efeeff', steps: ['文本切片', '向量化入库', '语义检索', '上下文注入', '生成'],
           d: '生成前先检索知识库注入上下文，让模型基于事实与沉淀经验产出，而非凭空生成。',
           pts: ['管线：文本切片 → 向量化入库 → 语义检索 → 上下文注入（对接 19 号链路）', '数据源：玩法基底原型库 · 游戏模板库 · KOL 风格语料 · 营销案例库（TG/X/Discord…）', '混合检索：向量相似度 + 关键词 + 知识图谱（达人×品牌×玩法×渠道）三路召回', '权限隔离：KOL 私有子库租户隔离，检索时按身份过滤'] },
@@ -6125,7 +6219,7 @@ class Component extends DCLogic {
         { n: '04', t: '评测体系', en: 'EVALS', color: '#c6efdc', color2: '#e6f8ef', steps: ['Agent 过程评测', '沙箱冒烟', '评分卡打分', '灰区人工抽审', '线上回流校准'],
           d: '三层评测守住质量：Agent 过程 → 产物三关卡 → 线上效果回流校准（详见 Agent OS 评测体系方案）。',
           pts: ['单 Agent 契约评测：规则断言 60% + LLM-as-Judge 30% + 人工金标 10%', '产物三关卡：沙箱冒烟测试 → 评分卡打分（低于阈值自动打回）→ 灰区人工抽审', 'Golden Set 回归：改 prompt / 换模型全量跑回归，分数下降阻断发布', '线上校准：CTR / 完玩率 / 转化回流，修正评分卡失真'] }
-      ],
+      ]),
       goKolco: go('kolco'), isKolco: S.page === 'kolco',
       tplFlow: [
         { n: '01', t: '游戏策划', d: '玩法基底选型 · 品牌任务点设计 · 数值与关卡草案' },
@@ -6189,12 +6283,18 @@ class Component extends DCLogic {
         const m = { '洽谈中': { bg: '#fdf3df', fg: '#a97b22' }, '已签约': { bg: '#efeeff', fg: '#5b4dff' }, '合作中': { bg: '#e2f4e9', fg: '#2eaa70' }, '暂停': { bg: '#eeecf7', fg: '#8783a3' } }[k.status] || { bg: '#eeecf7', fg: '#8783a3' };
         const tm = { S: { bg: '#ffece1', fg: '#d15a1f' }, A: { bg: '#efeeff', fg: '#5b4dff' }, B: { bg: '#eeecf7', fg: '#8783a3' } }[k.tier] || { bg: '#eeecf7', fg: '#8783a3' };
         const am = k.agreement === '已签署' ? { bg: '#e2f4e9', fg: '#2eaa70' } : { bg: '#fdf3df', fg: '#a97b22' };
+        const kStl = (D.settlements || []).filter(x => x.stype === '应付' && (x.party || '').includes(k.name));
+        const kPaid = kStl.filter(x => x.status === '已结清').reduce((a, x) => a + (x.cur === '¥' ? (x.amount || 0) / 7.2 : (x.amount || 0)), 0);
+        const kOpen = kStl.filter(x => x.status !== '已结清').reduce((a, x) => a + (x.cur === '¥' ? (x.amount || 0) / 7.2 : (x.amount || 0)), 0);
         return { ...k, stBg: m.bg, stFg: m.fg, tierBg: tm.bg, tierFg: tm.fg, initial: (k.name || '?').slice(0, 1),
           agBg: am.bg, agFg: am.fg, agLabel: k.agreement || '未签署',
           ratingLabel: k.rating ? k.rating.toFixed(1) : '—',
           ratingStars: k.rating ? '★'.repeat(Math.round(k.rating)) + '☆'.repeat(5 - Math.round(k.rating)) : '未评分',
           followUpLabel: k.followUp || '—', coopDataLabel: k.coopData || '暂无合作记录',
-          cycleAg: this.guard('legal', () => this.setData(d => { const x = (d.kolLib || []).find(y => y.id === k.id); if (x) x.agreement = x.agreement === '已签署' ? '未签署' : '已签署'; })),
+          settleLine: kStl.length ? ('已结清 $' + Math.round(kPaid).toLocaleString('en-US') + (kOpen ? ' · 未结 $' + Math.round(kOpen).toLocaleString('en-US') : '')) : '',
+          settleLineColor: kOpen ? '#d15a1f' : '#2eaa70',
+          goSettlePage: () => this.setState({ page: 'settle', settleType: '应付', settleSt: '全部' }),
+          cycleAg: this.guard('legal', () => this.setData(d => { const x = (d.kolLib || []).find(y => y.id === k.id); if (x) { x.agreement = x.agreement === '已签署' ? '未签署' : '已签署'; this.pushAudit(d, 'KOL「' + x.name + '」协议 → ' + x.agreement); } })),
           cycleSt: this.guard('kol', () => this.setData(d => { const x = (d.kolLib || []).find(y => y.id === k.id); if (x) { const o = ['洽谈中', '已签约', '合作中', '暂停']; x.status = o[(o.indexOf(x.status) + 1) % o.length]; } })),
           cycleTier: this.guard('kol', () => this.setData(d => { const x = (d.kolLib || []).find(y => y.id === k.id); if (x) { const o = ['S', 'A', 'B']; x.tier = o[(o.indexOf(x.tier) + 1) % o.length]; } })),
           del: this.guard('kol', () => this.undoable('已移除达人「' + k.name + '」', () => this.setData(d => { d.kolLib = (d.kolLib || []).filter(x => x.id !== k.id); })))
@@ -6281,7 +6381,7 @@ class Component extends DCLogic {
         { name: 'Web3 附加条款（提现与 KYC）', en: 'WEB3 ADDENDUM', tag: '合规', tagBg: '#fdeceb', tagFg: '#d43d33', core: '代币/积分激励地区白名单与地域屏蔽 · KYC 分级与制裁名单筛查 · 加密结算风险披露 · 各司法区差异条款', backs: '支撑：Web3 全球合规风控' },
         { name: '内容规范与社区准则', en: 'CONTENT POLICY', tag: '合规', tagBg: '#fdeceb', tagFg: '#d43d33', core: '违禁内容清单（涉政/涉黄/暴恐/侵权）· 内容分级标签 · 举报响应 SOP（24h）· 未成年人保护', backs: '支撑：UGC 风控 · 模板风控' }
       ].map((ra, i) => ({ ...ra, open: () => { this.setState({ _riskAgEn: ra.en }); this.loadRiskAg(i, ra.name); } })),
-      riskDomains: [
+      riskDomains: this._sv_riskDomains || (this._sv_riskDomains = [
         { title: '模板风控', en: 'TEMPLATE RISK', level: '高', lvBg: '#fdeceb', lvFg: '#d43d33', owner: '模板中心 · 合规 Agent',
           points: ['抽奖/概率类玩法触碰各地博彩红线（转盘、盲盒、K线预测）', '玩法机制诱导过度分享被平台判定 spam（TG/微信裂变限制）', '模板内置素材侵权（音效、字体、IP 形象）'],
           controls: ['模板上架双审：规则引擎扫描 + 合规 Agent 复核，博彩敏感玩法标注地区白名单', '每个模板挂「平台适配矩阵」：TG/X/微信各平台政策逐条核对后才开放分发', '模板素材全部走自有/授权素材库，上架时做版权溯源登记'] },
@@ -6306,7 +6406,7 @@ class Component extends DCLogic {
         { title: '数据与资金安全风控', en: 'DATA & FUND RISK', level: '中', lvBg: '#fff4e0', lvFg: '#b97a1c', owner: '平台 · 结算 Agent',
           points: ['用户/品牌方数据跨境传输违反 GDPR / CCPA / 个保法', '钱包与结算系统被攻击、对账差错', '数据回流训练涉隐私（用户行为数据未脱敏）'],
           controls: ['数据分区存储 + 跨境传输合规评估，隐私数据脱敏后才入训练语料', '资金池冷热分离、多签审批、结算 Agent 每日自动对账零误差告警', '全链路审计日志留存，年度渗透测试与隐私合规审计'] }
-      ],
+      ]),
       tgGroups: (D.tgCases || []).map(tg => ({ ...tg, count: (tg.items || []).length, items: (tg.items || []).map(g => { const k = Object.keys(this.TG_DOM).find(x => (g.name || '').indexOf(x) >= 0); return { ...g, logo: k ? this.fav(this.TG_DOM[k]) : '', hasLogo: !!k, noLogo: !k, initial: (g.name || '?').charAt(0), tileColor: tg.color }; }) })),
       kbTabs: [
         { label: '项目文档', on: S.page === 'docs' && dg === 'project', click: () => this.setState({ page: 'docs', docGroup: 'project', docFilter: '全部' }) },
@@ -6548,7 +6648,7 @@ class Component extends DCLogic {
       docPills, docsView,
       showGmPlat: S.page === 'docs' && dg === 'research' && (S.docFilter === '游戏营销平台' || S.docFilter === '全部'),
       showGpf: S.page === 'docs' && dg === 'research' && (S.docFilter === '分发渠道（平台）' || S.docFilter === '全部'),
-      gpfList: [
+      gpfList: this._sv_gpfList || (this._sv_gpfList = [
         { name: 'CrazyGames', url: 'crazygames.com', link: 'https://www.crazygames.com', img: 'uploads/pasted-1784256756543-0.png', tag: 'H5 免费游戏门户', tagBg: '#efeeff', tagFg: '#5b4dff',
           intro: '全球最大免费网页游戏门户之一（比利时，2013 年创立）：5,000+ 款 HTML5 游戏即点即玩，无需下载注册，月活跃用户 3,000万+，覆盖 Clicker / Puzzle / Strategy 等全品类，另有 Originals 独家自研线。',
           biz: '广告变现为主（贴片 + 页内展示广告，与开发者分成）+ 开发者提交平台（流量分发换分成）；对营销方是超休闲品类的天然试玩流量池。' },
@@ -6558,7 +6658,7 @@ class Component extends DCLogic {
         { name: 'Astrocade', url: 'astrocade.com', link: 'https://astrocade.com', img: 'uploads/pasted-1784256830114-0.png', tag: 'AI UGC 游戏社区', tagBg: '#e2f4e9', tagFg: '#2eaa70',
           intro: 'AI 生成 UGC 游戏平台：用户用 AI 对话式创建游戏（Create / Studio），社区即玩即评（Players\' Choice / Trending / Community Playtests），单款热门作品播放量达百万级 —— 与 Airvana「一句话生成游戏」路径最接近的对标。',
           biz: '创作者生态驱动：免费游玩 + 创作工具订阅 / 增值服务，社区分发形成 UGC 飞轮；验证了 AI 生成游戏 + 社区分发的可行性，是 Airvana 的直接竞对与研究样本。' }
-      ],
+      ]),
       showW3Proj: S.page === 'docs' && dg === 'research' && (S.docFilter === 'Web3 / 交易所' || S.docFilter === '全部'),
       exBanner: S.page === 'docs' && dg === 'research' && (S.docFilter === 'Web3 / 交易所' || S.docFilter === '全部'),
       goExlist: () => this.setState({ page: 'exlist' }),
@@ -6597,7 +6697,7 @@ class Component extends DCLogic {
         const cur = S.gpTab || '全部'; const on = cur === x;
         return { label: x, bg: on ? '#18172a' : '#fff', fg: on ? '#fff' : '#4b486a', bd: on ? '#18172a' : '#ddd9ec', click: () => this.setState({ gpTab: x }) };
       }),
-      gamePipe: [
+      gamePipe: this._sv_gamePipe || (this._sv_gamePipe = [
         { gp: '策划叙事', n: '一', t: '策划 / 剧情 / 数值 / 关卡生成', en: 'PRE-PRODUCTION', color: '#d9d4ff', note: '前置立项核心：游戏框架、世界观、玩法、地图、数值，是美术和代码的前置输入', items: [
           { k: '叙事剧情大模型', d: '世界观 / 主线支线剧本 / 分支对话 / 角色人设 / 任务文案，支持多结局与 NPC 记忆逻辑', tools: 'Claude · GPT · Inkle AI' },
           { k: '数值平衡 AI', d: '自动生成装备 / 怪物 / 技能 / 经济系统数值，模拟成长循环，检测通胀与强度失衡', tools: '专用数值引擎' },
@@ -6658,7 +6758,7 @@ class Component extends DCLogic {
           { k: '项目知识库', d: '查询引擎 API / 工具规范 / 项目历史需求', tools: 'RAG 知识库（对接 AIGC 架构）' },
           { k: '服务器负载模拟', d: '模拟万人同时在线，测试服务器承压能力', tools: '压测模拟 AI' }
         ]}
-      ].filter(x => !S.gpTab || S.gpTab === '全部' || x.gp === S.gpTab),
+      ]).filter(x => !S.gpTab || S.gpTab === '全部' || x.gp === S.gpTab),
       aiToolsList: [
         { n: '01', t: 'Claude', by: 'Anthropic', cat: '编码 / Agent', tileA: '#ffd8c2', tileB: '#ffece1', logo: this.fav('claude.ai'), use: '游戏策划 / 文案生成 / 代码共创 / 知识库问答；Claude Code 用于模板工程化开发', link: 'https://claude.ai', tags: '对话 · 编码 · Agent' },
         { n: '02', t: 'Codex', by: 'OpenAI', cat: '编码 / Agent', tileA: '#c9e3ff', tileB: '#e8f2ff', logo: this.fav('openai.com'), use: '代码生成与重构；结合 Godot 做游戏模板批量生成实验（对接周计划：codex + godot 模板生成）', link: 'https://openai.com/codex', tags: '编码 · CLI Agent' },
@@ -6674,15 +6774,15 @@ class Component extends DCLogic {
         { n: '12', t: 'Runway', by: 'Runway', cat: '设计 / 素材', tileA: '#d9d4ff', tileB: '#efeeff', logo: this.fav('runwayml.com'), use: 'Gen-3 视频生成 / 编辑；游戏宣传片与 KOL 营销视频素材', link: 'https://runwayml.com', tags: '视频生成' },
         { n: '13', t: 'ElevenLabs', by: 'ElevenLabs', cat: '设计 / 素材', tileA: '#c9e3ff', tileB: '#e8f2ff', logo: this.fav('elevenlabs.io'), use: '多语言配音 / 音效生成事实标准；NPC 配音与多语言营销口播', link: 'https://elevenlabs.io', tags: '音频 · 配音' }
       ].filter(x => S.docFilter === '全部' || x.cat === S.docFilter),
-      w3WinCases: [
+      w3WinCases: this._sv_w3WinCases || (this._sv_w3WinCases = [
         { n: '01', t: 'Notcoin · 点击挖矿裂变', tileA: '#ffd8c2', tileB: '#ffece1', icon: '⛏️', stats: '注册 4,000万+ · DAU 峰值 600万+ · 5 个月上线到发币（Binance 上币）', play: '零门槛点击挖矿 → 战队裂变（群组排行榜）→ 代币空投预期驱动注册', agent: '可衍生：社群点击挖矿 Agent（对应模板库 · 点击累积基底）' },
         { n: '02', t: 'Hamster Kombat · 每日任务留存', tileA: '#d9d4ff', tileB: '#efeeff', icon: '🐹', stats: '注册 3亿（TG 史上最快）· DAU 峰值 5,000万 · YouTube 订阅 3,600万', play: '每日 Combo / 密码跨平台发布（YouTube / TG）→ 拉动跨平台关注 → 交易所绑定升级收益', agent: '可衍生：每日密码任务 Agent —— 把「游戏外内容」变成日活引擎' },
         { n: '03', t: 'DOGS · 社交身份空投', tileA: '#c9e3ff', tileB: '#e8f2ff', icon: '🐶', stats: '注册 5,300万+ · 按 TG 账号年龄空投 · 上线 2 周完成发币', play: '账号资历自动计算空投额度 → 零操作领取 → 交易所开户提现承接（Binance / OKX）', agent: '可衍生：身份快照空投 Agent —— 转化路径最短的拉新模型（对接本周空投模板）' },
         { n: '04', t: 'Catizen · 内购变现闭环', tileA: '#c6efdc', tileB: '#e6f8ef', icon: '🐱', stats: '注册 3,400万 · 付费用户 100万+ · 内购收入 $1,600万+', play: '合成养猫 → 钓鱼小游戏矩阵 → Stars 支付内购 → 收入分成结算', agent: '可衍生：养成内购 Agent —— 品牌方 ROI 叙事最佳素材（TG 游戏能赚真金白银）' },
         { n: '05', t: 'Blum · 交易所混合获客', tileA: '#fcd1e1', tileB: '#fde8f0', icon: '🌸', stats: '注册 4,000万+（未发币先建生态）· Meme 币交易 + 游戏中心双轮', play: '游戏积分任务 × 链上交易任务混合 → 直接沉淀交易用户（前 Binance 高管创办）', agent: '可衍生：交易任务 Agent —— 游戏流量 → 交易行为的最自然转化' },
         { n: '06', t: 'OKX Racer · 交易所自营案例', tileA: '#e3ddff', tileB: '#f1eeff', icon: '🏎️', stats: '上线首月注册 1,000万+ · OKX App 下载显著拉升', play: 'BTC 价格竞猜 → 竞猜升级需绑定 OKX 账户 → 开户核销闭环', agent: '可衍生：价格竞猜开户 Agent —— 与竞猜模板 + 交易所核销方向完全对标（最佳参照）' }
-      ],
-      mkModes: [
+      ]),
+      mkModes: this._sv_mkModes || (this._sv_mkModes = [
         { t: '影响者营销', star: '★★★', tag: '核心模式 · 获客', tagBg: '#efeeff', tagFg: '#5b4dff',
           d: '平台本身围绕 KOL 而建：风格语料授权、入驻分成协议、S/A/B 分级全部就位。Airvana 改变其两大痛点 —— 成本结构（达人无需拍片，AI 共创 Playable 边际成本趋零，坑位费+佣金转向纯分成）与规模化瓶颈（Agent 托管把「逐个对接达人」变成批量自运营）。',
           c: '结论：升级为「可规模化的影响者营销」' },
@@ -6695,7 +6795,7 @@ class Component extends DCLogic {
         { t: '合作伙伴营销', star: '★☆☆', tag: '商务侧支撑', tagBg: '#eeecf7', tagFg: '#8783a3',
           d: '对应品牌方 MSA + SOW 模式：项目费与分成来自品牌合作，属于商务侧收入来源与案例背书，而非增长引擎；由品牌合作模块承接。',
           c: '结论：现金流 + 背书，不承担增长 KPI' }
-      ],
+      ]),
       agPbLoop: [
         { n: '01', t: '创意', en: 'CREATE', d: '一句话意图 → Agent 共创出可玩游戏与 A/B 变体，KOL 风格语料驱动个性化生成' },
         { n: '02', t: '游戏', en: 'PLAY', d: '轻量 Playable 本体（60 秒一局）：互动即广告，玩法承载品牌任务与转化目标' },
@@ -6783,7 +6883,7 @@ class Component extends DCLogic {
       importData: this.importData,
       showConfirm: !!S.confirm,
       confirmText: S.confirm ? S.confirm.text : '',
-      doConfirm: () => { const f = S.confirm && S.confirm.fn; this.setState({ confirm: null }); if (f) this.undoable('已删除 · 6 秒内可撤销', f); },
+      doConfirm: () => { const c = S.confirm; this.setState({ confirm: null }); if (c && c.fn) this.undoable('已删除 · 6 秒内可撤销', c.fn, c.text); },
       cancelConfirm: () => this.setState({ confirm: null }),
       toast: (S.toast && (S.toast.text || S.toast)) || '',
       toastUndo: (S.toast && S.toast.undo) || null,
@@ -6816,13 +6916,14 @@ class Component extends DCLogic {
             dueFmt: x.due ? (x.due.slice(5) + (overdue ? ' · 逾期' : '')) : '—',
             dueColor: overdue ? '#d94a4a' : '#8783a3',
             tBg: tm.bg, tFg: tm.fg, sBg: sm.bg, sFg: sm.fg,
-            cycleSt: this.guard('settle', () => this.setData(d => { const y = (d.settlements || []).find(z => z.id === x.id); if (y) { const o = ['待对账', '待发放', '已结清']; y.status = o[(o.indexOf(y.status) + 1) % o.length]; } })),
+            cycleSt: this.guard('settle', () => this.setData(d => { const y = (d.settlements || []).find(z => z.id === x.id); if (y) { const o = ['待对账', '待发放', '已结清']; y.status = o[(o.indexOf(y.status) + 1) % o.length]; this.pushAudit(d, '结算单「' + y.party + '」状态 → ' + y.status); } })),
             edit: () => this.openModal('settle', { ...x }),
             del: this.guard('settle', () => this.askConfirm('删除结算单「' + x.party + '」？', () => this.setData(d => { d.settlements = (d.settlements || []).filter(z => z.id !== x.id); })))
           };
         }),
       noSettle: !((D.settlements || []).length),
       openAddSettle: () => this.openModal('settle', { stype: '应收', cur: '$', status: '待对账' }),
+      settlePartyOpts: D.partners.map(x => ({ v: x.name })).concat((D.kolLib || []).map(x => ({ v: x.name + '（KOL 分成）' }))),
       goSettle: () => this.setState({ page: 'settle' }),
 
       // tickets
@@ -6856,11 +6957,12 @@ class Component extends DCLogic {
               y.assignee = v;
               d.reminders = (d.reminders || []).filter(r => r.tid !== x.id);
               d.reminders.unshift({ id: this.uid('rm'), tid: x.id, date: y.due || '', text: '工单转办：' + y.title, done: false, role: v });
+              this.pushAudit(d, '工单「' + y.title.slice(0, 24) + '」转办 → ' + ((this.ROLES.find(r => r.id === v) || {}).name || v));
             }); this.showToast('已转办，并写入对方角色的待办'); })(); },
             dueFmt: x.due ? (x.due.slice(5) + (overdue ? ' · 超时' : '')) : '—',
             dueColor: overdue ? '#d94a4a' : '#8783a3',
             cBg: cm.bg, cFg: cm.fg, sBg: sm.bg, sFg: sm.fg,
-            cycleSt: this.guard('ticket', () => this.setData(d => { const y = (d.tickets || []).find(z => z.id === x.id); if (y) { const o = ['待处理', '处理中', '已解决']; y.status = o[(o.indexOf(y.status) + 1) % o.length]; if (y.status === '已解决') (d.reminders || []).forEach(r => { if (r.tid === x.id) r.done = true; }); } })),
+            cycleSt: this.guard('ticket', () => this.setData(d => { const y = (d.tickets || []).find(z => z.id === x.id); if (y) { const o = ['待处理', '处理中', '已解决']; y.status = o[(o.indexOf(y.status) + 1) % o.length]; this.pushAudit(d, '工单「' + y.title.slice(0, 24) + '」状态 → ' + y.status); if (y.status === '已解决') (d.reminders || []).forEach(r => { if (r.tid === x.id) r.done = true; }); } })),
             edit: () => this.openModal('ticket', { ...x }),
             del: this.guard('ticket', () => this.askConfirm('删除工单「' + x.title + '」？', () => this.setData(d => { d.tickets = (d.tickets || []).filter(z => z.id !== x.id); })))
           };
@@ -6897,6 +6999,38 @@ class Component extends DCLogic {
       openAddCand: () => this.openModal('cand', { stage: '初筛' }),
       isTicketModal: S.modal === 'ticket', isCandModal: S.modal === 'cand',
 
+      // notifications (按角色聚合今日到期与逾期)
+      ...(() => {
+        const items = [];
+        const roleIs = (...ids) => roleCur.id === 'owner' || ids.includes(roleCur.id);
+        if (roleIs('biz', 'finance')) D.partners.forEach(p => { if (p.nextDate && p.nextDate <= today) items.push({ tag: '品牌', col: '#5b4dff', text: '跟进 ' + p.name, date: p.nextDate, go: () => { this.setState({ notifOpen: false }); this.jumpTo('p', p.id); } }); });
+        if (roleIs('product', 'tech', 'qa')) D.tasks.forEach(tk => { if (tk.due && tk.due <= today && tk.col !== '已完成') items.push({ tag: '任务', col: '#ff7a3d', text: tk.title, date: tk.due, go: () => { this.setState({ notifOpen: false }); this.jumpTo('t', tk.id); } }); });
+        (D.reminders || []).forEach(m => { if (!m.done && m.date && m.date <= today && (roleCur.id === 'owner' || !m.role || m.role === roleCur.id)) items.push({ tag: '待办', col: '#2eaa70', text: m.text, date: m.date, go: () => this.setState({ notifOpen: false, page: 'daily' }) }); });
+        (D.tickets || []).forEach(x => { if (x.status !== '已解决' && x.due && x.due <= today && (roleCur.id === 'owner' || x.assignee === roleCur.id || ['support', 'community'].includes(roleCur.id))) items.push({ tag: '工单', col: '#2b6fd4', text: x.title, date: x.due, go: () => this.setState({ notifOpen: false, page: 'tickets', tkSrc: '全部', tkSt: '全部' }) }); });
+        if (roleIs('finance')) (D.settlements || []).forEach(x => { if (x.status !== '已结清' && x.due && x.due <= today) items.push({ tag: '结算', col: '#0f9d8f', text: x.stype + ' · ' + x.party, date: x.due, go: () => this.setState({ notifOpen: false, page: 'settle', settleType: '全部', settleSt: '全部' }) }); });
+        if (roleIs('hr')) (D.candidates || []).forEach(x => { if (x.stage !== '已入职' && x.cdate && x.cdate <= today) items.push({ tag: '招聘', col: '#75803a', text: x.name + ' · ' + x.stage, date: x.cdate, go: () => this.setState({ notifOpen: false, page: 'hire', hireStage: '全部' }) }); });
+        items.sort((a, b) => a.date < b.date ? -1 : 1);
+        const view = items.slice(0, 30).map(it => ({ ...it, dateLabel: it.date.slice(5), over: it.date < today, dateColor: it.date < today ? '#d94a4a' : '#d15a1f' }));
+        return {
+          notifCount: items.length,
+          notifHas: items.length > 0,
+          notifList: view,
+          noNotif: items.length === 0,
+          notifOpenFlag: !!S.notifOpen,
+          toggleNotif: e => { e.stopPropagation(); this.setState({ notifOpen: !S.notifOpen }); },
+          notifStop: e => e.stopPropagation(),
+          notifRoleLabel: roleCur.id === 'owner' ? '全部角色' : roleCur.name,
+          toggleDark: () => {
+            const on = document.documentElement.classList.toggle('aicg-dark');
+            try { localStorage.setItem('aicg-theme', on ? 'dark' : 'light'); } catch (e) {}
+          }
+        };
+      })(),
+
+      // audit log view (负责人可见)
+      auditVisible: roleCur.id === 'owner' && !!(D.activityLog || []).length,
+      auditList: (D.activityLog || []).slice(0, 50).map(a => ({ ...a, roleName: (this.ROLES.find(r => r.id === a.role) || {}).name || a.role })),
+
       // backup
       backupModalOpen: !!S.backupModal,
       openBackupModal: () => this.setState({ backupModal: true }),
@@ -6919,7 +7053,7 @@ class Component extends DCLogic {
         bg: r.id === roleCur.id ? '#f5f4ff' : '#fff',
         dutyList: r.duties.map(t => ({ t })),
         pick: () => {
-          this.setData(d => { d.role = r.id; });
+          this.setData(d => { d.role = r.id; this.pushAudit(d, '切换角色 → ' + r.name); });
           this.setState({ roleModal: false, page: r.home });
           if (r.home === 'flow' && !this.state.flowHtml) this.loadFlow(this.state.flowSel || 0);
           if (r.home === 'cases' && !this.state.caseHtml) this.loadCase(this.state.caseSel || 0);

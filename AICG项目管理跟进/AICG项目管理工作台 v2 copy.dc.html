@@ -289,8 +289,8 @@
           <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px">
             <div style="font:700 14.5px 'Manrope','PingFang SC',sans-serif">跟进任务分布 <span style="font:700 10px 'IBM Plex Mono',Menlo,monospace;letter-spacing:.1em;color:#8783a3;text-transform:uppercase;margin-left:6px">· 按类型 ·</span></div>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
-            <sc-for list="{{ typeCards }}" as="tc" hint-placeholder-count="3">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px">
+            <sc-for list="{{ typeCards }}" as="tc" hint-placeholder-count="5">
               <div onClick="{{ tc.click }}" style="border:1px solid #ebe9f4;border-radius:12px;padding:14px 16px;background:#fafaff;cursor:pointer;transition:border-color .15s ease" style-hover="border-color:#5b4dff">
                 <div style="display:flex;align-items:center;gap:7px">
                   <span style="width:7px;height:7px;border-radius:99px;background:{{ tc.color }};flex:none"></span>
@@ -5734,6 +5734,8 @@ class Component extends DCLogic {
       (D.settlements || []).forEach(x => { if (hit(x.party) || hit(x.note)) results.push({ tag: '结算', tagBg: '#defaf3', tagFg: '#0f9d8f', text: x.party, sub: x.stype + ' · ' + x.status, go: () => this.setState({ q: '', page: 'settle', settleType: '全部', settleSt: '全部' }) }); });
       (this.CASES || []).forEach((c2, ci) => { if (hit(c2.title)) results.push({ tag: '案例', tagBg: '#efeeff', tagFg: '#5b4dff', text: c2.title, sub: 'AP 案例库', go: () => { this.setState({ q: '', page: 'cases' }); this.loadCase(ci); } }); });
       (window.EXCHANGE_ROWS || []).forEach(r2 => { if (hit(r2[0]) || hit(r2[1])) results.push({ tag: '交易所', tagBg: '#fdf3df', tagFg: '#a97b22', text: r2[0], sub: r2[2] || '', go: () => this.setState({ q: '', page: 'exlist', exQ: r2[0] }) }); });
+      (D.tickets || []).forEach(x => { if (hit(x.title) || hit(x.note)) results.push({ tag: '工单', tagBg: '#e0ecff', tagFg: '#2b6fd4', text: x.title, sub: x.src + ' · ' + x.status, go: () => this.setState({ q: '', page: 'tickets', tkSrc: '全部', tkSt: '全部' }) }); });
+      (D.candidates || []).forEach(x => { if (hit(x.name) || hit(x.job) || hit(x.note)) results.push({ tag: '候选人', tagBg: '#eef2dd', tagFg: '#75803a', text: x.name, sub: (x.job || '') + ' · ' + x.stage, go: () => this.setState({ q: '', page: 'hire', hireStage: '全部' }) }); });
       const goC = () => this.setState({ q: '', page: 'comp', compFilter: '全部' });
       (D.competitors || []).forEach(c => { if (hit(c.name) || hit(c.track) || hit(c.position)) results.push({ tag: '竞品', tagBg: '#fcd1e1', tagFg: '#b03a72', text: c.name, sub: c.threat + '威胁', go: goC }); });
     }
@@ -5947,7 +5949,9 @@ class Component extends DCLogic {
     const typeCards = [
       { name: '品牌方跟进', color: '#5b4dff', big: brandToday, unit: '件今日到期', sub: '逾期 ' + brandOver + ' · 本周还有 ' + brandWeek, subColor: brandOver > 0 ? '#d94a4a' : '#8783a3', click: () => this.setState({ page: 'partners', filterStage: '全部' }) },
       { name: '项目跟进', color: '#ff7a3d', big: taskToday, unit: '件今日到期', sub: '逾期 ' + taskOver + ' · 本周还有 ' + taskWeek, subColor: taskOver > 0 ? '#d94a4a' : '#8783a3', click: () => this.setState({ page: 'board', verFilter: 'all' }) },
-      { name: '手动待办', color: '#2eaa70', big: openTodos, unit: '件待完成', sub: '已完成 ' + manualDone, subColor: '#8783a3', click: () => this.setState({ page: 'daily' }) }
+      { name: '手动待办', color: '#2eaa70', big: openTodos, unit: '件待完成', sub: '已完成 ' + manualDone, subColor: '#8783a3', click: () => this.setState({ page: 'daily' }) },
+      (() => { const L = (D.tickets || []).filter(x => x.status !== '已解决'); const ov = L.filter(x => x.due && x.due < today).length; return { name: '工单 SLA', color: '#2b6fd4', big: L.length, unit: '件未解决', sub: ov > 0 ? ov + ' 件已超时' : '无超时', subColor: ov > 0 ? '#d94a4a' : '#8783a3', click: () => this.setState({ page: 'tickets', tkSrc: '全部', tkSt: '全部' }) }; })(),
+      (() => { const L = (D.settlements || []).filter(x => x.status !== '已结清'); const soon = L.filter(x => x.due && x.due <= week).length; return { name: '结算到期', color: '#0f9d8f', big: L.length, unit: '笔未结清', sub: soon > 0 ? soon + ' 笔 7 日内到期' : '近期无到期', subColor: soon > 0 ? '#d15a1f' : '#8783a3', click: () => this.setState({ page: 'settle', settleType: '全部', settleSt: '全部' }) }; })()
     ];
 
     // header
@@ -6847,11 +6851,16 @@ class Component extends DCLogic {
           return { ...x,
             assigneeName: (this.ROLES.find(r => r.id === x.assignee) || {}).name || '未指派',
             assigneeSel: x.assignee || '',
-            reassign: e => { const v = e.target.value; this.guard('ticket', () => this.setData(d => { const y = (d.tickets || []).find(z => z.id === x.id); if (y) y.assignee = v; }))(); },
+            reassign: e => { const v = e.target.value; this.guard('ticket', () => { this.setData(d => {
+              const y = (d.tickets || []).find(z => z.id === x.id); if (!y) return;
+              y.assignee = v;
+              d.reminders = (d.reminders || []).filter(r => r.tid !== x.id);
+              d.reminders.unshift({ id: this.uid('rm'), tid: x.id, date: y.due || '', text: '工单转办：' + y.title, done: false, role: v });
+            }); this.showToast('已转办，并写入对方角色的待办'); })(); },
             dueFmt: x.due ? (x.due.slice(5) + (overdue ? ' · 超时' : '')) : '—',
             dueColor: overdue ? '#d94a4a' : '#8783a3',
             cBg: cm.bg, cFg: cm.fg, sBg: sm.bg, sFg: sm.fg,
-            cycleSt: this.guard('ticket', () => this.setData(d => { const y = (d.tickets || []).find(z => z.id === x.id); if (y) { const o = ['待处理', '处理中', '已解决']; y.status = o[(o.indexOf(y.status) + 1) % o.length]; } })),
+            cycleSt: this.guard('ticket', () => this.setData(d => { const y = (d.tickets || []).find(z => z.id === x.id); if (y) { const o = ['待处理', '处理中', '已解决']; y.status = o[(o.indexOf(y.status) + 1) % o.length]; if (y.status === '已解决') (d.reminders || []).forEach(r => { if (r.tid === x.id) r.done = true; }); } })),
             edit: () => this.openModal('ticket', { ...x }),
             del: this.guard('ticket', () => this.askConfirm('删除工单「' + x.title + '」？', () => this.setData(d => { d.tickets = (d.tickets || []).filter(z => z.id !== x.id); })))
           };

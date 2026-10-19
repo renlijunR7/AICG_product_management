@@ -1616,10 +1616,15 @@
   function loadReactUmd() {
     const w = window;
     if (w.React && w.ReactDOM) return Promise.resolve();
+    // Patched: load vendored copies first (offline/内网可用), fall back to unpkg.
+    const localBase = "./assets/vendor/";
     return Promise.all([
+      loadScript(localBase + "react.production.min.js", REACT_SRI),
+      loadScript(localBase + "react-dom.production.min.js", REACT_DOM_SRI)
+    ]).catch(() => Promise.all([
       loadScript(REACT_URL, REACT_SRI),
       loadScript(REACT_DOM_URL, REACT_DOM_SRI)
-    ]).then(() => void 0);
+    ])).then(() => void 0);
   }
   function init() {
     const runtime = createRuntime(document);
